@@ -26,28 +26,28 @@ export default {
   props: {
     thumbnail: {
       type: String,
-      default: undefined
+      default: "/news-defualt-preview-img.png",
     },
     source: {
       type: String,
-      default: ""
+      default: "",
     },
     titleLabel: {
       type: String,
-      default: ""
+      default: "",
     },
     poll: {
       type: Boolean,
-      default: false
+      default: false,
     },
     pageLink: {
       type: String,
-      default: ""
+      default: "",
     },
     link: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
   mounted() {
     window.addEventListener("resize", this.heightChanged);
@@ -57,8 +57,8 @@ export default {
       if (this.$el.offsetHeight > 0) {
         this.$parent.$emit("heightChanged", this.$el.offsetHeight);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

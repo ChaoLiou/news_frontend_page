@@ -7,6 +7,7 @@ function combineFakeData(planetsConf, fakedata) {
     const fakeplanet = fakedata.find(d => d.PlanetType === index);
     return {
       ...pc,
+      index: index + 1,
       contentTypes: pc.contentTypes.map(ct => {
         if (ct.id === "audiovisual") {
           return {

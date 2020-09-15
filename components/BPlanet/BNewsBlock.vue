@@ -1,10 +1,8 @@
 <template>
   <div class="b-news-block">
-    <div>
-      <div class="b-news-block__title">{{ titleLabel }}</div>
-    </div>
-    <div class="b-news-block__tags" v-if="tagsData.length > 0">
+    <div class="b-news-block__tags" v-if="tagsData.length > 0" :style="stickyStyles">
       <b-horizontal-scroll>
+        <div class="b-news-block__title">{{ titleLabel }}</div>
         <b-news-tag
           v-for="(tag, index) in tagsData"
           :key="index"
@@ -15,7 +13,12 @@
       </b-horizontal-scroll>
     </div>
     <div>
-      <b-masonry-scroll :items="arr_source" @load-more="loadMore">
+      <b-masonry-scroll
+        :loading="loading"
+        :items="arr_source"
+        @load-more="loadMore"
+        ref="bMasonryScroll"
+      >
         <template v-slot:default="props">
           <b-news
             :thumbnail="props.item.img"
@@ -54,58 +57,104 @@ export default {
         return [];
       },
     },
-    tags: {
-      type: Array,
-      default() {
-        return [];
-      },
+    planetId: {
+      type: Number,
+      default: 1,
+    },
+    stickyTop: {
+      type: String,
+      default: "",
     },
   },
   data() {
     return {
       tagsData: [],
       arr_source: [],
+      loading: false,
     };
   },
-  created() {
-    this.$watch(
-      "tags",
-      function (newVal, oldVal) {
-        if (newVal.length > 0) {
-          this.tagsData = newVal.map((tag, index) => ({
-            title: tag,
-            tagged: index ? false : true,
-          }));
-        }
-      },
-      { immediate: true }
-    );
-  },
-  mounted() {
-    this.arr_source = this.source;
+  computed: {
+    stickyStyles() {
+      if (this.stickyTop) {
+        return {
+          top: this.stickyTop,
+          position: "sticky",
+          left: "0px",
+          zIndex: 2,
+        };
+      }
+    },
   },
   methods: {
+    init(updateCategories) {
+      this.arr_source = [];
+      this.resetScroll();
+      this.$store.commit("token/renew");
+      if (updateCategories) {
+        this.getNewsCategories(this.planetId).then((categories) => {
+          this.tagsData = categories.map((c, index) => ({
+            title: c.name,
+            id: c.id,
+            tagged: index ? false : true,
+          }));
+          this.loadMore();
+        });
+      } else {
+        this.loadMore();
+      }
+    },
+    resetScroll() {
+      if (this.$refs.bMasonryScroll) {
+        this.$refs.bMasonryScroll.reset();
+      }
+    },
     toggleTag(targetIndex) {
       this.tagsData = this.tagsData.map((tag, index) => ({
         ...tag,
         tagged: targetIndex === index,
       }));
+      this.init();
     },
-    loadMore({ pageSize, pageIndex }) {
-      setTimeout(() => {
-        this.arr_source = this.arr_source.concat(this.source);
-      }, 500);
+    loadMore({ pageSize, pageIndex } = { pageSize: 10, pageIndex: 1 }) {
+      const selectedTag = this.tagsData.find((t) => t.tagged);
+      if (selectedTag) {
+        this.loading = true;
+        this.getNews({
+          page: pageIndex,
+          pageSize,
+          categoryId: selectedTag.id,
+        })
+          .then((newslist) => {
+            if (newslist) {
+              if (pageIndex === 1) {
+                this.arr_source = [];
+              }
+              this.arr_source.push(...newslist);
+            }
+            this.loading = false;
+          })
+          .catch((err) => {
+            console.error(err);
+            this.loading = false;
+          });
+      }
     },
   },
   watch: {
-    source(value) {
-      this.arr_source = value;
+    source: {
+      immediate: true,
+      handler(value) {
+        this.init(true);
+      },
     },
   },
 };
 </script>
 
 <style scoped>
+.b-news-block {
+  position: relative;
+}
 .b-news-block > div:not(:last-child) {
   margin-bottom: 6px;
 }
@@ -116,6 +165,7 @@ export default {
 }
 .b-news-block__tags {
   margin-right: -12px;
+  background-color: white;
 }
 .b-news-block__tags .b-horizontal-scroll {
   height: 44px;

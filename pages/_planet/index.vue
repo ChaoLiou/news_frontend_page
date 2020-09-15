@@ -1,5 +1,5 @@
 <template>
-  <div class="planet-news">
+  <div class="_planet">
     <b-planet :planet="planet"></b-planet>
   </div>
 </template>
@@ -10,15 +10,15 @@ import planetsConf from "@/assets/json/planets.json";
 import fakedata from "@/assets/json/fakedata.json";
 export default {
   components: {
-    BPlanet
+    BPlanet,
   },
   computed: {
     planet() {
       return this.$combineFakeData(planetsConf, fakedata).find(
-        p => p.id === this.$route.params.planet
+        (p) => p.id === this.$route.params.planet
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

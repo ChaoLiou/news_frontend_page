@@ -61,6 +61,9 @@ export default {
       version: JSON.stringify(gitRevisionPlugin.version()),
       commithash: JSON.stringify(gitRevisionPlugin.commithash()),
       branch: JSON.stringify(gitRevisionPlugin.branch())
+    }),
+    BASE_URL: JSON.stringify({
+      news: ""
     })
   }
 };

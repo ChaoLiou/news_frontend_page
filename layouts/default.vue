@@ -29,7 +29,7 @@ export default {
     return {
       floatBtnShow: false,
       REVISION: JSON.parse(process.env.REVISION),
-      fontSize: 0
+      fontSize: 0,
     };
   },
   mounted() {
@@ -49,8 +49,8 @@ export default {
     scrollToTop() {
       window.scrollTo(0, 0);
       this.floatBtnShow = false;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

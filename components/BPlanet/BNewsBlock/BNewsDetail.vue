@@ -16,13 +16,13 @@ export default {
   props: {
     detail: {
       type: String,
-      default: ""
+      default: "",
     },
     link: {
       type: String,
-      default: ""
-    }
-  }
+      default: "",
+    },
+  },
 };
 </script>
 
@@ -30,10 +30,6 @@ export default {
 .b-news-detail img {
   width: 100% !important;
   height: calc(100% * (428 / 640)) !important;
-}
-.b-news-detail__content {
-  padding: 6px 10px;
-  font-weight: bold;
 }
 .b-news-detail .acglink {
   color: #0055aa;
