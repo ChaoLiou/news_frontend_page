@@ -4,28 +4,28 @@ import utils from "@/assets/js/utils.js";
 Vue.mixin({
   data() {
     return {
-      BASE_URL: JSON.parse(process.env.BASE_URL),
-      debug_mode: false
+      baseUrl: JSON.parse(process.env.BASE_URL),
+      debugMode: false
     };
   },
   methods: {
     $combineFakeData: utils.combineFakeData,
     getPlanets(lang = "zh", country = "TW") {
-      const url = `${this.BASE_URL.news}/main?lang=${lang}&country=${country}`;
-      if (this.debug_mode) console.log(url);
+      const url = `${this.baseUrl.news}/main?lang=${lang}&country=${country}`;
+      if (this.debugMode) console.log(url);
       return fetch(url)
         .then(res => res.json())
         .then(json => json.data);
     },
     getNewsCategories(planetId) {
-      const url = `${this.BASE_URL.news}/category?bannerID=${planetId}`;
-      if (this.debug_mode) console.log(url);
+      const url = `${this.baseUrl.news}/category?bannerID=${planetId}`;
+      if (this.debugMode) console.log(url);
       return fetch(url)
         .then(res => res.json())
         .then(json => json.data);
     },
     getNews({ page, pageSize, categoryId }) {
-      let url = `${this.BASE_URL.news}/news?page=${page}&pageSize=${pageSize}`;
+      let url = `${this.baseUrl.news}/news?page=${page}&pageSize=${pageSize}`;
       if (categoryId) {
         url += `&categoryID=${categoryId}`;
       }
@@ -33,7 +33,7 @@ Vue.mixin({
         this.$store.commit("token/renew");
       }
       url += `&timestamp=${this.$store.state.token.ts}`;
-      if (this.debug_mode) console.log(url);
+      if (this.debugMode) console.log(url);
       return fetch(url)
         .then(res => res.json())
         .then(json =>
