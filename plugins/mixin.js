@@ -10,7 +10,7 @@ Vue.mixin({
   },
   methods: {
     $combineFakeData: utils.combineFakeData,
-    getPlanets(lang = "zh", country = "TW") {
+    getPlanets(lang = "zh_TW", country = "TW") {
       const url = `${this.baseUrl.news}/main?lang=${lang}&country=${country}`;
       if (this.debugMode) console.log(url);
       return fetch(url)
