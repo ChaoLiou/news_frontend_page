@@ -3,15 +3,15 @@ const gitRevisionPlugin = new GitRevisionPlugin();
 
 export default {
   /*
-   ** Nuxt rendering mode
-   ** See https://nuxtjs.org/api/configuration-mode
+   ** Nuxt ssr
+   ** See https://nuxtjs.org/api/configuration-ssr
    */
-  mode: "universal",
+  ssr: false,
   /*
    ** Nuxt target
    ** See https://nuxtjs.org/api/configuration-target
    */
-  target: "server",
+  target: "static",
   /*
    ** Headers of the page
    ** See https://nuxtjs.org/api/configuration-head
@@ -27,7 +27,19 @@ export default {
         content: process.env.npm_package_description || ""
       }
     ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    script: [
+      {
+        src:
+          "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beango_stg.min.js",
+        defer: true
+      },
+      {
+        src:
+          "https://beangochat.blob.core.windows.net/beango-static-prod/sdk/vconsole.min.js",
+        defer: true
+      }
+    ]
   },
   /*
    ** Global CSS
@@ -63,7 +75,7 @@ export default {
       branch: JSON.stringify(gitRevisionPlugin.branch())
     }),
     BASE_URL: JSON.stringify({
-      news: "http://localhost:8888"
+      news: "https://753f40f86863.ngrok.io"
     })
   }
 };
