@@ -63,7 +63,7 @@ export default {
       branch: JSON.stringify(gitRevisionPlugin.branch())
     }),
     BASE_URL: JSON.stringify({
-      news: "http://localhost:8888"
+      news: "http://localhost:8080"
     })
   }
 };
