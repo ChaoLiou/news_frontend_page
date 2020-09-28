@@ -17,8 +17,8 @@ Vue.mixin({
         .then(res => res.json())
         .then(json => json.data);
     },
-    getNewsCategories(planetId) {
-      const url = `${this.baseUrl.news}/category?bannerID=${planetId}`;
+    getNewsCategories(planetId, lang = "zh_TW", country = "TW") {
+      const url = `${this.baseUrl.news}/category?bannerID=${planetId}&lang=${lang}&country=${country}`;
       if (this.debugMode) console.log(url);
       return fetch(url)
         .then(res => res.json())

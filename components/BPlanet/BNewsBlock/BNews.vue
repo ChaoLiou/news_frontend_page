@@ -1,10 +1,5 @@
 <template>
-  <nuxt-link
-    class="b-news"
-    :to="pageLink"
-    :href="pageLink ? pageLink : link"
-    :target="pageLink ? 'self' : '_blank'"
-  >
+  <div class="b-news" @click="toWebview">
     <div class="b-news__card">
       <div class="b-news__thumbnail">
         <img class="b-news__thumbnail-img-2" :src="thumbnail" @load="heightChanged" />
@@ -18,7 +13,7 @@
         <div>看結果</div>
       </div>
     </div>
-  </nuxt-link>
+  </div>
 </template>
 
 <script>
@@ -26,7 +21,7 @@ export default {
   props: {
     thumbnail: {
       type: String,
-      default: "/news-defualt-preview-img.png",
+      default: "",
     },
     source: {
       type: String,
@@ -53,6 +48,12 @@ export default {
     window.addEventListener("resize", this.heightChanged);
   },
   methods: {
+    toWebview() {
+      // BGO.open_full_h5_webview
+      BGO.redirect_uri_by_default_browser(this.link, (data) => {
+        console.log(data);
+      });
+    },
     heightChanged() {
       if (this.$el.offsetHeight > 0) {
         this.$parent.$emit("heightChanged", this.$el.offsetHeight);

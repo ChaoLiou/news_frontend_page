@@ -26,8 +26,10 @@ export default {
       newsTitleStickyTop: "",
     };
   },
-  async fetch() {
-    this.planets = await this.getPlanets();
+  mounted() {
+    this.getPlanets().then((planets) => {
+      this.planets = planets;
+    });
   },
   methods: {
     tabViewReady({ tabsHeight }) {

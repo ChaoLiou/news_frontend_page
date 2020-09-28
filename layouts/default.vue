@@ -2,6 +2,7 @@
   <div>
     <nuxt />
     <div :class="['float-btn-group', floatBtnShow ? 'float-btn-group_show' : '']">
+      <!-- <div style="width:100%;border-radius:0px">{{openIdData}}</div> -->
       <div class="go-to-home" @click="goToHome">
         <div class="go-to-home__icon"></div>
       </div>
@@ -24,18 +25,24 @@
   </div>
 </template>
 <script>
+import { get_openid_access_token } from "@/assets/js/beanfun_stg.js";
+
 export default {
   data() {
     return {
       floatBtnShow: false,
       REVISION: JSON.parse(process.env.REVISION),
       fontSize: 0,
+      openIdData: undefined,
     };
   },
   mounted() {
     this.fontSize = parseFloat(
       window.getComputedStyle(document.documentElement).fontSize
     );
+    get_openid_access_token((data) => {
+      this.openIdData = data;
+    });
   },
   methods: {
     goToHome() {
