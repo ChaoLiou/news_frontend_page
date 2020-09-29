@@ -1,9 +1,14 @@
 <template>
   <div
-    :class="['b-live-broadcast-block', masonry ? 'b-live-broadcast-block_masonry' : '']"
+    :class="[
+      'b-live-broadcast-block',
+      masonry ? 'b-live-broadcast-block_masonry' : '',
+    ]"
     :style="{
-    gridTemplateColumns: masonry ? '1fr' : `${titleLabelWidth} calc(100% - ${titleLabelWidth})`
-  }"
+      gridTemplateColumns: masonry
+        ? '1fr'
+        : `${titleLabelWidth} calc(100% - ${titleLabelWidth})`,
+    }"
   >
     <div class="b-live-broadcast-block__title">
       <div ref="titleLabel">{{ titleLabel }}</div>
@@ -36,35 +41,27 @@
 </template>
 
 <script>
-import BHorizontalScroll from "@/components/shared/BHorizontalScroll.vue";
-import BMasonryScroll from "@/components/shared/BMasonryScroll.vue";
-import BLiveBroadcast from "@/components/BPlanet/BLiveBroadcastBlock/BLiveBroadcast.vue";
 export default {
-  components: {
-    BHorizontalScroll,
-    BMasonryScroll,
-    BLiveBroadcast
-  },
   props: {
     titleLabel: {
       type: String,
-      default: "推薦直,播台"
+      default: "推薦直,播台",
     },
     source: {
       type: Array,
       default() {
         return [];
-      }
+      },
     },
     masonry: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       titleLabelWidth: "100px",
-      arr_source: []
+      arr_source: [],
     };
   },
   mounted() {
@@ -76,13 +73,13 @@ export default {
       setTimeout(() => {
         this.arr_source = this.arr_source.concat(this.source);
       }, 500);
-    }
+    },
   },
   watch: {
     source(value) {
       this.arr_source = value;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -99,7 +96,7 @@ export default {
   align-self: center;
   font-size: 1.25em;
   position: relative;
-  margin-bottom:10px;
+  margin-bottom: 10px;
 }
 .b-horizontal-scroll > * {
   margin-left: 8px;

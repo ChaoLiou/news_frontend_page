@@ -1,6 +1,3 @@
-const GitRevisionPlugin = require("git-revision-webpack-plugin");
-const gitRevisionPlugin = new GitRevisionPlugin();
-
 export default {
   /*
    ** Nuxt ssr
@@ -24,22 +21,21 @@ export default {
       {
         hid: "description",
         name: "description",
-        content: process.env.npm_package_description || ""
-      }
+        content: process.env.npm_package_description || "",
+      },
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     script: [
       {
         src:
-          "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beango_stg.min.js",
-        defer: true
+          // "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beango_stg.min.js",
+          "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beanfun.min.js",
       },
       {
         src:
           "https://beangochat.blob.core.windows.net/beango-static-prod/sdk/vconsole.min.js",
-        defer: true
-      }
-    ]
+      },
+    ],
   },
   /*
    ** Global CSS
@@ -69,13 +65,9 @@ export default {
    */
   build: {},
   env: {
-    REVISION: JSON.stringify({
-      version: JSON.stringify(gitRevisionPlugin.version()),
-      commithash: JSON.stringify(gitRevisionPlugin.commithash()),
-      branch: JSON.stringify(gitRevisionPlugin.branch())
-    }),
-    BASE_URL: JSON.stringify({
-      news: "http://localhost:8080"
-    })
-  }
+    BASE_URL: {
+      api: "https://753f40f86863.ngrok.io/v1",
+    },
+    DEBUG_MODE: false,
+  },
 };

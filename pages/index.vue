@@ -2,34 +2,36 @@
   <div class="index">
     <b-tab-view :source="planets" @ready="tabViewReady">
       <template v-slot:tab="props">
-        <div>{{props.item.name}}</div>
+        <div>{{ props.item.name }}</div>
       </template>
       <template v-slot:tab-item="props">
-        <b-planet :planet="props.item" :news-block-title-sticky-top="newsTitleStickyTop"></b-planet>
+        <b-planet
+          :planet="props.item"
+          :news-block-title-sticky-top="newsTitleStickyTop"
+        ></b-planet>
       </template>
     </b-tab-view>
   </div>
 </template>
 
 <script>
-import BPlanet from "@/components/BPlanet.vue";
-import planetsConf from "@/assets/json/planets.json";
-import fakedata from "@/assets/json/fakedata.json";
+import { get_openid_access_token } from "@/assets/js/beanfun_stg.js";
 
 export default {
-  components: {
-    BPlanet,
-  },
   data() {
     return {
-      planets: [],
       newsTitleStickyTop: "",
     };
   },
+  middleware: ["planets"],
+  computed: {
+    planets() {
+      return this.$store.getters["planets/list"];
+    },
+  },
   mounted() {
-    this.getPlanets().then((planets) => {
-      this.planets = planets;
-    });
+    // VConsole = new VConsole();
+    get_openid_access_token();
   },
   methods: {
     tabViewReady({ tabsHeight }) {
@@ -40,7 +42,4 @@ export default {
 </script>
 
 <style scoped>
-.planet-news {
-  padding-top: 8px;
-}
 </style>

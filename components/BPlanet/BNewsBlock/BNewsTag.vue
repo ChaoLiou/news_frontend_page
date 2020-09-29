@@ -1,9 +1,12 @@
 <template>
-  <div :class="{
+  <div
+    :class="{
       'b-news-tag': true,
-      tagged: tagged
-    }" @click="$emit('toggle')">
-    <div class="b-news-tag__title">{{titleLabel}}</div>
+      tagged: tagged,
+    }"
+    @click="$emit('toggle')"
+  >
+    <div class="b-news-tag__title">{{ titleLabel }}</div>
   </div>
 </template>
 
@@ -12,13 +15,13 @@ export default {
   props: {
     titleLabel: {
       type: String,
-      default: "標籤分類"
+      default: "",
     },
     tagged: {
       type: Boolean,
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 };
 </script>
 
