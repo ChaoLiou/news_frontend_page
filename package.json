@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "nuxt --config-file nuxt.config.dev.js",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate"
@@ -11,7 +11,5 @@
   "dependencies": {
     "nuxt": "^2.14.0"
   },
-  "devDependencies": {
-    "git-revision-webpack-plugin": "^3.0.6"
-  }
+  "devDependencies": {}
 }

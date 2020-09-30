@@ -12,8 +12,12 @@
     </div>
     <div class="planet-audiovisual-id__content">
       <div class="planet-audiovisual-id__video-meta">
-        <div class="planet-audiovisual-id__video-title">{{audiovisual.title}}</div>
-        <div class="planet-audiovisual-id__video-views">觀看次數: {{audiovisual.views}}次</div>
+        <div class="planet-audiovisual-id__video-title">
+          {{ audiovisual.title }}
+        </div>
+        <div class="planet-audiovisual-id__video-views">
+          觀看次數: {{ audiovisual.views }}次
+        </div>
         <div class="planet-audiovisual-id__author">
           <div
             class="planet-audiovisual-id__author-img"
@@ -21,7 +25,9 @@
               backgroundImage: `url(${audiovisual.authorImg})`,
             }"
           ></div>
-          <div class="planet-audiovisual-id__author-name">{{audiovisual.author}}</div>
+          <div class="planet-audiovisual-id__author-name">
+            {{ audiovisual.author }}
+          </div>
         </div>
       </div>
       <div class="planet-audiovisual-id__ad-block">
@@ -36,47 +42,34 @@
           />
         </b-horizontal-scroll>
       </div>
-      <b-audiovisual-block masonry title-label="你可能會喜歡" :source="others" />
+      <b-audiovisual-block
+        masonry
+        title-label="你可能會喜歡"
+        :source="others"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import BAdCard from "@/components/shared/Ad/BAdCard.vue";
-import BAudiovisualBlock from "@/components/BPlanet/BAudiovisualBlock.vue";
-import BHorizontalScroll from "@/components/shared/BHorizontalScroll.vue";
 import planetsConf from "@/assets/json/planets.json";
-import fakeads from "@/assets/json/fakeads.json";
-import fakedata from "@/assets/json/fakedata.json";
-import fakeaudiovisual from "@/assets/json/fakeaudiovisual.json";
 export default {
-  components: {
-    BHorizontalScroll,
-    BAdCard,
-    BAudiovisualBlock
-  },
   data() {
     return {
-      ads: fakeads
+      ads: fakeads,
     };
   },
   computed: {
     audiovisual() {
-      return fakeaudiovisual.find(
-        p =>
-          (p.id === "1" || p.id === this.$route.params.id) &&
-          p.planet === this.$route.params.planet
-      );
+      return;
     },
     others() {
-      return this.audiovisuals.filter((news, index) => !!index);
+      return;
     },
     audiovisuals() {
-      return this.$combineFakeData(planetsConf, fakedata)
-        .find(planet => this.$route.params.planet === planet.id)
-        .contentTypes.find(ct => ct.id === "audiovisual").items;
-    }
-  }
+      return;
+    },
+  },
 };
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="b-planet">
-    <template v-for="(contentType, index) in (fakeplanet ? fakeplanet.contentTypes : [])">
+    <template v-for="(contentType, index) in planetConf.contentTypes">
       <b-audiovisual-block
         v-if="contentType.id === 'audiovisual'"
         :key="index"
@@ -19,7 +19,7 @@
         :title-label="contentType.title"
         :source="contentType.items"
         :tags="contentType.tags"
-        :planetId="planet.id"
+        :planet-id="planetId"
         :sticky-top="newsBlockTitleStickyTop"
       />
     </template>
@@ -27,23 +27,14 @@
 </template>
 
 <script>
-import BAudiovisualBlock from "@/components/BPlanet/BAudiovisualBlock.vue";
-import BLiveBroadcastBlock from "@/components/BPlanet/BLiveBroadcastBlock.vue";
-import BNewsBlock from "@/components/BPlanet/BNewsBlock.vue";
-import planetsConf from "@/assets/json/planets.json";
-import fakedata from "@/assets/json/fakedata.json";
+import planetConf from "@/assets/json/planets.json";
 
 export default {
-  components: {
-    BAudiovisualBlock,
-    BLiveBroadcastBlock,
-    BNewsBlock,
-  },
   props: {
     planet: {
       type: Object,
       default() {
-        return {};
+        return undefined;
       },
     },
     newsTags: {
@@ -57,15 +48,13 @@ export default {
       default: "",
     },
   },
-  data() {
-    return {
-      fakeplanet: undefined,
-    };
-  },
-  mounted() {
-    this.fakeplanet = this.$combineFakeData(planetsConf, fakedata).find(
-      (p) => p._id === this.planet.id
-    );
+  computed: {
+    planetId() {
+      return this.planet ? this.planet.id : 0;
+    },
+    planetConf() {
+      return planetConf.find((p) => p._id === this.planet.id);
+    },
   },
 };
 </script>

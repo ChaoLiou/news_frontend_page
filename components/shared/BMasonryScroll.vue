@@ -3,10 +3,14 @@
     <b-masonry-proxy
       v-for="(item, index) in items"
       :key="index"
-      ref="items"
       :class="{ 'trigger-loading-more': triggerable(index) }"
       :trigger-loading-more="triggerable(index)"
-      :style="{ gridRowEnd: rowSpans.length > 0 ? `span ${rowSpans[index] ? rowSpans[index] : '10'}` : `span 10` }"
+      :style="{
+        gridRowEnd:
+          rowSpans.length > 0
+            ? `span ${rowSpans[index] ? rowSpans[index] : '10'}`
+            : `span 10`,
+      }"
       @heightChanged="(height) => heightChanged(index, height)"
       @load-more="loadMore(index)"
     >
@@ -15,20 +19,21 @@
     <template v-if="loading">
       <div
         class="b-masonry-scroll__placeholder"
-        :style="{ gridRowEnd: rowSpans.length > 0 ? `span ${rowSpans[index] ? rowSpans[index] : '10'}` : `span 10` }"
+        :style="{
+          gridRowEnd: gridRowEnd(index),
+        }"
         v-for="index in rowSpans.length"
         :key="`placeholder-${index}`"
       ></div>
     </template>
+    <div class="b-masonry-scroll__no-more" v-else>
+      <slot name="nomore" />
+    </div>
   </div>
 </template>
 
 <script>
-import BMasonryProxy from "@/components/shared/BMasonryScroll/BMasonryProxy.vue";
 export default {
-  components: {
-    BMasonryProxy,
-  },
   props: {
     items: {
       type: Array,
@@ -38,7 +43,7 @@ export default {
     },
     loading: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   data() {
@@ -53,17 +58,22 @@ export default {
     this.rowSpans = Array.from({ length: this.items.length }, (v, i) => 0);
   },
   methods: {
+    gridRowEnd(index) {
+      return this.rowSpans.length > 0
+        ? `span ${this.rowSpans[index] ? this.rowSpans[index] : "10"}`
+        : `span 10`;
+    },
     triggerable(index) {
-      return (index + 1) % (this.pageSize / 2) === 0 && this.pageIndex < 19;
+      return (index + 1) % (this.pageSize / 2) === 0;
     },
     reset() {
       this.pageIndex = 1;
+      window.scrollTo(0, 0);
     },
     heightChanged(index, height) {
       this.$set(this.rowSpans, index, Math.ceil((height + 10) / 20));
     },
     loadMore(index) {
-      // console.log({ pageIndex: this.pageIndex, pageSize: this.pageSize });
       if (index + 1 === this.pageIndex * this.pageSize) {
         this.$emit("load-more", {
           pageSize: this.pageSize,
@@ -93,6 +103,12 @@ export default {
   background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
   background-size: 1200px 104px;
   position: relative;
+}
+.b-masonry-scroll__no-more {
+  grid-column: 1/-1;
+  grid-row-end: span 2;
+  justify-self: center;
+  color: #00000081;
 }
 @keyframes placeload {
   0% {

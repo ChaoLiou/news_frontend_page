@@ -1,5 +1,10 @@
 <template>
-  <div :class="['b-audiovisual-block', masonry ? 'b-audiovisual-block_masonry' : '']">
+  <div
+    :class="[
+      'b-audiovisual-block',
+      masonry ? 'b-audiovisual-block_masonry' : '',
+    ]"
+  >
     <div>
       <div class="b-audiovisual-block__title">{{ titleLabel }}</div>
     </div>
@@ -35,34 +40,26 @@
 </template>
 
 <script>
-import BHorizontalScroll from "@/components/shared/BHorizontalScroll.vue";
-import BMasonryScroll from "@/components/shared/BMasonryScroll.vue";
-import BAudiovisual from "@/components/BPlanet/BAudiovisualBlock/BAudiovisual.vue";
 export default {
-  components: {
-    BHorizontalScroll,
-    BAudiovisual,
-    BMasonryScroll
-  },
   props: {
     titleLabel: {
       type: String,
-      default: "快速影片"
+      default: "快速影片",
     },
     source: {
       type: Array,
       default() {
         return [];
-      }
+      },
     },
     masonry: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      arr_source: []
+      arr_source: [],
     };
   },
   mounted() {
@@ -73,13 +70,13 @@ export default {
       setTimeout(() => {
         this.arr_source = this.arr_source.concat(this.source);
       }, 500);
-    }
+    },
   },
   watch: {
     source(value) {
       this.arr_source = value;
-    }
-  }
+    },
+  },
 };
 </script>
 

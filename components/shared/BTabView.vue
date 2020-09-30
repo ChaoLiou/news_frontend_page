@@ -6,7 +6,10 @@
       :style="{ gridTemplateColumns: `repeat(${source.length}, max-content)` }"
     >
       <div
-        :class="['b-tab-view__tab', selected(item) ? 'b-tab-view__tab_selected' : '']"
+        :class="[
+          'b-tab-view__tab',
+          selected(item) ? 'b-tab-view__tab_selected' : '',
+        ]"
         v-for="(item, index) in source"
         :key="`tab-${index}`"
         @click="selectedTab = item"
@@ -15,11 +18,7 @@
       </div>
     </div>
     <div class="b-tab-view__tab-items">
-      <div
-        v-show="selectedTab.id === item.id"
-        v-for="(item, index) in source"
-        :key="`tab-item-${index}`"
-      >
+      <div>
         <slot name="tab-item" :item="item" />
       </div>
     </div>
@@ -40,6 +39,11 @@ export default {
     return {
       selectedTab: undefined,
     };
+  },
+  computed: {
+    item() {
+      return this.source.find((s) => s.id === this.selectedTab.id);
+    },
   },
   mounted() {
     const tabs = this.$refs.tabs;

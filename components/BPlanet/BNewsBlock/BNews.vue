@@ -2,7 +2,11 @@
   <div class="b-news" @click="toWebview">
     <div class="b-news__card">
       <div class="b-news__thumbnail">
-        <img class="b-news__thumbnail-img-2" :src="thumbnail" @load="heightChanged" />
+        <img
+          class="b-news__thumbnail-img-2"
+          :src="thumbnail"
+          @load="heightChanged"
+        />
       </div>
       <div class="b-news__info">
         <div class="b-news__source">{{ source }}</div>
@@ -19,6 +23,10 @@
 <script>
 export default {
   props: {
+    planetId: {
+      type: Number,
+      default: 0,
+    },
     thumbnail: {
       type: String,
       default: "",
@@ -44,15 +52,20 @@ export default {
       default: "",
     },
   },
+  computed: {
+    planet() {
+      return this.$store.getters["planets/find"](this.planetId);
+    },
+    planetTitle() {
+      return this.planet ? this.planet.name : "星球";
+    },
+  },
   mounted() {
     window.addEventListener("resize", this.heightChanged);
   },
   methods: {
     toWebview() {
-      // BGO.open_full_h5_webview
-      BGO.redirect_uri_by_default_browser(this.link, (data) => {
-        console.log(data);
-      });
+      BGO.open_full_h5_webview(this.link, this.planetTitle);
     },
     heightChanged() {
       if (this.$el.offsetHeight > 0) {

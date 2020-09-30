@@ -25,40 +25,36 @@
 </template>
 
 <script>
-import BPlayIcon from "@/components/shared/icons/BPlayIcon.vue";
 export default {
-  components: {
-    BPlayIcon
-  },
   props: {
     thumbnail: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     author: {
       type: String,
-      default: ""
+      default: "",
     },
     titleLabel: {
       type: String,
-      default: ""
+      default: "",
     },
     views: {
       type: String,
-      default: ""
+      default: "",
     },
     pageLink: {
       type: String,
-      default: ""
+      default: "",
     },
     link: {
       type: String,
-      default: ""
+      default: "",
     },
     width: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
   mounted() {
     const thumbnailImgDOM = this.$refs.thumbnailImg;
@@ -76,7 +72,7 @@ export default {
       if (this.$el.offsetHeight > 0) {
         this.$parent.$emit("heightChanged", this.$el.offsetHeight);
       }
-    }
+    },
   },
   watch: {
     thumbnail(value) {
@@ -89,8 +85,8 @@ export default {
         parentVueComp.$emit("heightChanged", $rootDOM.offsetHeight);
       };
       thumbnailImage.src = value;
-    }
-  }
+    },
+  },
 };
 </script>
 
