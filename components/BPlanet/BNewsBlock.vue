@@ -6,7 +6,9 @@
       :style="stickyStyles"
     >
       <b-horizontal-scroll>
-        <div class="b-news-block__title">{{ titleLabel }}</div>
+        <div class="b-news-block__title" @click="enableVConsole">
+          {{ titleLabel }}
+        </div>
         <b-news-tag
           v-for="(tag, index) in tagsData"
           :key="index"
@@ -82,6 +84,9 @@ export default {
     },
   },
   methods: {
+    enableVConsole() {
+      new VConsole();
+    },
     initCategories() {
       this.tagsData = this.$store.getters["categories/list"].map(
         (c, index) => ({

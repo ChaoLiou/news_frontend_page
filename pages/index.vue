@@ -30,7 +30,6 @@ export default {
     },
   },
   mounted() {
-    // VConsole = new VConsole();
     get_openid_access_token();
   },
   methods: {
