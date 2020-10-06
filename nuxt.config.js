@@ -17,25 +17,28 @@ export default {
     title: process.env.npm_package_name || "",
     meta: [
       { charset: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        name: "viewport",
+        content: "width=device-width, initial-scale=1, user-scalable=no"
+      },
       {
         hid: "description",
         name: "description",
-        content: process.env.npm_package_description || "",
-      },
+        content: process.env.npm_package_description || ""
+      }
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     script: [
       {
         src:
           // "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beango_stg.min.js",
-          "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beanfun.min.js",
+          "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beanfun.min.js"
       },
       {
         src:
-          "https://beangochat.blob.core.windows.net/beango-static-prod/sdk/vconsole.min.js",
-      },
-    ],
+          "https://beangochat.blob.core.windows.net/beango-static-prod/sdk/vconsole.min.js"
+      }
+    ]
   },
   /*
    ** Global CSS
@@ -66,8 +69,8 @@ export default {
   build: {},
   env: {
     BASE_URL: {
-      api: "https://753f40f86863.ngrok.io/v1",
+      api: "https://753f40f86863.ngrok.io/v1"
     },
-    DEBUG_MODE: false,
-  },
+    DEBUG_MODE: false
+  }
 };

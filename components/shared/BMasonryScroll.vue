@@ -6,10 +6,7 @@
       :class="{ 'trigger-loading-more': triggerable(index) }"
       :trigger-loading-more="triggerable(index)"
       :style="{
-        gridRowEnd:
-          rowSpans.length > 0
-            ? `span ${rowSpans[index] ? rowSpans[index] : '10'}`
-            : `span 10`,
+        gridRowEnd: gridRowEnd(index),
       }"
       @heightChanged="(height) => heightChanged(index, height)"
       @load-more="loadMore(index)"

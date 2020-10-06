@@ -90,4 +90,4 @@ sw.*
 *.swp
 
 package-lock.json
-static/detail.html
+articles/
