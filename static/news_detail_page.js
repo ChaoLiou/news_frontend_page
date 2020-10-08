@@ -5,8 +5,17 @@ const config = {
   id: "" || parts[parts.length - 2],
   defaultImg: "/news_detail_img_default.png",
   scripts: [
-    "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beanfun.min.js",
-    "https://beangochat.blob.core.windows.net/beango-static-prod/sdk/vconsole.min.js"
+    {
+      src:
+        "https://beangochat.blob.core.windows.net/beango-static-prod/sdk/beango.min.js",
+      onload: beanfunOnLoad
+    },
+    {
+      src:
+        "https://beangochat.blob.core.windows.net/beango-static-prod/sdk/vconsole.min.js",
+      onload: vConsoleOnLoad
+    },
+    { src: "https://cdn.jsdelivr.net/npm/vue/dist/vue.js", onload: vueOnload }
   ]
 };
 const bodyDOM = document.querySelector("body");
@@ -14,15 +23,30 @@ const bodyDOM = document.querySelector("body");
 includeScriptSources();
 init();
 
+function beanfunOnLoad() {
+  console.log("beanfunOnLoad");
+}
+
+function vConsoleOnLoad() {
+  console.log("vConsoleOnLoad");
+  // VConsole = new VConsole();
+}
+
+function vueOnload() {
+  console.log("vueOnload");
+  initRecommends();
+}
+
 function includeScriptSources() {
   const headDOM = document.querySelector("head");
-  config.scripts.forEach(src =>
-    headDOM.append(createElement("script", { src }))
-  );
+  config.scripts.forEach(script => {
+    const scriptDOM = createElement("script", { src: script.src });
+    scriptDOM.onload = script.onload;
+    headDOM.append(scriptDOM);
+  });
 }
 
 function init() {
-  // VConsole = new VConsole();
   initToolMenu();
 
   fetch(config.news_API + "/news?id=" + config.id)
@@ -134,6 +158,277 @@ function initHeaderAndDetail(data) {
   bindEvents(data);
 }
 
+function initBMasonryProxy() {
+  Vue.component("b-masonry-proxy", {
+    template: `
+<div class="b-masonry-proxy">
+  <slot></slot>
+</div>`,
+    props: {
+      triggerLoadingMore: {
+        type: Boolean,
+        default: false
+      }
+    },
+    data() {
+      return {
+        observer: undefined
+      };
+    },
+    mounted() {
+      if (this.triggerLoadingMore) {
+        this.observer = new IntersectionObserver(this.handleScroll, {
+          root: null,
+          threshold: 0
+        });
+        this.observer.observe(this.$el);
+      }
+    },
+    methods: {
+      handleScroll(entries, observer) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            this.$emit("load-more");
+          }
+        });
+      }
+    },
+    watch: {
+      triggerLoadingMore(value) {
+        if (!value) {
+          this.observer.disconnect();
+          this.observer = undefined;
+        }
+      }
+    }
+  });
+}
+
+function initBMasonryScroll() {
+  Vue.component("b-masonry-scroll", {
+    template: `
+<div class="b-masonry-scroll">
+    <b-masonry-proxy
+      v-for="(item, index) in items"
+      :key="index"
+      :class="{ 'trigger-loading-more': triggerable(index) }"
+      :trigger-loading-more="triggerable(index)"
+      :style="{
+        gridRowEnd: gridRowEnd(index),
+      }"
+      @heightChanged="(height) => heightChanged(index, height)"
+      @load-more="loadMore(index)"
+    >
+      <slot :item="{ ...item, index }"></slot>
+    </b-masonry-proxy>
+    <template v-if="loading">
+      <div
+        class="b-masonry-scroll__placeholder"
+        :style="{
+          gridRowEnd: gridRowEnd(index),
+        }"
+        v-for="index in rowSpans.length"
+        :key="'placeholder-' + index"
+      ></div>
+    </template>
+    <div class="b-masonry-scroll__no-more" v-else>
+      <slot name="nomore" />
+    </div>
+</div>`,
+    props: {
+      items: {
+        type: Array,
+        default() {
+          return [];
+        }
+      },
+      loading: {
+        type: Boolean,
+        default: true
+      }
+    },
+    data() {
+      return {
+        rowSpans: [],
+        observer: undefined,
+        pageIndex: 1,
+        pageSize: 10
+      };
+    },
+    mounted() {
+      this.rowSpans = Array.from({ length: this.items.length }, (v, i) => 0);
+    },
+    methods: {
+      gridRowEnd(index) {
+        return this.rowSpans.length > 0
+          ? `span ${this.rowSpans[index] ? this.rowSpans[index] : "10"}`
+          : `span 10`;
+      },
+      triggerable(index) {
+        return (index + 1) % (this.pageSize / 2) === 0;
+      },
+      heightChanged(index, height) {
+        this.$set(this.rowSpans, index, Math.ceil((height + 10) / 20));
+      },
+      loadMore(index) {
+        if (index + 1 === this.pageIndex * this.pageSize) {
+          this.$emit("load-more", {
+            pageSize: this.pageSize,
+            pageIndex: ++this.pageIndex
+          });
+        }
+      }
+    }
+  });
+}
+
+function initBNews() {
+  Vue.component("b-news", {
+    template: `
+  <div class="b-news" @click="toWebview">
+  <a :href="link">
+    <div class="b-news__card">
+      <div class="b-news__thumbnail">
+        <img
+          class="b-news__thumbnail-img-2"
+          :src="thumbnail"
+          @load="heightChanged"
+        />
+      </div>
+      <div class="b-news__info">
+        <div class="b-news__source">{{ source }}</div>
+        <div class="b-news__title">{{ titleLabel }}</div>
+      </div>
+    </div>
+  </a>
+  </div>`,
+    props: {
+      link: {
+        type: String,
+        default: ""
+      },
+      thumbnail: {
+        type: String,
+        default: ""
+      },
+      source: {
+        type: String,
+        default: ""
+      },
+      titleLabel: {
+        type: String,
+        default: ""
+      },
+      poll: {
+        type: Boolean,
+        default: false
+      },
+      pageLink: {
+        type: String,
+        default: ""
+      },
+      link: {
+        type: String,
+        default: ""
+      }
+    },
+    mounted() {
+      window.addEventListener("resize", this.heightChanged);
+    },
+    methods: {
+      toWebview() {
+        // BGO.open_full_h5_webview(this.link, this.planetTitle);
+      },
+      heightChanged() {
+        if (this.$el.offsetHeight > 0) {
+          this.$parent.$emit("heightChanged", this.$el.offsetHeight);
+        }
+      }
+    }
+  });
+}
+
+function initRecommends() {
+  initBMasonryProxy();
+  initBMasonryScroll();
+  initBNews();
+  new Vue({
+    el: ".recommends",
+    template: `
+  <b-masonry-scroll
+    :loading="loading"
+    :items="arr_source"
+    @load-more="loadMore"
+    ref="bMasonryScroll"
+  >
+    <template #default="props">
+      <b-news
+        :thumbnail="props.item.img"
+        :title-label="props.item.title"
+        :source="props.item.source"
+        :poll="props.item.poll"
+        :page-link="props.item.pageLink"
+        :link="props.item.link"
+      />
+    </template>
+    <template #nomore>沒有更多新聞了</template>
+  </b-masonry-scroll>`,
+    data() {
+      return {
+        arr_source: [],
+        loading: true
+      };
+    },
+    mounted() {
+      this.init();
+    },
+    methods: {
+      init() {
+        this.loading = true;
+        this.arr_source = [];
+        this.loadMore();
+      },
+      loadMoreNews(list, pageIndex) {
+        if (list) {
+          if (pageIndex === 1) {
+            this.arr_source = [];
+          }
+          this.arr_source.push(...list);
+        }
+        this.loading = false;
+      },
+      loadMore({ pageSize, pageIndex } = { pageSize: 10, pageIndex: 1 }) {
+        this.loading = true;
+        const apiRelative = `news?page=${pageIndex}&pageSize=${pageSize}&timestamp=${Date.now()}&bannerID=2`;
+        get(apiRelative)
+          .then(json => this.loadMoreNews(json.data.map(formatNews), pageIndex))
+          .catch(err => {
+            console.error(err);
+            this.loading = false;
+          });
+      }
+    }
+  });
+}
+
+function get(apiRelative) {
+  const url = `${config.news_API}/${apiRelative}`;
+  return fetch(url, {
+    mode: "cors"
+  }).then(res => res.json());
+}
+
+function formatNews(news) {
+  return {
+    img: news.Images.length > 0 ? news.Images[0].file_path : undefined,
+    title: news.src_title,
+    source: "Nownews",
+    poll: false,
+    pageLink: "",
+    link: news.article_path
+  };
+}
+
 function bindEvents(data) {
   const insideSharingDOM = document.querySelector(".tool-menu__inside-sharing");
   const outsideSharingDOM = document.querySelector(
@@ -218,12 +513,14 @@ function transformMilliseconds(ms) {
   const nowDateObj = new Date();
   if (sameDate(dateObj, nowDateObj)) {
     if (sameDateHours(dateObj, nowDateObj)) {
-      return nowDateObj.getMinutes() - dateObj.getMinutes() + "分鐘前";
+      return (
+        Math.abs(nowDateObj.getMinutes() - dateObj.getMinutes()) + "分鐘前"
+      );
     } else {
-      return nowDateObj.getHours() - dateObj.getHours() + "小時前";
+      return Math.abs(nowDateObj.getHours() - dateObj.getHours()) + "小時前";
     }
   } else {
-    return nowDateObj.getDate() - dateObj.getDate() + "天前";
+    return Math.abs(nowDateObj.getDate() - dateObj.getDate()) + "天前";
   }
 }
 
