@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+
+    <!-- Primary Meta Tags -->
+    <title>{{title}}</title>
+    <meta name="title" content="{{title}}" />
+    <meta name="description" content="{{description}}" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{link}}" />
+    <meta property="og:title" content="{{title}}" />
+    <meta property="og:description" content="{{description}}" />
+    <meta property="og:image" content="{{image}}" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="{{link}}" />
+    <meta property="twitter:title" content="{{title}}" />
+    <meta property="twitter:description" content="{{description}}" />
+    <meta property="twitter:image" content="{{image}}" />
+    <link rel="stylesheet" type="text/css" href="/news_detail_page.css" />
+  </head>
+  <body>
+    <div class="header">
+      <div
+        class="header__thumbnail"
+        style='background-image: url("{{image}}");'
+      ></div>
+      <div class="header__text-info">
+        <div
+          class="header__source-img"
+          style='background-image: url("/news_detail_img_default.png");'
+        ></div>
+        <div class="header__source-title"></div>
+        <div class="header__published-updated"></div>
+        <div class="title header__title">
+          {{title}}
+        </div>
+      </div>
+    </div>
+    <div class="detail">
+      <div class="content detail__content">
+        {{content}}
+      </div>
+    </div>
+    <div class="ads"></div>
+    <div class="recommends">
+      <div class="recommends__title"></div>
+      <div class="masonry-scroll"></div>
+    </div>
+    <script src="/news_detail_page.js" defer></script>
+  </body>
+</html>

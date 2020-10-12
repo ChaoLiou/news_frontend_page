@@ -32,7 +32,7 @@ figure {
 }
 .header__thumbnail {
   height: 200px;
-  background-color: black;
+  background-color: #c5c5c5;
 }
 .header__text-info {
   padding: 15px 10px;
@@ -46,6 +46,7 @@ figure {
   height: 100%;
   grid-column: 1/2;
   grid-row: 1/3;
+  background-color: #c5c5c5;
 }
 .header__source-title {
   grid-row: 1/2;
@@ -63,6 +64,14 @@ figure {
   grid-row: 2/3;
   color: #c4c4c4;
   font-size: 0.8em;
+}
+.detail::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 8px;
+  background-color: #f7f7f7;
+  margin: 12px 0px;
 }
 .detail p {
   padding: 15px;
@@ -107,6 +116,8 @@ figure {
 }
 iframe {
   width: 100%;
+}
+iframe[src*="youtube"] {
   height: calc(100vw * 9 / 16);
   border: 0px;
 }
@@ -243,6 +254,10 @@ iframe {
   pointer-events: none;
   cursor: default;
 }
-.tool-menu {
-  display: none;
+.recommends {
+  margin: 0px 12px;
+}
+.recommends__title {
+  font-weight: bold;
+  margin: 16px 0px;
 }

@@ -7,7 +7,8 @@ const config = {
   scripts: [
     {
       src:
-        "https://beangochat.blob.core.windows.net/beango-static-prod/sdk/beango.min.js",
+        // "https://beangochat.blob.core.windows.net/beango-static-prod/sdk/beango.min.js",
+        "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beanfun.min.js",
       onload: beanfunOnLoad
     },
     {
@@ -29,7 +30,7 @@ function beanfunOnLoad() {
 
 function vConsoleOnLoad() {
   console.log("vConsoleOnLoad");
-  // VConsole = new VConsole();
+  // new VConsole();
 }
 
 function vueOnload() {
@@ -86,75 +87,15 @@ function initToolMenu() {
 
 function initHeaderAndDetail(data) {
   console.log(data);
-  const sourceImgDOM = createElement("div", {
-    class: "header__source-img"
-  });
-  sourceImgDOM.style.backgroundImage = "url('" + config.defaultImg + "')";
-  const sourceTitleDOM = createElement("div", {
-    class: "header__source-title",
-    text: data.src_site.description
-  });
-  const publishedDOM = createElement("div", {
-    class: "header__published-updated",
-    text:
+  const sourceTitleDOM = document.querySelector(".header__source-title");
+  sourceTitleDOM.textContent = data.src_site.description;
+  const datetimeInfoDOM = document.querySelector(".header__published-updated");
+  datetimeInfoDOM.textContent =
       formatPublishedText(data.src_publish_time_unix) +
       " " +
-      formatUpdatedText(data.src_update_time_unix)
-  });
-  const titleDOM = document.querySelector(".title");
-  titleDOM.classList.add("header__title");
-  const textDOM = createElement("div", { class: "header__text-info" }, [
-    sourceImgDOM,
-    sourceTitleDOM,
-    publishedDOM,
-    titleDOM
-  ]);
-  const thumbnailDOM = createElement("div", { class: "header__thumbnail" });
-  if (data.Images && data.Images.length > 0) {
-    thumbnailDOM.style.backgroundImage =
-      "url('" + data.Images[0].file_path + "')";
-  }
-  const headerDOM = createElement("div", { class: "header" }, [
-    thumbnailDOM,
-    textDOM
-  ]);
-
-  document
-    .querySelector(".tool-menu")
-    .insertAdjacentElement("afterend", headerDOM);
-
-  const originalLinkDOM = createElement("a", {
-    class: "footer__original-link",
-    href: data.src_url,
-    target: "blank",
-    text: "前往"
-  });
-
-  const footerSourceImgDOM = createElement("div", {
-    class: "footer__source-img"
-  });
-  footerSourceImgDOM.style.backgroundImage = "url('" + config.defaultImg + "')";
-  const footerSourceTitleDOM = createElement("div", {
-    class: "footer__source-title",
-    text: data.src_site.description
-  });
-  const footerDOM = createElement("div", { class: "detail__footer" }, [
-    footerSourceImgDOM,
-    footerSourceTitleDOM,
-    originalLinkDOM
-  ]);
-  const contentDOM = document.querySelector(".content");
-  contentDOM.classList.add("detail__content");
-
-  const detailDOM = createElement("div", { class: "detail" }, [
-    contentDOM,
-    footerDOM
-  ]);
-
-  document
-    .querySelector(".header")
-    .insertAdjacentElement("afterend", detailDOM);
-
+    formatUpdatedText(data.src_update_time_unix);
+  const recommendsTitle = document.querySelector(".recommends__title");
+  recommendsTitle.textContent = "你可能會喜歡";
   bindEvents(data);
 }
 
@@ -353,7 +294,7 @@ function initRecommends() {
   initBMasonryScroll();
   initBNews();
   new Vue({
-    el: ".recommends",
+    el: ".masonry-scroll",
     template: `
   <b-masonry-scroll
     :loading="loading"
