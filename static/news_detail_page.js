@@ -1,7 +1,7 @@
 const parts = location.pathname.split("/").filter(v => !!v);
 
 const config = {
-  news_API: "https://753f40f86863.ngrok.io/v1",
+  news_API: "https://stg-news-api.beanfun.com/v1",
   id: "" || parts[parts.length - 2],
   defaultImg: "/news_detail_img_default.png",
   scripts: [
@@ -30,7 +30,7 @@ function beanfunOnLoad() {
 
 function vConsoleOnLoad() {
   console.log("vConsoleOnLoad");
-  // new VConsole();
+  new VConsole();
 }
 
 function vueOnload() {
@@ -91,8 +91,8 @@ function initHeaderAndDetail(data) {
   sourceTitleDOM.textContent = data.src_site.description;
   const datetimeInfoDOM = document.querySelector(".header__published-updated");
   datetimeInfoDOM.textContent =
-      formatPublishedText(data.src_publish_time_unix) +
-      " " +
+    formatPublishedText(data.src_publish_time_unix) +
+    " " +
     formatUpdatedText(data.src_update_time_unix);
   const recommendsTitle = document.querySelector(".recommends__title");
   recommendsTitle.textContent = "你可能會喜歡";
@@ -375,37 +375,110 @@ function bindEvents(data) {
   const outsideSharingDOM = document.querySelector(
     ".tool-menu__outside-sharing"
   );
+  // const link = `${location.origin}/articles/tw/1/1315985892283793408/detail.html`;
+  const link = data.article_path;
+  const widgetId = "5f55f91c53b8fe00073e2905";
+  const deepLink = `beanfunapp://Q/h5/w_id/${widgetId}?url=${encodeURIComponent(
+    link
+  )}`;
+  console.log(encodeURIComponent(link));
+  const image = data.Images[0].file_path;
+  console.log({ link, widgetId, deepLink, image });
   insideSharingDOM.addEventListener("click", () => {
-    BGO.send_message_v2(
-      {
-        messages: [
-          {
-            promote_notification: "來自星球的新聞分享",
-            raw_message: {
-              mime_type: 80,
-              content: data.src_title + " " + data.article_path
-            }
+    const msg_body = {
+      messages: [
+        {
+          raw_message: {
+            mime_type: 81,
+            content: data.src_title + "\n" + link,
+            metadata: {
+              application_x_beanfun_interactive_metadata: {
+                service_id: widgetId,
+                image_info: {
+                  mime_type: 10,
+                  uri: image,
+                  thumbnail_uri: image
+                },
+                once: false,
+                forwardable: true,
+                expired_hint: "新聞過期",
+                options: [
+                  {
+                    opt_key: "app_link_option_key",
+                    opt_type: 3,
+                    description: data.src_title,
+                    uri: data.article_path
+                  }
+                ],
+                interactive_key: "sdk_interactive_key"
+              }
+            },
+            expired_time: -1
           }
-        ]
+        }
+      ]
+    };
+    const select_opt = {
+      title: "轉傳至",
+      target: {
+        friend: 1,
+        group: 1,
+        fun_chat: 1,
+        nickname_group: 1,
+        game: 1
       },
-      {
-        title: "好友群",
-        target: {
-          friend: 1,
-          group: 1,
-          fun_chat: 1,
-          nickname_group: 1,
-          game: 1
-        },
-        max_selected_count: -1
-      }
-    );
-  });
-  outsideSharingDOM.addEventListener("click", () => {
-    BGO.send_data_to_apps({
-      text: data.src_title + " " + data.article_path
+      max_selected_count: -1
+    };
+    console.log({ msg_body, select_opt });
+    BGO.send_message_v2(msg_body, select_opt, result => {
+      console.log(result);
     });
   });
+  outsideSharingDOM.addEventListener("click", () => {
+    const defaultLink = `https://beanfunstor.blob.core.windows.net/redirect/appCheck.html?url=${encodeURIComponent(
+      deepLink
+    )}`;
+    const body = {
+      seo: {
+        title: data.src_title,
+        description: data.src_title,
+        image
+      },
+      defaultLink
+    };
+
+    var headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append(
+      "Authorization",
+      "Basic YmVhbmZ1bjpleUpqYjJSbGJtRnRaU0k2SW1KbFlXNW1kVzRpTENKaGIzUjBaWEpKWkNJNklqVmpOR1ptWlRZd05XTmhabVEwTURjME16bG1aRFJpWmlJc0luUnpJam94TlRZMk9URTFOell4TlRnMGZRPT0="
+    );
+    console.log({ defaultLink, body, headers });
+    fetchCORS("https://bean.fun/api/link/create_if_missing", {
+      method: "POST",
+      headers,
+      body: JSON.stringify(body)
+    }).then(json => {
+      console.log({ create_if_missing: json });
+      if (json._id) {
+        const shortenLink = `https://bean.fun/${json._id}`;
+        BGO.send_data_to_apps({
+          text: `我在beanfun! 看到這個有趣的新聞! 一起來看新聞吧!\n\n${shortenLink}`
+        });
+      } else {
+        console.error("_id is not found");
+      }
+    });
+  });
+}
+
+function fetchCORS(url, { method, headers, body }, cb) {
+  const cors_api_url = "https://cors-anywhere.herokuapp.com";
+  return fetch(`${cors_api_url}/${url} `, {
+    method,
+    headers,
+    body
+  }).then(res => res.json());
 }
 
 function createElement(tagName, options, childList) {

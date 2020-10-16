@@ -4,19 +4,19 @@ const config = {
   secret: "aee67dd89f5c4085ac044461b58b89fb_oas",
   clientId: "D3919088-F73B-4F2C-9EAB-84168195BEEF",
   widgetId: "5f55f91c53b8fe00073e2905",
-  openidUrl: "https://stg-api.beanfun.com/v1/openid/token/verification",
+  openidUrl: "https://stg-api.beanfun.com/v1/openid/token/verification"
 };
 
 export const get_openid_access_token = () => {
-  BGO.check_app_exist((res) => {
+  BGO.check_app_exist(res => {
+    console.log({ check_app_exist: res });
     if (true || (res.result && res.result === "ok")) {
       BGO.init({
         token: config.token,
-        official_account_id: config.officialAccountId,
+        official_account_id: config.officialAccountId
       });
+      console.log(config);
       BGO.get_me_openid_access_token(config.clientId, config.secret, received);
-    } else {
-      console.log(res);
     }
   });
 };
@@ -29,7 +29,7 @@ function received(data) {
 function checkUser(openidUrl) {
   console.log(openidUrl);
   var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function () {
+  xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       console.log(this.responseText);
       var res = this.responseText.split(",");
