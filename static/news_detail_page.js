@@ -61,19 +61,27 @@ function init() {
 }
 
 function initToolMenu() {
+  const insideSharingTextDOM = createElement("div", {
+    class: "tool-menu__text"
+  });
+  insideSharingTextDOM.textContent = "轉傳";
   const insideSharingDOM = createElement(
     "div",
     {
       class: "tool-menu__inside-sharing"
     },
-    [createElement("div", { class: "tool-menu__icon" })]
+    [createElement("div", { class: "tool-menu__icon" }), insideSharingTextDOM]
   );
+  const outsideSharingTextDOM = createElement("div", {
+    class: "tool-menu__text"
+  });
+  outsideSharingTextDOM.textContent = "分享";
   const outsideSharingDOM = createElement(
     "div",
     {
       class: "tool-menu__outside-sharing"
     },
-    [createElement("div", { class: "tool-menu__icon" })]
+    [createElement("div", { class: "tool-menu__icon" }), outsideSharingTextDOM]
   );
   const toolMenuDOM = createElement(
     "div",
