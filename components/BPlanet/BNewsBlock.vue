@@ -85,7 +85,8 @@ export default {
   },
   methods: {
     enableVConsole() {
-      new VConsole();
+      const vConsoleDOM = document.querySelector("#__vconsole");
+      vConsoleDOM.classList.remove("hidden");
     },
     initCategories() {
       this.tagsData = this.$store.getters["categories/list"].map(

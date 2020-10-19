@@ -15,14 +15,14 @@ export const get_openid_access_token = () => {
         token: config.token,
         official_account_id: config.officialAccountId
       });
-      console.log(config);
+      console.log({ config });
       BGO.get_me_openid_access_token(config.clientId, config.secret, received);
     }
   });
 };
 
 function received(data) {
-  console.log(data);
+  console.log({ get_me_openid_access_token: data });
   checkUser(config.openidUrl + `?token=${data.access_token}`);
 }
 
@@ -35,7 +35,6 @@ function checkUser(openidUrl) {
       var res = this.responseText.split(",");
     }
   };
-  console.log(openidUrl);
   xhttp.open("GET", openidUrl, true);
   xhttp.send();
 }
