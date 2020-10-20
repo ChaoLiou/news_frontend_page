@@ -30,7 +30,15 @@ function beanfunOnLoad() {
 
 function vConsoleOnLoad() {
   console.log("vConsoleOnLoad");
-  new VConsole();
+  const vConsole = new VConsole();
+  const id = setInterval(() => {
+    const vConsoleDOM = document.querySelector("#__vconsole");
+    if (vConsoleDOM) {
+      vConsoleDOM.classList.add("hidden");
+      console.log("[Hide vConsole] vConsole is hidden");
+      clearInterval(id);
+    }
+  }, 100);
 }
 
 function vueOnload() {
@@ -379,6 +387,12 @@ function formatNews(news) {
 }
 
 function bindEvents(data) {
+  const titleDOM = document.querySelector(".title");
+  titleDOM.addEventListener("click", () => {
+    const vConsoleDOM = document.querySelector("#__vconsole");
+    vConsoleDOM.classList.remove("hidden");
+  });
+
   const insideSharingDOM = document.querySelector(".tool-menu__inside-sharing");
   const outsideSharingDOM = document.querySelector(
     ".tool-menu__outside-sharing"

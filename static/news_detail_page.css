@@ -266,6 +266,9 @@ iframe[src*="youtube"] {
   font-weight: bold;
   margin: 16px 0px;
 }
+#__vconsole.hidden {
+  display: none;
+}
 #__vconsole .vc-switch {
   opacity: 0.3;
 }
