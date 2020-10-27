@@ -1,52 +1,54 @@
 const baseUrl = process.env.BASE_URL;
 const debugMode = process.env.DEBUG_MODE;
 
-export const get = async function(apiRelative) {
-  const url = `${baseUrl.api}/${apiRelative}`;
-  if (debugMode) console.log(url);
+async function fetchBase(apiRelative, { method, body }, apiPrefix = "") {
+  const url = `${apiPrefix ? apiPrefix : baseUrl.backendApi}/${apiRelative}`;
+  if (debugMode) log(method, url);
   try {
-    const res = await fetch(url, {
-      mode: "cors"
-    });
+    const res = body
+      ? await fetch(url, {
+          method,
+          headers: new Headers({
+            "Content-Type": "application/json"
+          }),
+          body: body ? JSON.stringify(body) : undefined
+        })
+      : await fetch(url);
     const json = await res.json();
     return json;
   } catch (err) {
     console.error(err);
   }
+}
+
+export const get = async (apiRelative, apiPrefix = "") => {
+  return fetchBase(apiRelative, { method: "GET" }, apiPrefix);
 };
 
-export const patch = async function(apiRelative, body) {
-  const url = `${baseUrl.api}/${apiRelative}`;
-  if (debugMode) console.log(url);
-  try {
-    const res = await fetch(url, {
+export const patch = async (apiRelative, body, apiPrefix = "") => {
+  return fetchBase(
+    apiRelative,
+    {
       method: "PATCH",
-      headers: new Headers({
-        "Content-Type": "application/json"
-      }),
-      body: body ? JSON.stringify(body) : undefined
-    });
-    const json = await res.json();
-    return json;
-  } catch (err) {
-    console.error(err);
-  }
+      body
+    },
+    apiPrefix
+  );
 };
 
-export const post = async function(apiRelative, body) {
-  const url = `${baseUrl.api}/${apiRelative}`;
-  if (debugMode) console.log(url);
-  try {
-    const res = await fetch(url, {
+export const post = async (apiRelative, body, apiPrefix = "") => {
+  return fetchBase(
+    apiRelative,
+    {
       method: "POST",
-      headers: new Headers({
-        "Content-Type": "application/json"
-      }),
-      body: JSON.stringify(body)
-    });
-    const json = await res.json();
-    return json;
-  } catch (err) {
-    console.error(err);
-  }
+      body
+    },
+    apiPrefix
+  );
 };
+
+function log(key, value) {
+  const log = {};
+  log[key] = value;
+  console.log(log);
+}

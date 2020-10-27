@@ -1,6 +1,6 @@
 [
   {
-    "_id": 1,
+    "id": 1,
     "link": "/video-game",
     "contentTypes": [
       {
@@ -11,7 +11,7 @@
     ]
   },
   {
-    "_id": 2,
+    "id": 2,
     "link": "/chill",
     "contentTypes": [
       {
@@ -22,7 +22,7 @@
     ]
   },
   {
-    "_id": 3,
+    "id": 3,
     "link": "/current-news",
     "contentTypes": [
       {

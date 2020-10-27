@@ -1,4 +1,4 @@
-import { commithWrapper } from "@/assets/js/vuex-utils";
+import { commitWrapper } from "@/assets/js/vuex-utils";
 
 const name = "token";
 
@@ -12,7 +12,7 @@ export const actions = {
   async update({ commit }, data) {
     try {
       const ts = Date.now();
-      commithWrapper(commit, `stateRepo/${name}/update`, ts);
+      commitWrapper(commit, `stateRepo/${name}/update`, ts);
     } catch (error) {
       console.error(error);
     }

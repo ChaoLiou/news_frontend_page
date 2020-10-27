@@ -2,9 +2,9 @@
   <div class="b-horizontal-scroll" :style="{ maxWidth }">
     <slot></slot>
     <div
-      v-if="fade"
+      v-if="fadeOut && fadeOutEnabled"
       class="b-horizontal-scroll__fade-mask"
-      :style="{ height: `${fadeMaskHeight}px` }"
+      :style="{ height: `${fadeOutMaskHeight}px`, top: `${fadeOutMaskTop}px` }"
     ></div>
   </div>
 </template>
@@ -14,18 +14,32 @@ export default {
   props: {
     maxWidth: {
       type: String,
-      default: "100%"
+      default: "100%",
     },
-    fade: {
+    fadeOut: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
+  },
+  data() {
+    return {
+      fadeOutEnabled: true,
+      fadeOutMaskHeight: 0,
+      fadeOutMaskTop: 0,
+    };
   },
   mounted() {
-    if (this.fade) {
-      this.fadeMaskHeight = this.$el.offsetHeight;
+    const { height, top, width } = this.$el.getBoundingClientRect();
+    if (this.fadeOut) {
+      this.fadeOutMaskHeight = height;
+      this.fadeOutMaskTop = top;
     }
-  }
+    this.$el.addEventListener("scroll", (e) => {
+      const scrolledWidth = e.target.scrollLeft + width;
+      const scrollableWidth = e.target.scrollWidth - scrolledWidth;
+      this.fadeOutEnabled = scrollableWidth > 0;
+    });
+  },
 };
 </script>
 
@@ -43,15 +57,11 @@ export default {
 }
 .b-horizontal-scroll__fade-mask {
   z-index: 2;
-  position: absolute;
+  position: fixed;
   top: 0px;
   right: 0px;
-  width: 25%;
+  width: 3em;
   height: 100%;
-  background: linear-gradient(
-    270deg,
-    #fafafa 22.47%,
-    rgba(250, 250, 250, 0) 82.02%
-  );
+  background: linear-gradient(270deg, #fafafa 30%, rgba(250, 250, 250, 0) 70%);
 }
 </style>

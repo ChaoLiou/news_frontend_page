@@ -17,10 +17,9 @@
         v-else-if="contentType.id === 'news'"
         :key="index"
         :title-label="contentType.title"
-        :source="contentType.items"
-        :tags="contentType.tags"
         :planet-id="planetId"
         :sticky-top="newsBlockTitleStickyTop"
+        :vendor-stage-env="vendorStageEnv"
       />
     </template>
   </div>
@@ -48,12 +47,17 @@ export default {
       default: "",
     },
   },
+  data() {
+    return {
+      vendorStageEnv: process.env.VENDOR_STAGE,
+    };
+  },
   computed: {
     planetId() {
       return this.planet ? this.planet.id : 0;
     },
     planetConf() {
-      return planetConf.find((p) => p._id === this.planet.id);
+      return planetConf.find((p) => p.id === this.planet.id);
     },
   },
 };

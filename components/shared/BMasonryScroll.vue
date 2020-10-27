@@ -6,7 +6,7 @@
       :class="{ 'trigger-loading-more': triggerable(index) }"
       :trigger-loading-more="triggerable(index)"
       :style="{
-        gridRowEnd: gridRowEnd(index),
+        gridRowEnd: getGridRowEnd(index),
       }"
       @heightChanged="(height) => heightChanged(index, height)"
       @load-more="loadMore(index)"
@@ -17,7 +17,7 @@
       <div
         class="b-masonry-scroll__placeholder"
         :style="{
-          gridRowEnd: gridRowEnd(index),
+          gridRowEnd: getGridRowEnd(index),
         }"
         v-for="index in rowSpans.length"
         :key="`placeholder-${index}`"
@@ -30,7 +30,11 @@
 </template>
 
 <script>
+import BMasonryProxy from "../shared/BMasonryScroll/BMasonryProxy";
 export default {
+  components: {
+    BMasonryProxy,
+  },
   props: {
     items: {
       type: Array,
@@ -55,7 +59,7 @@ export default {
     this.rowSpans = Array.from({ length: this.items.length }, (v, i) => 0);
   },
   methods: {
-    gridRowEnd(index) {
+    getGridRowEnd(index) {
       return this.rowSpans.length > 0
         ? `span ${this.rowSpans[index] ? this.rowSpans[index] : "10"}`
         : `span 10`;
