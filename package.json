@@ -6,10 +6,18 @@
     "dev": "nuxt --config-file nuxt.config.dev.js",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate"
+    "pre-build": "npm run build:packages && npm run build:detail",
+    "generate": "npm run pre-build && nuxt generate",
+    "generate:vs": "npm run pre-build && nuxt generate --config-file nuxt.config.vendor-stage.js",
+    "build:detail": "webpack --progress --config news_detail_page/webpack.config.js",
+    "build:packages": "vue-cli-service build --target lib --dest static/packages/ --name BRecommendNewsBlock --filename b-recommend-news-block --inline-vue --formats umd-min components/packages/BRecommendNewsBlock.vue"
   },
   "dependencies": {
     "nuxt": "^2.14.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@vue/cli-service": "^4.5.7",
+    "vue-template-compiler": "^2.6.12",
+    "webpack-cli": "^4.0.0"
+  }
 }

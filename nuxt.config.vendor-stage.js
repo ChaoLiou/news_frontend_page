@@ -11,6 +11,13 @@ export default Object.assign(config, {
       appBuild: 1,
       trackingVer: "0.07"
     },
-    DEBUG_MODE: true
+    BUILD: {
+      builtAt: new Date().toLocaleString()
+    },
+    VENDOR_STAGE: {
+      enabled: true,
+      newsDetailRelativeUrl: "articles/tw/1/1310256393650966528/detail.html"
+    },
+    DEBUG_MODE: false
   }
 });
