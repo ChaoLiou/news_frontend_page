@@ -1,4 +1,4 @@
-import config from "./nuxt.config";
+import config from "./nuxt.config.default";
 export default Object.assign(config, {
   env: {
     BASE_URL: {
