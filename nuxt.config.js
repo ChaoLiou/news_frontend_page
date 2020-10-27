@@ -15,7 +15,7 @@ export default Object.assign(config, {
       builtAt: new Date().toLocaleString()
     },
     VENDOR_STAGE: {
-      enabled: true,
+      enabled: false,
       newsDetailRelativeUrl: "articles/tw/1/1310256393650966528/detail.html"
     },
     DEBUG_MODE: false
