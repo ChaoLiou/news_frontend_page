@@ -1,20 +1,17 @@
 <template>
-  <div class="b-news" @click="toWebview">
+  <div class="b-news" @click="navigate">
     <div class="b-news__card">
       <div class="b-news__thumbnail">
         <img
-          class="b-news__thumbnail-img-2"
-          :src="thumbnail"
+          class="b-news__thumbnail-img"
+          :src="data.img"
+          :alt="data.img"
           @load="heightChanged"
         />
       </div>
       <div class="b-news__info">
-        <div class="b-news__source">{{ source }}</div>
-        <div class="b-news__title">{{ titleLabel }}</div>
-      </div>
-      <div v-if="poll" class="b-news__action">
-        <div>去投票</div>
-        <div>看結果</div>
+        <div class="b-news__source">{{ data.source }}</div>
+        <div class="b-news__title">{{ data.title }}</div>
       </div>
     </div>
   </div>
@@ -22,50 +19,21 @@
 
 <script>
 export default {
+  name: "b-news",
   props: {
-    planetId: {
-      type: Number,
-      default: 0,
-    },
-    thumbnail: {
-      type: String,
-      default: "",
-    },
-    source: {
-      type: String,
-      default: "",
-    },
-    titleLabel: {
-      type: String,
-      default: "",
-    },
-    poll: {
-      type: Boolean,
-      default: false,
-    },
-    pageLink: {
-      type: String,
-      default: "",
-    },
-    link: {
-      type: String,
-      default: "",
-    },
-  },
-  computed: {
-    planet() {
-      return this.$store.getters["planets/find"](this.planetId);
-    },
-    planetTitle() {
-      return this.planet ? this.planet.name : "星球";
+    data: {
+      type: Object,
+      default() {
+        return {};
+      },
     },
   },
   mounted() {
     window.addEventListener("resize", this.heightChanged);
   },
   methods: {
-    toWebview() {
-      BGO.open_full_h5_webview(this.link, this.planetTitle);
+    navigate() {
+      this.$emit("navigate", this.data);
     },
     heightChanged() {
       if (this.$el.offsetHeight > 0) {
@@ -91,9 +59,8 @@ export default {
   overflow: hidden;
   position: relative;
 }
-.b-news__thumbnail-img-2 {
+.b-news__thumbnail-img {
   width: 100%;
-  height: 100%;
 }
 .b-news__info {
   padding: 10px;
@@ -106,18 +73,5 @@ export default {
 }
 .b-news__title {
   font-weight: bold;
-}
-.b-news__action {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  justify-items: center;
-  padding-bottom: 10px;
-}
-.b-news__action > div {
-  border: 1px solid #979797;
-  border-radius: 5px;
-  font-size: 0.64em;
-  color: #767676;
-  padding: 4px 14px;
 }
 </style>

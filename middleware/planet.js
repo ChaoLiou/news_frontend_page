@@ -1,4 +1,4 @@
-const name = "planets";
+const name = "planet";
 
 export default function({ store }) {
   const list = store.getters[`${name}/list`];

@@ -2,15 +2,15 @@
   <div class="b-news-block">
     <div
       class="b-news-block__tags"
-      v-if="tagsData.length > 0"
+      v-if="tags.length > 0"
       :style="stickyStyles"
     >
-      <b-horizontal-scroll>
+      <b-horizontal-scroll fade-out>
         <div class="b-news-block__title" @click="enableVConsole">
           {{ titleLabel }}
         </div>
         <b-news-tag
-          v-for="(tag, index) in tagsData"
+          v-for="(tag, index) in tags"
           :key="index"
           :title-label="tag.title"
           :tagged="tag.tagged"
@@ -21,20 +21,12 @@
     <div>
       <b-masonry-scroll
         :loading="loading"
-        :items="arr_source"
+        :items="source"
         @load-more="loadMore"
         ref="bMasonryScroll"
       >
         <template #default="props">
-          <b-news
-            :thumbnail="props.item.img"
-            :title-label="props.item.title"
-            :source="props.item.source"
-            :poll="props.item.poll"
-            :page-link="props.item.pageLink"
-            :link="props.item.link"
-            :planet-id="planetId"
-          />
+          <b-news :data="props.item" @navigate="navigate" />
         </template>
         <template #nomore>沒有更多新聞了</template>
       </b-masonry-scroll>
@@ -43,17 +35,24 @@
 </template>
 
 <script>
+import { planet_click_news } from "@/assets/js/tracking/events";
+import { getPlanetName } from "@/assets/js/tracking/mapping";
+import { openFullH5Webview } from "@/assets/js/beanfun";
+
 export default {
   props: {
+    vendorStageEnv: {
+      type: Object,
+      default() {
+        return {
+          enabled: false,
+          newsDetailRelativeUrl: "",
+        };
+      },
+    },
     titleLabel: {
       type: String,
       default: "",
-    },
-    source: {
-      type: Array,
-      default() {
-        return [];
-      },
     },
     planetId: {
       type: Number,
@@ -66,12 +65,21 @@ export default {
   },
   data() {
     return {
-      tagsData: [],
-      arr_source: [],
+      tags: [],
+      source: [],
       loading: true,
     };
   },
   computed: {
+    categories() {
+      return this.$store.getters["category/list"];
+    },
+    planet() {
+      return this.$store.getters["planet/find"](this.planetId);
+    },
+    planetTitle() {
+      return this.planet ? this.planet.name : "";
+    },
     stickyStyles() {
       if (this.stickyTop) {
         return {
@@ -84,28 +92,49 @@ export default {
     },
   },
   methods: {
+    navigate(data) {
+      this.$store.dispatch("event/emit", {
+        event_id: planet_click_news.id,
+        payload: planet_click_news.generatePayload({
+          planet_name: getPlanetName(this.planetId),
+          category: data.categories,
+          url: data.link,
+          title: data.title,
+          news_id: data.id,
+        }),
+      });
+      const { session_id, action_index } = this.$store.getters["event/data"];
+      const link = `${data.link}?session_id=${session_id}&action_index=${action_index}`;
+      const { officialAccountId } = this.$store.getters["serverEnv/env"];
+      openFullH5Webview(
+        this.vendorStageEnv.enabled
+          ? location.origin + "/" + this.vendorStageEnv.newsDetailRelativeUrl
+          : link,
+        this.planetTitle,
+        officialAccountId
+      );
+    },
     enableVConsole() {
       const vConsoleDOM = document.querySelector("#__vconsole");
       vConsoleDOM.classList.remove("hidden");
     },
-    initCategories() {
-      this.tagsData = this.$store.getters["categories/list"].map(
-        (c, index) => ({
-          title: c.name,
-          id: c.id,
-          tagged: false,
-        })
-      );
-      this.tagsData.unshift({ title: "全部", id: -1, tagged: true });
+    initTags() {
+      this.tags = this.categories.map((c) => ({
+        title: c.name,
+        id: c.id,
+        tagged: false,
+      }));
+      this.tags.unshift({ title: "全部", id: -1, tagged: true });
     },
-    init(updateCategories) {
+    init(planetId) {
       this.loading = true;
-      this.arr_source = [];
+      this.source = [];
       this.resetScroll();
-      if (updateCategories) {
+      if (planetId) {
+        this.tags = [];
         this.$store
-          .dispatch("categories/fetch", this.planetId)
-          .then(this.initCategories)
+          .dispatch("category/fetch", planetId)
+          .then(this.initTags)
           .then(this.loadMore);
       } else {
         this.loadMore();
@@ -117,23 +146,23 @@ export default {
       }
     },
     toggleTag(targetIndex) {
-      this.tagsData = this.tagsData.map((tag, index) => ({
-        ...tag,
-        tagged: targetIndex === index,
+      this.tags = this.tags.map((t, i) => ({
+        ...t,
+        tagged: targetIndex === i,
       }));
       this.init();
     },
     loadMoreNews(list, pageIndex) {
       if (list) {
         if (pageIndex === 1) {
-          this.arr_source = [];
+          this.source = [];
         }
-        this.arr_source.push(...list);
+        this.source.push(...list);
       }
-      this.loading = false;
     },
     loadMore({ pageSize, pageIndex } = { pageSize: 10, pageIndex: 1 }) {
-      const selectedTag = this.tagsData.find((t) => t.tagged);
+      this.loading = true;
+      const selectedTag = this.tags.find((t) => t.tagged);
       if (selectedTag) {
         const payload = {
           pageIndex,
@@ -144,22 +173,19 @@ export default {
         } else {
           payload.categoryId = selectedTag.id;
         }
-        this.loading = true;
         this.$store
           .dispatch("news/fetch", payload)
           .then((list) => this.loadMoreNews(list, pageIndex))
-          .catch((err) => {
-            console.error(err);
-            this.loading = false;
-          });
+          .then(() => (this.loading = false))
+          .catch((_) => (this.loading = false));
       }
     },
   },
   watch: {
-    source: {
+    planetId: {
       immediate: true,
       handler(value) {
-        this.init(true);
+        this.init(value);
       },
     },
   },

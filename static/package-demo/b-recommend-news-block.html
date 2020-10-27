@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <title>BRecommendNewsBlock.vue</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+    <script src="/packages/b-recommend-news-block.umd.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <b-recommend-news-block
+        :api-prefix="apiPrefix"
+        :news-id="newsId"
+        :official-account-id="officialAccountId"
+      />
+    </div>
+  </body>
+  <script>
+    var app = new Vue({
+      el: "#app",
+      components: {
+        "b-recommend-news-block": BRecommendNewsBlock
+      },
+      data() {
+        return {
+          apiPrefix: "https://753f40f86863.ngrok.io/v1",
+          newsId: "1310256393650966528",
+          officialAccountId: ""
+        };
+      }
+    });
+  </script>
+</html>
