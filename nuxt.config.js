@@ -1,15 +1,17 @@
 import config from "./nuxt.config.default";
+
 export default Object.assign(config, {
   env: {
     BASE_URL: {
-      backendApi: "https://753f40f86863.ngrok.io/v1",
-      beanfunApi: "https://stg-api.beanfun.com/v1",
-      trackingApi: "https://fb1b2bcc52bd.ngrok.io/v1"
+      backendApi: process.env.BACKEND_API || "https://753f40f86863.ngrok.io/v1",
+      beanfunApi: process.env.BEANFUN_API || "https://stg-api.beanfun.com/v1",
+      trackingApi:
+        process.env.TRACKING_API || "https://fb1b2bcc52bd.ngrok.io/v1"
     },
     TRACKING_EVENT: {
-      appVer: "1.0.0",
-      appBuild: 1,
-      trackingVer: "0.07"
+      appVer: process.env.APP_VER || "1.0.0",
+      appBuild: process.env.APP_BUILD || 1,
+      trackingVer: process.env.TRACKING_VER || "0.07"
     },
     BUILD: {
       builtAt: new Date().toLocaleString()
