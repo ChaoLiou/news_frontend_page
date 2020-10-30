@@ -1,4 +1,4 @@
-import { formatPublishedText, formatUpdatedText } from "./formatter";
+import { transformMilliseconds } from "./formatter";
 
 export const createElement = (tagName, options, childList) => {
   const DOM = document.createElement(tagName);
@@ -57,9 +57,9 @@ export const renderSourceTitle = text => {
 
 export const renderDateTimeInfo = (published, updated) => {
   const datetimeInfoDOM = document.querySelector(".header__published-updated");
-  const publishedText = formatPublishedText(published);
-  const updatedText = formatUpdatedText(updated);
-  datetimeInfoDOM.textContent = `${publishedText} ${updatedText}`;
+  const publishedText = `更新於 ${transformMilliseconds(published)}`;
+  const updatedText = `發布於 ${transformMilliseconds(updated)}`;
+  datetimeInfoDOM.innerHTML = `${publishedText}<br />${updatedText}`;
 };
 
 export const renderRecommendNewsTitle = text => {

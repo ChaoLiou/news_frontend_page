@@ -37,9 +37,9 @@ figure {
 .header__text-info {
   padding: 15px 10px;
   display: grid;
-  grid-template-columns: 40px 1fr 70px;
+  grid-template-columns: 50px 1fr 70px;
   column-gap: 12px;
-  grid-template-rows: repeat(2, 20px) 1fr;
+  grid-template-rows: 20px 30px 1fr;
 }
 .header__source-img {
   width: 100%;
@@ -117,7 +117,7 @@ figure {
 iframe {
   width: 100%;
 }
-iframe[src*="youtube"] {
+iframe[src*="https://www.youtube.com/embed/"] {
   height: calc(100vw * 9 / 16);
   border: 0px;
 }

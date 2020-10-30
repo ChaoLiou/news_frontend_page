@@ -33,12 +33,12 @@ export default {
         src:
           // "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beango_stg.min.js",
           "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beanfun.min.js",
-        name: "beanfun"
+        group: "beanfun_vue"
       },
       {
         src:
           "https://beangochat.blob.core.windows.net/beango-static-prod/sdk/vconsole.min.js",
-        name: "vconsole"
+        group: "vconsole"
       }
     ]
   },

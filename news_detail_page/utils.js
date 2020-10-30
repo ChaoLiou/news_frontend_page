@@ -2,21 +2,21 @@ import { createElement } from "./render";
 
 export const includeScriptSources = scripts => {
   const headDOM = document.head;
-  const groups = groupBy(scripts, "name");
-  const groupCounters = groupBy(scripts, "name", 0);
+  const groups = groupBy(scripts, "group");
+  const groupCounters = groupBy(scripts, "group", 0);
   scripts
-    .map(x => ({ ...x, onload: window[`${x.name}Onload`] }))
+    .map(x => ({ ...x, onload: window[`${x.group}Onload`] }))
     .forEach(script => {
       const scriptDOM = createElement("script", { src: script.src });
       scriptDOM.onload = function() {
-        const counter = ++groupCounters[script.name];
-        const max = groups[script.name].length;
+        const counter = ++groupCounters[script.group];
+        const max = groups[script.group].length;
         console.log(
-          `#${counter} script is load in [${script.name}] group / ${max -
+          `#${counter} script is load in [${script.group}] group / ${max -
             counter} scripts to go`
         );
         if (counter === max) {
-          console.log(`${script.name}Onload`);
+          console.log(`${script.group}Onload`);
           script.onload();
         }
       };

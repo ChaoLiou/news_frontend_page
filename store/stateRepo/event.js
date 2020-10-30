@@ -8,9 +8,7 @@ export const state = () => ({
     os_type: "",
     lang: "",
     region: "",
-    tz: "",
-    latitude: 0,
-    longitude: 0
+    tz: ""
   },
   data: {
     openid: "",

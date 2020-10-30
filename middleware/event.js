@@ -25,10 +25,5 @@ export default function({ store }) {
         region: country
       });
     });
-    getMeLocation(location => {
-      store.dispatch("beanfun/fetchLocation", location);
-      const { longitude, latitude } = store.getters["beanfun/location"];
-      store.dispatch(`${name}/fetchInfo`, { longitude, latitude });
-    });
   });
 }

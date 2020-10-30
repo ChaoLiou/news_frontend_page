@@ -1,5 +1,5 @@
 import config from "../nuxt.config.js";
-import { get } from "../assets/js/fetchAPI";
+import { get, post } from "../assets/js/fetchAPI";
 import { hideVConsole } from "../assets/js/utils";
 import { includeScriptSources, parseNewsIdWithinUrl } from "./utils";
 import {
@@ -18,8 +18,7 @@ import {
   initBGO,
   getOpenidAccessToken,
   checkAppExist,
-  getMeProfile,
-  getMeLocation
+  getMeProfile
 } from "../assets/js/beanfun";
 import { getOSType, getTimeZone } from "../assets/js/tracking/utils";
 import { getPlanetName } from "../assets/js/tracking/mapping";
@@ -29,8 +28,7 @@ import { state as initEventState } from "../store/stateRepo/event";
 let _beanfunState = initBeanfunState();
 let _eventState = initEventState();
 const _newsId = parseNewsIdWithinUrl();
-const _env = config.env;
-const _newsAPI = _env.BASE_URL.backendApi;
+const { BASE_URL = {}, TRACKING_EVENT = {}, VENDOR_STAGE = {} } = config.env;
 let _serverEnv = {
   officialAccountId: "",
   token: "",
@@ -38,22 +36,20 @@ let _serverEnv = {
   clientId: "",
   widgetId: ""
 };
-const testingEnabled = _env.VENDOR_STAGE.enabled;
 
-window.beanfunOnload = beanfunOnLoad;
 window.vconsoleOnload = vconsoleOnload;
-window.vueOnload = vueOnload;
+window.beanfun_vueOnload = beanfun_vueOnload;
 
 const scripts = [
   ...config.head.script,
-  { src: "https://cdn.jsdelivr.net/npm/vue/dist/vue.js", name: "vue" },
-  { src: "/packages/b-recommend-news-block.umd.min.js", name: "vue" }
+  { src: "https://cdn.jsdelivr.net/npm/vue/dist/vue.js", group: "beanfun_vue" },
+  { src: "/packages/b-recommend-news-block.umd.min.js", group: "beanfun_vue" }
 ];
 includeScriptSources(scripts);
 init();
 
-function beanfunOnLoad() {
-  get("variable", _newsAPI)
+function beanfun_vueOnload() {
+  get("variable", BASE_URL.backendApi)
     .then(
       json =>
         (_serverEnv = {
@@ -64,7 +60,8 @@ function beanfunOnLoad() {
           widgetId: json.WidgetID
         })
     )
-    .then(serverEnvReady);
+    .then(serverEnvReady)
+    .then(initRecommendNewsBlock);
 }
 
 function vconsoleOnload() {
@@ -72,59 +69,40 @@ function vconsoleOnload() {
   hideVConsole();
 }
 
-function vueOnload() {
-  initRecommendNewsBlock();
-}
-
 function serverEnvReady() {
   const { officialAccountId, token, clientId } = _serverEnv;
   checkAppExist(() => {
-    // getMeProfile(profile => {
-    //   _beanfunState = {
-    //     ..._beanfunState,
-    //     profile
-    //   };
-    //   const { language, country } = profile;
-    //   _eventState = {
-    //     ..._eventState,
-    //     info: {
-    //       ..._eventState.info,
-    //       lang: language,
-    //       region: country
-    //     }
-    //   };
-    // });
-    getMeLocation(location => {
+    getMeProfile(profile => {
       _beanfunState = {
         ..._beanfunState,
-        location
+        profile
       };
-      const { longitude, latitude } = location;
+      const { language, country } = profile;
       _eventState = {
         ..._eventState,
         info: {
           ..._eventState.info,
-          longitude,
-          latitude
+          lang: language,
+          region: country
         }
       };
     });
     initBGO(officialAccountId, token);
-    // getOpenidAccessToken(clientId, "", accessTokenResult => {
-    //   _beanfunState = {
-    //     ..._beanfunState,
-    //     accessToken: accessTokenResult
-    //   };
-    //   get(
-    //     `openid/token/verification?token=${accessTokenResult.access_token}`,
-    //     _env.BASE_URL.beanfunApi
-    //   ).then(verification => {
-    //     _beanfunState = {
-    //       ..._beanfunState,
-    //       verification
-    //     };
-    //   });
-    // });
+    getOpenidAccessToken(clientId, "", accessTokenResult => {
+      _beanfunState = {
+        ..._beanfunState,
+        accessToken: accessTokenResult
+      };
+      get(
+        `openid/token/verification?token=${accessTokenResult.access_token}`,
+        _beanfunApi
+      ).then(verification => {
+        _beanfunState = {
+          ..._beanfunState,
+          verification
+        };
+      });
+    });
   });
 }
 
@@ -133,9 +111,9 @@ function init() {
     ..._eventState,
     env: {
       ..._eventState.env,
-      app_ver: _env.TRACKING_EVENT.appVer,
-      app_build: _env.TRACKING_EVENT.appBuild,
-      t_ver: _env.TRACKING_EVENT.trackingVer
+      app_ver: TRACKING_EVENT.appVer,
+      app_build: TRACKING_EVENT.appBuild,
+      t_ver: TRACKING_EVENT.trackingVer
     },
     info: {
       ..._eventState.info,
@@ -146,10 +124,12 @@ function init() {
 
   renderToolMenu();
 
-  get(`news?id=${_newsId}`, _newsAPI).then(json =>
+  get(`news?id=${_newsId}`, BASE_URL.backendApi).then(json =>
     typeof json.data === typeof [] && json.data.length > 0
       ? initWithNews(json.data[0])
-      : console.error(`news(${_newsId}) is not found on [${_newsAPI}]!`)
+      : console.error(
+          `news(${_newsId}) is not found on [${BASE_URL.backendApi}]!`
+        )
   );
 }
 
@@ -163,7 +143,7 @@ function initWithNews(news) {
 function initRecommendNewsBlock() {
   new Vue({
     el: ".masonry-scroll",
-    template: `<b-recommend-news-block api-prefix="${_newsAPI}" news-id="${_newsId}" @navigate="navigate" :testing="${testingEnabled}" official-account-id="${_serverEnv.officialAccountId}" />`,
+    template: `<b-recommend-news-block api-prefix="${BASE_URL.backendApi}" news-id="${_newsId}" @navigate="navigate" :testing="${VENDOR_STAGE.enabled}" official-account-id="${_serverEnv.officialAccountId}" />`,
     components: {
       "b-recommend-news-block": BRecommendNewsBlock
     },
@@ -206,6 +186,14 @@ function trackEvent({ session_id, action_index, event_id, payload }) {
   console.log({ env: _eventState.env });
   console.log({ info: _eventState.info });
   console.log({ data: _eventState.data });
+  const body = {
+    ..._eventState.env,
+    ..._eventState.info,
+    ..._eventState.data
+  };
+  post("tracking", body, BASE_URL.trackingApi).then(result =>
+    console.log({ result })
+  );
 }
 
 function bindEvents(news) {
@@ -244,7 +232,7 @@ function bindEvents(news) {
       description,
       image,
       deepLink,
-      api: _newsAPI
+      api: BASE_URL.backendApi
     }).then(json => {
       if (json._id) {
         sendDataToApps(json._id);
