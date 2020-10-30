@@ -8,15 +8,23 @@
     "start": "nuxt start",
     "pre-build": "npm run build:packages && npm run build:detail",
     "generate": "npm run pre-build && nuxt generate",
+    "only-generate": "nuxt generate",
     "build:detail": "webpack --progress --config news_detail_page/webpack.config.js",
-    "build:packages": "vue-cli-service build --target lib --dest static/packages/ --name BRecommendNewsBlock --filename b-recommend-news-block --inline-vue --formats umd-min components/packages/BRecommendNewsBlock.vue"
+    "build:packages": "vue-cli-service build --target lib --dest static/packages/ --name BRecommendNewsBlock --filename b-recommend-news-block --inline-vue --formats umd-min components/packages/BRecommendNewsBlock.vue",
+    "test": "jest"
   },
   "dependencies": {
+    "core-js": "^3.6.5",
     "nuxt": "^2.14.0"
   },
   "devDependencies": {
     "@vue/cli-service": "^4.5.7",
     "vue-template-compiler": "^2.6.12",
-    "webpack-cli": "^4.0.0"
+    "webpack-cli": "^4.0.0",
+    "@vue/test-utils": "^1.1.0",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^26.5.0",
+    "jest": "^26.5.0",
+    "vue-jest": "^3.0.4"
   }
 }

@@ -1,37 +1,57 @@
-export const formatPublishedText = ms => {
-  const result = transformMilliseconds(ms);
-  return "更新於 " + result;
-};
-
-export const formatUpdatedText = ms => {
-  const result = transformMilliseconds(ms);
-  return "發佈於 " + result;
-};
-
-export const transformMilliseconds = ms => {
-  const dateObj = new Date(ms);
-  const nowDateObj = new Date();
-  if (sameDate(dateObj, nowDateObj)) {
-    if (sameDateHours(dateObj, nowDateObj)) {
-      return (
-        Math.abs(nowDateObj.getMinutes() - dateObj.getMinutes()) + "分鐘前"
-      );
-    } else {
-      return Math.abs(nowDateObj.getHours() - dateObj.getHours()) + "小時前";
+export const transformMilliseconds = (ms1, ms2 = undefined) => {
+  const dateObj1 = new Date(ms1);
+  const dateObj2 = ms2 ? new Date(ms2) : new Date();
+  if (sameYear(dateObj1, dateObj2)) {
+    if (sameMonth(dateObj1, dateObj2)) {
+      if (sameDate(dateObj1, dateObj2)) {
+        if (sameHours(dateObj1, dateObj2)) {
+          return `${diffMinutes(dateObj1, dateObj2)} 分鐘前`;
+        } else {
+          return `${diffHours(dateObj1, dateObj2)} 小時前`;
+        }
+      } else {
+        return `${diffDates(dateObj1, dateObj2)} 天前`;
+      }
     }
-  } else {
-    return Math.abs(nowDateObj.getDate() - dateObj.getDate()) + "天前";
   }
+  return (
+    `${dateObj1.getFullYear()}/${dateObj1.getMonth() +
+      1}/${dateObj1.getDate()}` +
+    " " +
+    `${dateObj1.getHours()}:${dateObj1.getMinutes()}`
+  );
 };
 
-export const sameDateHours = (dateObj1, dateObj2) => {
-  return dateObj1.getHours() === dateObj2.getHours();
+export const diffMinutes = (dateObj1, dateObj2) => {
+  return Math.abs(dateObj1.getMinutes() - dateObj2.getMinutes());
+};
+
+export const diffHours = (dateObj1, dateObj2) => {
+  return Math.abs(dateObj1.getHours() - dateObj2.getHours());
+};
+
+export const diffDates = (dateObj1, dateObj2) => {
+  return Math.abs(dateObj1.getDate() - dateObj2.getDate());
+};
+
+export const sameHours = (dateObj1, dateObj2) => {
+  return (
+    sameDate(dateObj1, dateObj2) && dateObj1.getHours() === dateObj2.getHours()
+  );
 };
 
 export const sameDate = (dateObj1, dateObj2) => {
   return (
-    dateObj1.getFullYear() === dateObj2.getFullYear() &&
-    dateObj1.getMonth() === dateObj2.getMonth() &&
-    dateObj1.getDate() === dateObj2.getDate()
+    sameMonth(dateObj1, dateObj2) && dateObj1.getDate() === dateObj2.getDate()
   );
+};
+
+export const sameMonth = (dateObj1, dateObj2) => {
+  return (
+    sameYear(dateObj1, dateObj2) && dateObj1.getMonth() === dateObj2.getMonth()
+  );
+};
+
+export const sameYear = (dateObj1, dateObj2) => {
+  return dateObj1.getFullYear() === dateObj2.getFullYear();
 };
