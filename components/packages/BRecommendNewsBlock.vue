@@ -8,7 +8,7 @@
         ref="bMasonryScroll"
       >
         <template #default="props">
-          <b-news :data="props.item" @navigate="navigate" />
+          <b-news :data="props.item" @navigate="navigate" auto-img-height />
         </template>
         <template #nomore>沒有更多新聞了</template>
       </b-masonry-scroll>
