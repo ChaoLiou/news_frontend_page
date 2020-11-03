@@ -25,20 +25,28 @@ export const createElement = (tagName, options, childList) => {
   return DOM;
 };
 
-export const renderToolMenu = () => {
+export const renderToolMenu = (insideSharingText, outsideSharingText) => {
+  const insideSharingTextDOM = createElement("div", {
+    class: "tool-menu__text"
+  });
+  insideSharingTextDOM.textContent = insideSharingText;
   const insideSharingDOM = createElement(
     "div",
     {
       class: "tool-menu__inside-sharing"
     },
-    [createElement("div", { class: "tool-menu__icon" })]
+    [createElement("div", { class: "tool-menu__icon" }), insideSharingTextDOM]
   );
+  const outsideSharingTextDOM = createElement("div", {
+    class: "tool-menu__text"
+  });
+  outsideSharingTextDOM.textContent = outsideSharingText;
   const outsideSharingDOM = createElement(
     "div",
     {
       class: "tool-menu__outside-sharing"
     },
-    [createElement("div", { class: "tool-menu__icon" })]
+    [createElement("div", { class: "tool-menu__icon" }), outsideSharingTextDOM]
   );
   const toolMenuDOM = createElement(
     "div",
@@ -65,4 +73,17 @@ export const renderDateTimeInfo = (published, updated) => {
 export const renderRecommendNewsTitle = text => {
   const recommendsTitle = document.querySelector(".recommends__title");
   recommendsTitle.textContent = text;
+};
+
+export const renderSoureNewsLink = (text, link) => {
+  const detailContainer = document.querySelector(".detail");
+  const externalLinkIcon = createElement("div", {
+    class: "detail__external-link-icon"
+  });
+  const aLink = createElement("a", { href: link });
+  aLink.textContent = text;
+  aLink.append(externalLinkIcon);
+  detailContainer.append(
+    createElement("div", { class: "detail__source-link" }, [aLink])
+  );
 };

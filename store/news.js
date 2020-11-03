@@ -10,15 +10,19 @@ export const getters = {
 };
 
 export const actions = {
-  async fetch({ rootState, dispatch, commit }, data) {
+  async fetch({ rootState, rootGetters, dispatch, commit }, data) {
     try {
-      if (!rootState.stateRepo.token.ts) {
-        commitWrapper(commit, "stateRepo/token/update", Date.now());
+      if (!rootGetters["token/ts"]) {
+        dispatchWrapper(dispatch, "token/update", Date.now());
       }
-      const res = await dispatchWrapper(dispatch, `api/${name}/fetch`, {
+      const { language, countrycode } = rootGetters["beanfun/profile"];
+      const payload = {
         ...data,
-        ts: rootState.stateRepo.token.ts
-      });
+        ts: rootGetters["token/ts"],
+        lang: language,
+        country: countrycode
+      };
+      const res = await dispatchWrapper(dispatch, `api/${name}/fetch`, payload);
       const list = res.data.map(formatNews);
       commitWrapper(commit, `stateRepo/${name}/fetch`, list);
       return list;

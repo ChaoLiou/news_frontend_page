@@ -19,7 +19,6 @@
         :title-label="contentType.title"
         :planet-id="planetId"
         :sticky-top="newsBlockTitleStickyTop"
-        :vendor-stage-env="vendorStageEnv"
       />
     </template>
   </div>
@@ -46,11 +45,6 @@ export default {
       type: String,
       default: "",
     },
-  },
-  data() {
-    return {
-      vendorStageEnv: process.env.VENDOR_STAGE,
-    };
   },
   computed: {
     planetId() {

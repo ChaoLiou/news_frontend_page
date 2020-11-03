@@ -30,19 +30,11 @@ export default {
     bNews,
   },
   props: {
-    venderStageVer: {
-      type: Boolean,
-      default: false,
-    },
     apiPrefix: {
       type: String,
       default: "",
     },
     newsId: {
-      type: String,
-      default: "",
-    },
-    officialAccountId: {
       type: String,
       default: "",
     },
@@ -52,11 +44,6 @@ export default {
       source: [],
       loading: true,
     };
-  },
-  computed: {
-    planetTitle() {
-      return "星球";
-    },
   },
   methods: {
     navigate(data) {
@@ -69,12 +56,6 @@ export default {
         new_session_id = generateUUID();
         new_action_index = 0;
       }
-      const link = `${data.link}?session_id=${new_session_id}&action_index=${new_action_index}`;
-      openFullH5Webview(
-        this.venderStageVer ? location.href : link,
-        this.planetTitle,
-        this.officialAccountId
-      );
       this.$emit("navigate", {
         data,
         session_id: new_session_id,

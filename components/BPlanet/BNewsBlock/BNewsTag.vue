@@ -27,18 +27,19 @@ export default {
 
 <style scoped>
 .b-news-tag {
-  border: 1px solid #979797;
-  font-size: 0.8em;
-  border-radius: 20px;
+  background-color: #fafafa;
+  border-radius: 10px;
+  line-height: 22px;
 }
 .b-news-tag.tagged {
-  background: #393939;
+  background-color: #767676;
 }
 .b-news-tag.tagged .b-news-tag__title {
   color: #ffffff;
 }
 .b-news-tag__title {
-  color: #979797;
-  padding: 2px 14px;
+  font-size: 13px;
+  color: #767676;
+  padding: 4px 12px;
 }
 </style>

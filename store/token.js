@@ -3,8 +3,8 @@ import { commitWrapper } from "@/assets/js/vuex-utils";
 const name = "token";
 
 export const getters = {
-  get: state => {
-    return state.ts;
+  ts: (state, getters, rootState, rootGetters) => {
+    return rootState.stateRepo[name].ts;
   }
 };
 

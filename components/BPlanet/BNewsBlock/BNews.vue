@@ -3,15 +3,21 @@
     <div class="b-news__card">
       <div class="b-news__thumbnail">
         <img
+          v-if="autoImgHeight"
           class="b-news__thumbnail-img"
           :src="data.img"
           :alt="data.img"
           @load="heightChanged"
         />
+        <div
+          v-else
+          class="b-news__thumbnail-img"
+          :style="thumbnailImgStyle"
+        ></div>
       </div>
       <div class="b-news__info">
-        <div class="b-news__source">{{ data.source }}</div>
         <div class="b-news__title">{{ data.title }}</div>
+        <div class="b-news__source">{{ data.source }}</div>
       </div>
     </div>
   </div>
@@ -27,9 +33,24 @@ export default {
         return {};
       },
     },
+    autoImgHeight: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    thumbnailImgStyle() {
+      return this.autoImgHeight
+        ? undefined
+        : { height: "70px", backgroundImage: `url(${this.data.img})` };
+    },
   },
   mounted() {
-    window.addEventListener("resize", this.heightChanged);
+    if (this.autoImgHeight) {
+      this.$el.addEventListener("resize", this.heightChanged);
+    } else {
+      this.heightChanged();
+    }
   },
   methods: {
     navigate() {
@@ -51,7 +72,7 @@ export default {
 .b-news__card {
   width: 100%;
   background-color: #fafafa;
-  border-radius: 6px;
+  border-radius: 16px;
   overflow: hidden;
   border: 0.5px solid #dbdbdb;
 }
@@ -61,17 +82,23 @@ export default {
 }
 .b-news__thumbnail-img {
   width: 100%;
+  background-size: cover;
 }
 .b-news__info {
-  padding: 10px;
-  font-size: 0.8em;
+  padding: 12px 12.45px;
+  display: grid;
+  row-gap: 4px;
 }
 .b-news__source {
-  font-size: 0.8em;
-  color: #979797;
-  font-weight: bold;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18.2px;
+  color: #767676;
+  font-weight: 400;
 }
 .b-news__title {
   font-weight: bold;
+  line-height: 21px;
+  font-size: 15px;
 }
 </style>

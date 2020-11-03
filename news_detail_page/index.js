@@ -1,12 +1,13 @@
 import config from "../nuxt.config.js";
 import { get, post } from "../assets/js/fetchAPI";
-import { hideVConsole } from "../assets/js/utils";
+import { hideVConsole, getVendorStageDetailUrl } from "../assets/js/utils";
 import { includeScriptSources, parseNewsIdWithinUrl } from "./utils";
 import {
   renderToolMenu,
   renderSourceTitle,
   renderDateTimeInfo,
-  renderRecommendNewsTitle
+  renderRecommendNewsTitle,
+  renderSoureNewsLink
 } from "./render";
 import {
   generateInsideSharingParams,
@@ -18,10 +19,10 @@ import {
   initBGO,
   getOpenidAccessToken,
   checkAppExist,
-  getMeProfile
+  getMeProfile,
+  openFullH5Webview
 } from "../assets/js/beanfun";
 import { getOSType, getTimeZone } from "../assets/js/tracking/utils";
-import { getPlanetName } from "../assets/js/tracking/mapping";
 import { planet_click_news } from "../assets/js/tracking/events";
 import { state as initBeanfunState } from "../store/stateRepo/beanfun";
 import { state as initEventState } from "../store/stateRepo/event";
@@ -95,7 +96,7 @@ function serverEnvReady() {
       };
       get(
         `openid/token/verification?token=${accessTokenResult.access_token}`,
-        _beanfunApi
+        BASE_URL.beanfunApi
       ).then(verification => {
         _beanfunState = {
           ..._beanfunState,
@@ -122,7 +123,7 @@ function init() {
     }
   };
 
-  renderToolMenu();
+  renderToolMenu("轉傳", "分享");
 
   get(`news?id=${_newsId}`, BASE_URL.backendApi).then(json =>
     typeof json.data === typeof [] && json.data.length > 0
@@ -137,13 +138,14 @@ function initWithNews(news) {
   renderSourceTitle(news.src_site.description);
   renderDateTimeInfo(news.src_publish_time_unix, news.src_update_time_unix);
   renderRecommendNewsTitle("你可能會喜歡");
+  renderSoureNewsLink("檢視原始文章", news.src_url);
   bindEvents(news);
 }
 
 function initRecommendNewsBlock() {
   new Vue({
     el: ".masonry-scroll",
-    template: `<b-recommend-news-block api-prefix="${BASE_URL.backendApi}" news-id="${_newsId}" @navigate="navigate" :testing="${VENDOR_STAGE.enabled}" official-account-id="${_serverEnv.officialAccountId}" />`,
+    template: `<b-recommend-news-block api-prefix="${BASE_URL.backendApi}" news-id="${_newsId}" @navigate="navigate" />`,
     components: {
       "b-recommend-news-block": BRecommendNewsBlock
     },
@@ -154,16 +156,24 @@ function initRecommendNewsBlock() {
           action_index,
           event_id: planet_click_news.id,
           payload: planet_click_news.generatePayload({
-            planet_name:
-              data.categories.length > 0
-                ? getPlanetName(data.categories[0].NewsMainBanner.id)
-                : "",
-            category: data.categories,
+            planet_name: data.representativePlanet.name,
+            category: data.categories.map(x => x.name),
             url: data.link,
             title: data.title,
             news_id: data.id
           })
         });
+        const link = `${data.link}?session_id=${session_id}&action_index=${action_index}`;
+        openFullH5Webview(
+          VENDOR_STAGE.enabled
+            ? `${location.origin}/${getVendorStageDetailUrl(
+                location.pathname,
+                VENDOR_STAGE.detailUrls
+              )}`
+            : link,
+          data.representativePlanet.name,
+          _serverEnv.officialAccountId
+        );
       }
     }
   });

@@ -1,14 +1,14 @@
 <template>
   <div class="b-news-block">
+    <div class="b-news-block__title" @click="enableVConsole">
+      {{ titleLabel }}
+    </div>
     <div
       class="b-news-block__tags"
       v-if="tags.length > 0"
       :style="stickyStyles"
     >
       <b-horizontal-scroll fade-out>
-        <div class="b-news-block__title" @click="enableVConsole">
-          {{ titleLabel }}
-        </div>
         <b-news-tag
           v-for="(tag, index) in tags"
           :key="index"
@@ -26,7 +26,7 @@
         ref="bMasonryScroll"
       >
         <template #default="props">
-          <b-news :data="props.item" @navigate="navigate" />
+          <b-news :data="props.item" @navigate="navigate" auto-img-height />
         </template>
         <template #nomore>沒有更多新聞了</template>
       </b-masonry-scroll>
@@ -36,20 +36,11 @@
 
 <script>
 import { planet_click_news } from "@/assets/js/tracking/events";
-import { getPlanetName } from "@/assets/js/tracking/mapping";
 import { openFullH5Webview } from "@/assets/js/beanfun";
-
+import { getVendorStageDetailUrl } from "@/assets/js/utils";
+const VENDOR_STAGE = process.env.VENDOR_STAGE;
 export default {
   props: {
-    vendorStageEnv: {
-      type: Object,
-      default() {
-        return {
-          enabled: false,
-          newsDetailRelativeUrl: "",
-        };
-      },
-    },
     titleLabel: {
       type: String,
       default: "",
@@ -68,17 +59,12 @@ export default {
       tags: [],
       source: [],
       loading: true,
+      VENDOR_STAGE,
     };
   },
   computed: {
     categories() {
       return this.$store.getters["category/list"];
-    },
-    planet() {
-      return this.$store.getters["planet/find"](this.planetId);
-    },
-    planetTitle() {
-      return this.planet ? this.planet.name : "";
     },
     stickyStyles() {
       if (this.stickyTop) {
@@ -96,8 +82,8 @@ export default {
       this.$store.dispatch("event/emit", {
         event_id: planet_click_news.id,
         payload: planet_click_news.generatePayload({
-          planet_name: getPlanetName(this.planetId),
-          category: data.categories,
+          planet_name: data.representativePlanet.name,
+          category: data.categories.map((x) => x.name),
           url: data.link,
           title: data.title,
           news_id: data.id,
@@ -107,10 +93,10 @@ export default {
       const link = `${data.link}?session_id=${session_id}&action_index=${action_index}`;
       const { officialAccountId } = this.$store.getters["serverEnv/env"];
       openFullH5Webview(
-        this.vendorStageEnv.enabled
-          ? location.origin + "/" + this.vendorStageEnv.newsDetailRelativeUrl
+        VENDOR_STAGE.enabled
+          ? `${location.origin}/${getVendorStageDetailUrl(location.pathname)}`
           : link,
-        this.planetTitle,
+        data.representativePlanet.name,
         officialAccountId
       );
     },
@@ -201,7 +187,9 @@ export default {
 }
 .b-news-block__title {
   font-weight: bold;
-  font-size: 1.25em;
+  font-size: 17px;
+  line-height: 23.8px;
+  color: #393939;
   position: relative;
 }
 .b-news-block__tags {
@@ -213,6 +201,6 @@ export default {
   align-items: center;
 }
 .b-news-block__tags .b-horizontal-scroll > *:not(:last-child) {
-  margin-right: 12px;
+  margin-right: 16px;
 }
 </style>

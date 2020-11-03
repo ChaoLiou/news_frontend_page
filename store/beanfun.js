@@ -25,7 +25,11 @@ export const getters = {
 export const actions = {
   async fetchProfile({ commit }, data) {
     try {
-      commitWrapper(commit, `stateRepo/${name}/fetchProfile`, data);
+      const newData = {
+        ...data,
+        language: data.language.includes("_") ? language : "zh_TW"
+      };
+      commitWrapper(commit, `stateRepo/${name}/fetchProfile`, newData);
     } catch (error) {
       console.error(error);
     }

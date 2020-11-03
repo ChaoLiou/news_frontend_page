@@ -12,18 +12,11 @@ export const actions = {
   async fetch({ dispatch, commit, rootGetters }, planetId) {
     try {
       const { language, countrycode } = rootGetters["beanfun/profile"];
-      let payload = {
-        planetId
+      const payload = {
+        planetId,
+        lang: language,
+        country: countrycode
       };
-      if (language && countrycode) {
-        payload = {
-          ...payload,
-          lang: language.includes("_")
-            ? language
-            : `${language}_${countrycode}`,
-          country: countrycode
-        };
-      }
       const res = await dispatchWrapper(dispatch, `api/${name}/fetch`, payload);
       const list = res.data;
       commitWrapper(commit, `stateRepo/${name}/fetch`, list);

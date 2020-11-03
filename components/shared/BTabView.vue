@@ -88,8 +88,9 @@ export default {
   padding: 7.5px 10px;
   white-space: nowrap;
 }
-.b-tab-view__tab_selected {
+.b-tab-view__tab.b-tab-view__tab_selected {
   border-bottom: 2px solid #26d07c;
+  color: #26d07c;
 }
 .b-tab-view__tab-items {
   margin-top: 55px;

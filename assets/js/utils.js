@@ -30,3 +30,12 @@ export const hideVConsole = () => {
     }
   }, 100);
 };
+
+export const getVendorStageDetailUrl = (
+  url,
+  urls = process.env.VENDOR_STAGE.detailUrls
+) => {
+  url = url.replace(/^\//, "");
+  const list = urls.filter(x => x !== url);
+  return list[Date.now() % list.length];
+};

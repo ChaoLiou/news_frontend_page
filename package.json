@@ -8,7 +8,7 @@
     "start": "nuxt start",
     "pre-build": "npm run build:packages && npm run build:detail",
     "generate": "npm run pre-build && nuxt generate",
-    "only-generate": "nuxt generate",
+    "generate:only": "nuxt generate",
     "build:detail": "webpack --progress --config news_detail_page/webpack.config.js",
     "build:packages": "vue-cli-service build --target lib --dest static/packages/ --name BRecommendNewsBlock --filename b-recommend-news-block --inline-vue --formats umd-min components/packages/BRecommendNewsBlock.vue",
     "test": "jest"
