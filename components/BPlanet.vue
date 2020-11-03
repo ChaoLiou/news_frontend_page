@@ -5,13 +5,12 @@
         v-if="contentType.id === 'audiovisual'"
         :key="index"
         :title-label="contentType.title"
-        :source="contentType.items"
+        :planet-id="planetId"
       />
       <b-live-broadcast-block
         v-else-if="contentType.id === 'livebroadcast'"
         :key="index"
         :title-label="contentType.title"
-        :source="contentType.items"
       />
       <b-news-block
         v-else-if="contentType.id === 'news'"
@@ -60,6 +59,7 @@ export default {
 <style scoped>
 .b-planet > * {
   margin-left: 12px;
+  padding-top: 12px;
 }
 .b-planet > *:not(:last-child) {
   margin-bottom: 12px;

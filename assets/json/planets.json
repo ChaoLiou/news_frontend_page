@@ -4,9 +4,12 @@
     "link": "/video-game",
     "contentTypes": [
       {
+        "id": "audiovisual",
+        "title": "電星影音"
+      },
+      {
         "id": "news",
-        "title": "不想錯過資訊",
-        "items": []
+        "title": "不想錯過資訊"
       }
     ]
   },
@@ -15,9 +18,12 @@
     "link": "/chill",
     "contentTypes": [
       {
+        "id": "audiovisual",
+        "title": "鬆一個影音"
+      },
+      {
         "id": "news",
-        "title": "鬆鬆情報",
-        "items": []
+        "title": "鬆鬆情報"
       }
     ]
   },
@@ -26,9 +32,12 @@
     "link": "/current-news",
     "contentTypes": [
       {
+        "id": "audiovisual",
+        "title": "快充影音"
+      },
+      {
         "id": "news",
-        "title": "擴增腦情報",
-        "items": []
+        "title": "擴增腦情報"
       }
     ]
   }

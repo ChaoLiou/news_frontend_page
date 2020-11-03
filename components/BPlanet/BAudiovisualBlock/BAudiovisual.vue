@@ -1,90 +1,79 @@
 <template>
-  <nuxt-link
-    class="b-audiovisual"
-    :to="pageLink"
-    :href="pageLink ? pageLink : link"
-    :target="pageLink ? 'self' : '_blank'"
-  >
-    <div class="b-audiovisual__card" :style="{ width }">
-      <div class="b-audiovisual__thumbnail">
-        <div class="b-audiovisual__thumbnail-img" ref="thumbnailImg"></div>
-        <div class="b-audiovisual__play-icon b-audiovisual__play-icon_center">
-          <b-play-icon />
+  <div class="b-audiovisual">
+    <iframe
+      type="text/html"
+      :src="frameSrc"
+      :style="frameStyle"
+      frameborder="0"
+    ></iframe>
+    <div class="b-audiovisual__menu">
+      <div class="b-audiovisual__menu-title">
+        <div class="b-audiovisual__title">{{ data.title }}</div>
+        <div class="b-audiovisual__info">
+          <div class="b-audiovisual__datetime">{{ datetime }}</div>
+          <div class="b-audiovisual__viewers">{{ viewers }}</div>
         </div>
       </div>
-      <div class="b-audiovisual__info">
-        <div class="b-audiovisual__author">{{ author }}</div>
-        <div class="b-audiovisual__title">{{ titleLabel }}</div>
-        <div class="b-audiovisual__views">
-          <div class="b-audiovisual__eye-icon"></div>
-          <div>{{ views }}</div>
+      <div
+        :class="[
+          'b-audiovisual__menu-icon',
+          menuToggle ? 'b-audiovisual__menu-icon_toggled' : '',
+        ]"
+        @click="menuToggle = !menuToggle"
+      ></div>
+      <div v-show="menuToggle" class="b-audiovisual__menu-content">
+        <div class="b-audiovisual__source">
+          <div
+            class="b-audiovisual__source-img"
+            :style="{ backgroundImage: `url(${data.source.img})` }"
+          ></div>
+          <div class="b-audiovisual__source-title">{{ data.source.title }}</div>
         </div>
+        <div class="b-audiovisual__description" v-html="data.description"></div>
       </div>
     </div>
-  </nuxt-link>
+  </div>
 </template>
 
 <script>
+import { transformMilliseconds } from "@/news_detail_page/formatter";
+import { formatNumber } from "@/assets/js/formatter";
 export default {
   props: {
-    thumbnail: {
-      type: String,
-      default: undefined,
-    },
-    author: {
-      type: String,
-      default: "",
-    },
-    titleLabel: {
-      type: String,
-      default: "",
-    },
-    views: {
-      type: String,
-      default: "",
-    },
-    pageLink: {
-      type: String,
-      default: "",
-    },
-    link: {
-      type: String,
-      default: "",
-    },
-    width: {
-      type: String,
-      default: "",
+    data: {
+      type: Object,
+      default() {
+        return undefined;
+      },
     },
   },
-  mounted() {
-    const thumbnailImgDOM = this.$refs.thumbnailImg;
-    const $rootDOM = this.$el;
-    const parentVueComp = this.$parent;
-    var thumbnailImage = new Image();
-    thumbnailImage.onload = () => {
-      thumbnailImgDOM.style.backgroundImage = `url(${this.thumbnail})`;
-      parentVueComp.$emit("heightChanged", $rootDOM.offsetHeight);
+  data() {
+    return {
+      menuToggle: false,
     };
-    thumbnailImage.src = this.thumbnail;
   },
-  methods: {
-    heightChanged() {
-      if (this.$el.offsetHeight > 0) {
-        this.$parent.$emit("heightChanged", this.$el.offsetHeight);
-      }
+  computed: {
+    frameSrc() {
+      return `http://www.youtube.com/embed/${this.youtubeId}`;
+      // +`?enablejsapi=1&origin=http://example.com`;
     },
-  },
-  watch: {
-    thumbnail(value) {
-      const thumbnailImgDOM = this.$refs.thumbnailImg;
-      const $rootDOM = this.$el;
-      const parentVueComp = this.$parent;
-      var thumbnailImage = new Image();
-      thumbnailImage.onload = () => {
-        thumbnailImgDOM.style.backgroundImage = `url(${value})`;
-        parentVueComp.$emit("heightChanged", $rootDOM.offsetHeight);
+    youtubeId() {
+      return this.data.link.replace("https://youtu.be/", "");
+    },
+    datetime() {
+      return transformMilliseconds(this.data.datetime);
+    },
+    viewers() {
+      return `觀看次數：${formatNumber(this.data.viewers, {
+        digit: 4,
+        unit: "萬",
+      })}次`;
+    },
+    frameStyle() {
+      return {
+        width: "100vw",
+        height: `calc(100vw * ${this.data.height} / ${this.data.width})`,
       };
-      thumbnailImage.src = value;
     },
   },
 };
@@ -92,92 +81,67 @@ export default {
 
 <style scoped>
 .b-audiovisual {
-  display: block;
+  background-color: #262626;
 }
-.b-audiovisual__card {
+.b-audiovisual__menu {
+  padding: 20px 12px 32px 12px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.05);
   display: grid;
-  grid-template-rows: repeat(2, 1fr);
-  border-radius: 6px;
-  overflow: hidden;
-  border: 0.5px solid #dbdbdb;
-}
-.b-audiovisual > div {
-  background-color: #fafafa;
-}
-.b-audiovisual__thumbnail {
-  position: relative;
-}
-.b-audiovisual__thumbnail-img {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: absolute;
-  z-index: 1;
-}
-.b-audiovisual__play-icon {
-  position: absolute;
-  width: fit-content;
-  height: fit-content;
-  z-index: 2;
-}
-.b-audiovisual__play-icon_center {
-  left: 50%;
-  transform: translate(-50%, -50%);
-  top: 50%;
-}
-.b-audiovisual__info {
-  padding: 8px 6px;
-  font-size: 0.8em;
-}
-.b-audiovisual__info > div:not(:last-child) {
-  margin-bottom: 4px;
-}
-.b-audiovisual__views {
-  display: flex;
-  flex-direction: row;
-}
-.b-audiovisual__views,
-.b-audiovisual__author {
-  font-size: 0.8em;
-  color: #b8b8b8;
-  overflow: hidden;
-  font-weight: bold;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: calc(100% - 12px);
+  grid-template-columns: 1fr 26px;
+  column-gap: 6px;
 }
 .b-audiovisual__title {
+  color: #ffffff;
+  font-size: 15px;
+  line-height: 21px;
   font-weight: bold;
-  height: 2.8em;
-  overflow: hidden;
-  position: relative;
-  text-align: justify;
-  padding-right: 16px;
 }
-.b-audiovisual__title:before {
-  content: "…";
-  position: absolute;
-  right: 0;
-  bottom: 0;
+.b-audiovisual__info {
+  display: flex;
+  flex-direction: row;
+  margin-top: 4px;
 }
-.b-audiovisual__title:after {
-  content: "";
-  position: absolute;
-  right: 0;
-  width: 1em;
-  height: 1.5em;
-  background: #fafafa;
+.b-audiovisual__datetime,
+.b-audiovisual__viewers {
+  padding-right: 1em;
+  color: #ececec;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18.2px;
 }
-.b-audiovisual__eye-icon {
-  background-image: url("/icons/eye.png");
+.b-audiovisual__menu-icon {
+  width: 26px;
+  height: 24px;
+  background-image: url("/icons/arrow_down.svg");
+}
+.b-audiovisual__menu-icon.b-audiovisual__menu-icon_toggled {
+  transform: rotateX(180deg);
+}
+.b-audiovisual__menu-content {
+  margin-top: 16px;
+}
+.b-audiovisual__source {
+  display: grid;
+  column-gap: 12px;
+  grid-template-columns: 30px 1fr;
+  align-items: center;
+}
+.b-audiovisual__source-img {
+  width: 30px;
+  height: 30px;
   background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  width: 0.6em;
-  height: 0.6em;
-  align-self: center;
-  padding-right: 4px;
+  border-radius: 50%;
+}
+.b-audiovisual__source-title {
+  font-size: 13px;
+  line-height: 18.2px;
+  color: #ffffff;
+}
+.b-audiovisual__description {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 24px;
+  color: #ffffff;
+  font-weight: 400;
 }
 </style>
