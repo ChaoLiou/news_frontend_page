@@ -17,7 +17,7 @@ export default Object.assign(config, {
       builtAt: new Date().toLocaleString()
     },
     VENDOR_STAGE: {
-      enabled: true,
+      enabled: false,
       detailUrls: [
         "articles/tw/1/1310256393650966528/detail.html",
         "articles/tw/1/1323087025544368128/detail.html"
