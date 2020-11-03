@@ -2,7 +2,7 @@
   <div class="b-horizontal-scroll" :style="{ maxWidth }">
     <slot></slot>
     <div
-      v-if="fadeOut && fadeOutEnabled"
+      v-show="fadeOut && fadeOutEnabled"
       class="b-horizontal-scroll__fade-mask"
       :style="{ height: `${fadeOutMaskHeight}px`, top: `${fadeOutMaskTop}px` }"
     ></div>
@@ -57,10 +57,10 @@ export default {
 }
 .b-horizontal-scroll__fade-mask {
   z-index: 2;
-  position: fixed;
+  position: sticky;
   top: 0px;
   right: 0px;
-  width: 3em;
+  width: 42px;
   height: 100%;
   background: linear-gradient(270deg, #fafafa 30%, rgba(250, 250, 250, 0) 70%);
 }

@@ -8,7 +8,7 @@
         ref="bMasonryScroll"
       >
         <template #default="props">
-          <b-news :data="props.item" @navigate="navigate" />
+          <b-news :data="props.item" @navigate="navigate" auto-img-height />
         </template>
         <template #nomore>沒有更多新聞了</template>
       </b-masonry-scroll>
@@ -38,14 +38,34 @@ export default {
       type: String,
       default: "",
     },
+    lang: {
+      type: String,
+      default: "",
+    },
+    country: {
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {
       source: [],
       loading: true,
+      planets: [],
     };
   },
   methods: {
+    getPlanets() {
+      get(
+        `main?lang=${this.lang}&country=${this.country}`,
+        this.apiPrefix
+      ).then((res) => (this.planets = res.data));
+    },
+    getPlanetTitle(planetId) {
+      console.log({ planets: this.planets, planetId });
+      const planet = this.planets.find((x) => x.id === planetId);
+      return planet ? planet.name : "星球";
+    },
     navigate(data) {
       const { session_id, action_index } = getQueryString();
       let new_session_id, new_action_index;
@@ -78,7 +98,7 @@ export default {
     },
     loadMore({ pageSize, pageIndex } = { pageSize: 10, pageIndex: 1 }) {
       this.loading = true;
-      const apiRelative = `recommendedNews?page=${pageIndex}&pageSize=${pageSize}&news_id=${this.newsId}`;
+      const apiRelative = `recommendedNews?page=${pageIndex}&pageSize=${pageSize}&news_id=${this.newsId}&lang=${this.lang}&country=${this.country}`;
       get(apiRelative, this.apiPrefix)
         .then((json) => json.data.map(formatNews))
         .then((list) => this.loadMoreNews(list, pageIndex))

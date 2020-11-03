@@ -76,7 +76,10 @@ function serverEnvReady() {
     getMeProfile(profile => {
       _beanfunState = {
         ..._beanfunState,
-        profile
+        profile: {
+          ...profile,
+          language: profile.language.includes("_") ? profile.language : "zh_TW"
+        }
       };
       const { language, country } = profile;
       _eventState = {
@@ -143,9 +146,10 @@ function initWithNews(news) {
 }
 
 function initRecommendNewsBlock() {
+  const { language, country } = _beanfunState.profile;
   new Vue({
     el: ".masonry-scroll",
-    template: `<b-recommend-news-block api-prefix="${BASE_URL.backendApi}" news-id="${_newsId}" @navigate="navigate" />`,
+    template: `<b-recommend-news-block api-prefix="${BASE_URL.backendApi}" news-id="${_newsId}" @navigate="navigate" lang="${language}" country="${country}" />`,
     components: {
       "b-recommend-news-block": BRecommendNewsBlock
     },
@@ -219,18 +223,19 @@ function bindEvents(news) {
   );
   const link = news.article_path;
   const encodedLink = encodeURIComponent(link);
-  const widgetId = _serverEnv.widgetId;
-  const deepLink = `beanfunapp://Q/h5/w_id/${widgetId}?url=${encodedLink}`;
   const image = news.Images[0].file_path;
   const description = news.description;
   const title = news.src_title;
+  const { widgetId, officialAccountId } = _serverEnv;
+  const deepLinkInsideSharing = `beanfunapp://Q/h5/w_id/${widgetId}?url=${encodedLink}`;
+  const deepLinkOutsideSharing = `beanfunapp://Q/h5page/${officialAccountId}?url=${encodedLink}&theme=1&title=${title}`;
 
   insideSharingDOM.addEventListener("click", () => {
     const { msg_body, select_opt } = generateInsideSharingParams({
       description,
       widgetId,
       image,
-      deepLink,
+      deepLinkInsideSharing,
       title
     });
     sendMessageV2(msg_body, select_opt);
@@ -241,7 +246,7 @@ function bindEvents(news) {
       title,
       description,
       image,
-      deepLink,
+      deepLinkOutsideSharing,
       api: BASE_URL.backendApi
     }).then(json => {
       if (json._id) {

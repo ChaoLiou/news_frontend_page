@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     tabViewReady({ tabsHeight }) {
-      this.newsTitleStickyTop = `${tabsHeight}px`;
+      this.newsTitleStickyTop = `${tabsHeight - 1}px`;
     },
   },
 };

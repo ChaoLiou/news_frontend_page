@@ -85,10 +85,11 @@ export default {
 .b-tab-view__tab > *:first-child {
   font-size: 1.2em;
   font-weight: bold;
-  padding: 7.5px 10px;
+  padding: 7.5px 0px;
+  margin: 0px 10px;
   white-space: nowrap;
 }
-.b-tab-view__tab.b-tab-view__tab_selected {
+.b-tab-view__tab.b-tab-view__tab_selected > div {
   border-bottom: 2px solid #26d07c;
   color: #26d07c;
 }

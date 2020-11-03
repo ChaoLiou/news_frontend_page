@@ -12,7 +12,13 @@
   </head>
   <body>
     <div id="app">
-      <b-recommend-news-block :api-prefix="apiPrefix" :news-id="newsId" />
+      <b-recommend-news-block
+        :api-prefix="apiPrefix"
+        :news-id="newsId"
+        :lang="lang"
+        :country="country"
+        @navigate="navigate"
+      />
     </div>
   </body>
   <script>
@@ -24,8 +30,15 @@
       data() {
         return {
           apiPrefix: "https://753f40f86863.ngrok.io/v1",
-          newsId: "1310256393650966528"
+          newsId: "1310256393650966528",
+          lang: "en_US",
+          country: "US"
         };
+      },
+      methods: {
+        navigate(data) {
+          console.log(data);
+        }
       }
     });
   </script>
