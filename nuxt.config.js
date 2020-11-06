@@ -23,6 +23,9 @@ export default Object.assign(config, {
         "articles/tw/1/1323087025544368128/detail.html"
       ]
     },
+    VIDEO_IMAGE: {
+      size: ["default", "medium", "high", "standard", "maxres"][0]
+    },
     DEBUG_MODE: false
   }
 });

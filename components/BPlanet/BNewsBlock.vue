@@ -113,7 +113,6 @@ export default {
       this.tags.unshift({ title: "全部", id: -1, tagged: true });
     },
     init(planetId) {
-      this.loading = true;
       this.source = [];
       this.resetScroll();
       if (planetId) {

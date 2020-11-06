@@ -42,7 +42,7 @@ window.vconsoleOnload = vconsoleOnload;
 window.beanfun_vueOnload = beanfun_vueOnload;
 
 const scripts = [
-  ...config.head.script,
+  ...config.head.script.filter(x => !!x.group),
   { src: "https://cdn.jsdelivr.net/npm/vue/dist/vue.js", group: "beanfun_vue" },
   { src: "/packages/b-recommend-news-block.umd.min.js", group: "beanfun_vue" }
 ];

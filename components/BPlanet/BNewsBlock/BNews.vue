@@ -16,7 +16,7 @@
         ></div>
       </div>
       <div class="b-news__info">
-        <div class="b-news__title">{{ data.title }}</div>
+        <div class="b-news__title">{{ data.index }}.{{ data.title }}</div>
         <div class="b-news__source">{{ data.source }}</div>
       </div>
     </div>

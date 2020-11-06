@@ -11,6 +11,9 @@ export default Object.assign(config, {
       appBuild: 1,
       trackingVer: "0.07"
     },
+    VIDEO_IMAGE: {
+      size: ["default", "medium", "high", "standard", "maxres"][1]
+    },
     DEBUG_MODE: true
   }
 });

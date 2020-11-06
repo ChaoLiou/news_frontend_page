@@ -5,20 +5,24 @@
       masonry ? 'b-audiovisual-block_masonry' : '',
     ]"
   >
-    <div>
+    <div v-if="titleLabel">
       <div class="b-audiovisual-block__title">{{ titleLabel }}</div>
     </div>
     <div>
-      <b-masonry-scroll :items="source" v-if="masonry" @loadMore="loadMore">
-        <template v-slot:default="props">
-          <b-audiovisual-card
-            :thumbnail="props.item.thumbnail"
-            :title-label="props.item.title"
-            :author="props.item.author"
-            :views="props.item.views"
-            :pageLink="props.item.pageLink"
-            :link="props.item.link"
-          />
+      <b-masonry-scroll
+        v-if="masonry"
+        :items="source"
+        :loading="loading"
+        :column="1"
+        :auto-adjust-height="false"
+        ref="bMasonryScroll"
+        @load-more="loadMore"
+      >
+        <template #default="props">
+          <b-audiovisual :data="props.item" />
+        </template>
+        <template #nomore>
+          <div class="no-more-content">沒有更多影片了</div>
         </template>
       </b-masonry-scroll>
       <b-horizontal-scroll v-else>
@@ -31,8 +35,6 @@
 </template>
 
 <script>
-import audiovisuals from "@/assets/json/fake/audiovisual.json";
-
 export default {
   props: {
     titleLabel: {
@@ -51,27 +53,48 @@ export default {
   data() {
     return {
       source: [],
+      loading: false,
     };
   },
   methods: {
-    init(planetId) {
+    init() {
+      this.loading = true;
       this.source = [];
+      this.resetScroll();
+      this.loadMore();
+    },
+    resetScroll() {
+      if (this.$refs.bMasonryScroll) {
+        this.$refs.bMasonryScroll.reset();
+      }
+    },
+    loadMoreVideo(list, pageIndex) {
+      if (list) {
+        if (pageIndex === 1) {
+          this.source = [];
+        }
+        this.source.push(...list);
+      }
+    },
+    loadMore({ pageSize, pageIndex } = { pageSize: 10, pageIndex: 1 }) {
+      this.loading = true;
       const payload = {
-        pageIndex: 1,
-        pageSize: 10,
+        pageIndex,
+        pageSize,
+        planetId: this.planetId,
       };
-      setTimeout(() => {
-        this.$store
-          .dispatch("audiovisual/fetch", payload)
-          .then((list) => (this.source = list));
-      }, 500);
+      this.$store
+        .dispatch("audiovisual/fetch", payload)
+        .then((list) => this.loadMoreVideo(list, pageIndex))
+        .then(() => (this.loading = false))
+        .catch((_) => (this.loading = false));
     },
   },
   watch: {
     planetId: {
       immediate: true,
-      handler(value) {
-        this.init(value);
+      handler() {
+        this.init();
       },
     },
   },
@@ -88,5 +111,12 @@ export default {
 }
 .b-horizontal-scroll > *:not(:last-child) {
   margin-right: 16px;
+}
+.no-more-content {
+  width: 100vw;
+  background-color: #262626;
+  color: white;
+  display: grid;
+  justify-content: center;
 }
 </style>

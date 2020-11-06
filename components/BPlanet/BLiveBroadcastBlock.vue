@@ -15,7 +15,7 @@
     </div>
     <div>
       <b-masonry-scroll :items="arr_source" v-if="masonry" @loadMore="loadMore">
-        <template v-slot:default="props">
+        <template #default="props">
           <b-live-broadcast
             :thumbnail="props.item.img"
             :live="props.item.live"

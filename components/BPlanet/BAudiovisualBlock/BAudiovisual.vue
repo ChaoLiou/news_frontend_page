@@ -1,14 +1,11 @@
 <template>
   <div class="b-audiovisual">
-    <iframe
-      type="text/html"
-      :src="frameSrc"
-      :style="frameStyle"
-      frameborder="0"
-    ></iframe>
+    <div :id="id" :style="frameStyle"></div>
     <div class="b-audiovisual__menu">
       <div class="b-audiovisual__menu-title">
-        <div class="b-audiovisual__title">{{ data.title }}</div>
+        <div class="b-audiovisual__title">
+          {{ data.title }}
+        </div>
         <div class="b-audiovisual__info">
           <div class="b-audiovisual__datetime">{{ datetime }}</div>
           <div class="b-audiovisual__viewers">{{ viewers }}</div>
@@ -36,6 +33,12 @@
 </template>
 
 <script>
+function onPlayerReady(event) {
+  console.log({ onPlayerReady: event });
+}
+function onPlayerStateChange(event) {
+  console.log({ onPlayerStateChange: event });
+}
 import { transformMilliseconds } from "@/news_detail_page/formatter";
 import { formatNumber } from "@/assets/js/formatter";
 export default {
@@ -50,15 +53,22 @@ export default {
   data() {
     return {
       menuToggle: false,
+      player: undefined,
     };
   },
   computed: {
+    id() {
+      return `iframe-${this.data.id}`;
+    },
     frameSrc() {
       return `http://www.youtube.com/embed/${this.youtubeId}`;
-      // +`?enablejsapi=1&origin=http://example.com`;
     },
     youtubeId() {
-      return this.data.link.replace("https://youtu.be/", "");
+      const result = /\?v=(.*?)$/.exec(this.data.link);
+      if (result) {
+        const [_, id] = result;
+        return id;
+      }
     },
     datetime() {
       return transformMilliseconds(this.data.datetime);
@@ -72,9 +82,20 @@ export default {
     frameStyle() {
       return {
         width: "100vw",
-        height: `calc(100vw * ${this.data.height} / ${this.data.width})`,
+        height: `calc(100vw * ${this.data.img.height} / ${this.data.img.width})`,
       };
     },
+  },
+  mounted() {
+    this.player = new YT.Player(this.id, {
+      // width: this.data.img.width,
+      // height: this.data.img.height,
+      videoId: this.youtubeId,
+      events: {
+        onReady: onPlayerReady,
+        onStateChange: onPlayerStateChange,
+      },
+    });
   },
 };
 </script>
@@ -143,5 +164,9 @@ export default {
   line-height: 24px;
   color: #ffffff;
   font-weight: 400;
+}
+iframe {
+  width: 100%;
+  height: 100%;
 }
 </style>

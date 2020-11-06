@@ -1,5 +1,5 @@
 import { dispatchWrapper, commitWrapper } from "@/assets/js/vuex-utils";
-import { formatNews } from "@/assets/js/formatter";
+import { formatVideo } from "@/assets/js/formatter";
 
 const name = "audiovisual";
 
@@ -10,10 +10,20 @@ export const getters = {
 };
 
 export const actions = {
-  async fetch({ dispatch, commit }, data) {
+  async fetch({ rootGetters, dispatch, commit }, data) {
     try {
-      const res = await dispatchWrapper(dispatch, `api/${name}/fetch`, data);
-      const list = res;
+      if (!rootGetters["token/ts"]) {
+        dispatchWrapper(dispatch, "token/update", Date.now());
+      }
+      const { language, countrycode } = rootGetters["beanfun/profile"];
+      const payload = {
+        ...data,
+        ts: rootGetters["token/ts"],
+        lang: language,
+        country: countrycode
+      };
+      const res = await dispatchWrapper(dispatch, `api/${name}/fetch`, payload);
+      const list = res.data.map(formatVideo);
       commitWrapper(commit, `stateRepo/${name}/fetch`, list);
       return list;
     } catch (error) {

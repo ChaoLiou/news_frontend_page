@@ -1,10 +1,10 @@
 <template>
   <div class="index">
     <b-tab-view :source="planets" @ready="tabViewReady">
-      <template v-slot:tab="props">
+      <template #tab="props">
         <div>{{ props.item.name }}</div>
       </template>
-      <template v-slot:tab-item="props">
+      <template #tab-item="props">
         <b-planet
           :planet="props.item"
           :news-block-title-sticky-top="newsTitleStickyTop"

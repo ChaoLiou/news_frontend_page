@@ -5,7 +5,7 @@ export const formatNews = x => {
       : [];
   const planets = categories.map(c => c.NewsMainBanner);
   return {
-    id: x.id.toString(),
+    id: x.id,
     img: x.Images && x.Images.length > 0 ? x.Images[0].file_path : undefined,
     title: x.src_title,
     source: x.src_site.description,
@@ -39,4 +39,32 @@ export const formatNumber = (x, shortenOptions) => {
       .reverse()
       .join(",");
   }
+};
+
+export const formatVideo = x => {
+  const categories =
+    x.src_category && x.src_category.NewsSubCategory
+      ? x.src_category.NewsSubCategory
+      : [];
+  const planets = categories.map(c => c.NewsMainBanner);
+  const thumbnails =
+    x.Images && x.Images.length > 0
+      ? JSON.parse(x.Images[0].src_thumbnails)
+      : {};
+  return {
+    id: x.id,
+    img: thumbnails[process.env.VIDEO_IMAGE.size],
+    title: x.src_title,
+    viewers: 0,
+    categories,
+    planets,
+    link: x.src_url,
+    datetime: x.src_start_ymdt_unix
+      ? new Date(x.src_start_ymdt_unix)
+      : undefined,
+    source: {
+      img: "/news_detail_img_default.png",
+      title: x.src_site.name
+    }
+  };
 };

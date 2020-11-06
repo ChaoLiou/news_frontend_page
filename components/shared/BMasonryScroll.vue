@@ -1,5 +1,5 @@
 <template>
-  <div class="b-masonry-scroll">
+  <div class="b-masonry-scroll" :style="style">
     <b-masonry-proxy
       v-for="(item, index) in items"
       :key="index"
@@ -46,6 +46,14 @@ export default {
       type: Boolean,
       default: true,
     },
+    column: {
+      type: Number,
+      default: 2,
+    },
+    autoAdjustHeight: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -55,14 +63,25 @@ export default {
       pageSize: 10,
     };
   },
+  computed: {
+    style() {
+      return {
+        gridTemplateColumns: `repeat(${this.column}, minmax(150px, 1fr))`,
+        gridAutoRows: this.autoAdjustHeight ? "10px" : undefined,
+        gridGap: this.autoAdjustHeight ? "10px" : undefined,
+      };
+    },
+  },
   mounted() {
     this.rowSpans = Array.from({ length: this.items.length }, (v, i) => 0);
   },
   methods: {
     getGridRowEnd(index) {
-      return this.rowSpans.length > 0
-        ? `span ${this.rowSpans[index] ? this.rowSpans[index] : "10"}`
-        : `span 10`;
+      if (this.autoAdjustHeight) {
+        return this.rowSpans.length > 0
+          ? `span ${this.rowSpans[index] ? this.rowSpans[index] : "10"}`
+          : `span 10`;
+      }
     },
     triggerable(index) {
       return (index + 1) % (this.pageSize / 2) === 0;
@@ -75,7 +94,7 @@ export default {
       this.$set(this.rowSpans, index, Math.ceil((height + 10) / 20));
     },
     loadMore(index) {
-      if (index + 1 === this.pageIndex * this.pageSize) {
+      if ((index + 1) * 2 === this.pageIndex * this.pageSize) {
         this.$emit("load-more", {
           pageSize: this.pageSize,
           pageIndex: ++this.pageIndex,
@@ -89,9 +108,6 @@ export default {
 <style scoped>
 .b-masonry-scroll {
   display: grid;
-  grid-template-columns: repeat(2, minmax(150px, 1fr));
-  grid-auto-rows: 10px;
-  grid-gap: 10px;
 }
 .b-masonry-scroll__placeholder {
   animation-duration: 1.5s;

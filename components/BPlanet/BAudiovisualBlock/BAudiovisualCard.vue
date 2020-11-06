@@ -1,7 +1,7 @@
 <template>
   <nuxt-link
     class="b-audiovisual-card"
-    :to="`/${data.planetId}/audiovisual/${data.id}`"
+    :to="`/${planetId}/audiovisual/${data.id}`"
   >
     <div
       class="b-audiovisual-card__body"
@@ -17,7 +17,7 @@
         <div class="b-audiovisual-card__info">
           <div class="b-audiovisual-card__viewers">{{ viewers }}</div>
           <div class="b-audiovisual-card__title">{{ data.title }}</div>
-          <div class="b-audiovisual-card__source">{{ data.source }}</div>
+          <div class="b-audiovisual-card__source">{{ data.source.title }}</div>
         </div>
       </div>
     </div>
@@ -44,6 +44,9 @@ export default {
     },
   },
   computed: {
+    planetId() {
+      return this.data.planets.length > 0 ? this.data.planets[0].id : undefined;
+    },
     viewers() {
       return `${formatNumber(this.data.viewers)}次觀看`;
     },
@@ -54,29 +57,16 @@ export default {
     const parentVueComp = this.$parent;
     var thumbnailImage = new Image();
     thumbnailImage.onload = () => {
-      thumbnailImgDOM.style.backgroundImage = `url(${this.data.img})`;
+      thumbnailImgDOM.style.backgroundImage = `url(${this.data.img.url})`;
       parentVueComp.$emit("heightChanged", $rootDOM.offsetHeight);
     };
-    thumbnailImage.src = this.data.img;
+    thumbnailImage.src = this.data.img.url;
   },
   methods: {
     heightChanged() {
       if (this.$el.offsetHeight > 0) {
         this.$parent.$emit("heightChanged", this.$el.offsetHeight);
       }
-    },
-  },
-  watch: {
-    thumbnail(value) {
-      const thumbnailImgDOM = this.$refs.thumbnailImg;
-      const $rootDOM = this.$el;
-      const parentVueComp = this.$parent;
-      var thumbnailImage = new Image();
-      thumbnailImage.onload = () => {
-        thumbnailImgDOM.style.backgroundImage = `url(${value})`;
-        parentVueComp.$emit("heightChanged", $rootDOM.offsetHeight);
-      };
-      thumbnailImage.src = value;
     },
   },
 };
