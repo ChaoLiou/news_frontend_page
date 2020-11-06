@@ -22,8 +22,8 @@
       <b-masonry-scroll
         :loading="loading"
         :items="source"
-        @load-more="loadMore"
         ref="bMasonryScroll"
+        @load-more="loadMore"
       >
         <template #default="props">
           <b-news :data="props.item" @navigate="navigate" auto-img-height />
@@ -50,8 +50,8 @@ export default {
       default: 0,
     },
     stickyTop: {
-      type: String,
-      default: "",
+      type: Number,
+      default: 0,
     },
   },
   data() {
@@ -69,7 +69,7 @@ export default {
     stickyStyles() {
       if (this.stickyTop) {
         return {
-          top: this.stickyTop,
+          top: `${this.stickyTop}px`,
           position: "sticky",
           left: "0px",
           zIndex: 2,
@@ -128,6 +128,8 @@ export default {
     resetScroll() {
       if (this.$refs.bMasonryScroll) {
         this.$refs.bMasonryScroll.reset();
+        const scrollY = this.$el.offsetTop;
+        window.scroll(0, scrollY);
       }
     },
     toggleTag(targetIndex) {
@@ -196,7 +198,6 @@ export default {
   background-color: white;
 }
 .b-news-block__tags .b-horizontal-scroll {
-  height: 44px;
   align-items: center;
 }
 .b-news-block__tags .b-horizontal-scroll > *:not(:last-child) {

@@ -18,7 +18,7 @@
 export default {
   data() {
     return {
-      newsTitleStickyTop: "",
+      newsTitleStickyTop: 0,
     };
   },
   middleware: ["planet"],
@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     tabViewReady({ tabsHeight }) {
-      this.newsTitleStickyTop = `${tabsHeight - 1}px`;
+      this.newsTitleStickyTop = tabsHeight - 1;
     },
   },
 };

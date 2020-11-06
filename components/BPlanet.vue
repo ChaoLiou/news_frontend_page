@@ -41,8 +41,8 @@ export default {
       },
     },
     newsBlockTitleStickyTop: {
-      type: String,
-      default: "",
+      type: Number,
+      default: 0,
     },
   },
   computed: {

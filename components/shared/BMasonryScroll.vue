@@ -88,7 +88,6 @@ export default {
     },
     reset() {
       this.pageIndex = 1;
-      window.scrollTo(0, 0);
     },
     heightChanged(index, height) {
       this.$set(this.rowSpans, index, Math.ceil((height + 10) / 20));

@@ -51,6 +51,7 @@ export const generateInsideSharingParams = ({
     },
     max_selected_count: -1
   };
+  console.log({ generateInsideSharingParams: { msg_body, select_opt } });
   return {
     msg_body,
     select_opt
@@ -74,5 +75,6 @@ export const generateOutsideSharingParamsPromise = ({
     },
     defaultLink
   };
+  console.log({ generateOutsideSharingParamsPromise: { body } });
   return post("shortlink", body, api);
 };

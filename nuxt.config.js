@@ -24,7 +24,7 @@ export default Object.assign(config, {
       ]
     },
     VIDEO_IMAGE: {
-      size: ["default", "medium", "high", "standard", "maxres"][0]
+      size: ["default", "medium", "high", "standard", "maxres"][1]
     },
     DEBUG_MODE: false
   }
