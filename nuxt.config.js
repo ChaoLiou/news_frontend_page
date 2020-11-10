@@ -4,7 +4,6 @@ export default Object.assign(config, {
   env: {
     BASE_URL: {
       backendApi: process.env.BACKEND_API || "https://753f40f86863.ngrok.io/v1",
-      beanfunApi: process.env.BEANFUN_API || "https://stg-api.beanfun.com/v1",
       trackingApi:
         process.env.TRACKING_API || "https://fb1b2bcc52bd.ngrok.io/v1"
     },

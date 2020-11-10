@@ -98,8 +98,7 @@ function serverEnvReady() {
         accessToken: accessTokenResult
       };
       get(
-        `openid/token/verification?token=${accessTokenResult.access_token}`,
-        BASE_URL.beanfunApi
+        `openid/token/verification?token=${accessTokenResult.access_token}`
       ).then(verification => {
         _beanfunState = {
           ..._beanfunState,
