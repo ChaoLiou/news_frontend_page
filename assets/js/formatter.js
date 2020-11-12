@@ -18,7 +18,7 @@ export const formatNews = x => {
 
 export const formatNumber = (x, shortenOptions) => {
   const reversedNumbers = [...x.toString()].reverse();
-  if (shortenOptions && reversedNumbers.length >= shortenOptions.digit) {
+  if (shortenOptions && reversedNumbers.length > shortenOptions.digit) {
     return (
       formatNumber(
         reversedNumbers

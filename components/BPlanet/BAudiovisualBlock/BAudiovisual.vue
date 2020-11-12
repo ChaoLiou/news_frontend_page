@@ -75,10 +75,11 @@ export default {
       return transformMilliseconds(this.data.datetime);
     },
     views() {
-      return `觀看次數：${formatNumber(this.data.views, {
+      const formattedViews = formatNumber(this.data.views, {
         digit: 4,
         unit: "萬",
-      })}次`;
+      });
+      return `觀看次數：${formattedViews}次`;
     },
     description() {
       return replaceNewLineToBr(this.data.description);
