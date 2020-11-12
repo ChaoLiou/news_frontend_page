@@ -8,7 +8,7 @@
         </div>
         <div class="b-audiovisual__info">
           <div class="b-audiovisual__datetime">{{ datetime }}</div>
-          <div class="b-audiovisual__viewers">{{ viewers }}</div>
+          <div class="b-audiovisual__views">{{ views }}</div>
         </div>
       </div>
       <div
@@ -26,7 +26,7 @@
           ></div>
           <div class="b-audiovisual__source-title">{{ data.source.title }}</div>
         </div>
-        <div class="b-audiovisual__description" v-html="data.description"></div>
+        <div class="b-audiovisual__description" v-html="description"></div>
       </div>
     </div>
   </div>
@@ -41,6 +41,7 @@ function onPlayerStateChange(event) {
 }
 import { transformMilliseconds } from "@/news_detail_page/formatter";
 import { formatNumber } from "@/assets/js/formatter";
+import { replaceNewLineToBr } from "@/assets/js/utils";
 export default {
   props: {
     data: {
@@ -73,11 +74,14 @@ export default {
     datetime() {
       return transformMilliseconds(this.data.datetime);
     },
-    viewers() {
-      return `觀看次數：${formatNumber(this.data.viewers, {
+    views() {
+      return `觀看次數：${formatNumber(this.data.views, {
         digit: 4,
         unit: "萬",
       })}次`;
+    },
+    description() {
+      return replaceNewLineToBr(this.data.description);
     },
     frameStyle() {
       return {
@@ -146,7 +150,7 @@ export default {
   margin-top: 4px;
 }
 .b-audiovisual__datetime,
-.b-audiovisual__viewers {
+.b-audiovisual__views {
   padding-right: 1em;
   color: #ececec;
   font-weight: 400;

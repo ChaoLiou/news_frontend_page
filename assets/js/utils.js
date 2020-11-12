@@ -39,3 +39,7 @@ export const getVendorStageDetailUrl = (
   const list = urls.filter(x => x !== url);
   return list[Date.now() % list.length];
 };
+
+export const replaceNewLineToBr = text => {
+  return text.replace(/\n/g, "<br />");
+};

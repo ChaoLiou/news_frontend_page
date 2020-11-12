@@ -15,7 +15,7 @@
           <div></div>
         </div>
         <div class="b-audiovisual-card__info">
-          <div class="b-audiovisual-card__viewers">{{ viewers }}</div>
+          <div class="b-audiovisual-card__views">{{ views }}</div>
           <div class="b-audiovisual-card__title">{{ data.title }}</div>
           <div class="b-audiovisual-card__source">{{ data.source.title }}</div>
         </div>
@@ -47,8 +47,8 @@ export default {
     planetId() {
       return this.data.planets.length > 0 ? this.data.planets[0].id : undefined;
     },
-    viewers() {
-      return `${formatNumber(this.data.viewers)}次觀看`;
+    views() {
+      return `${formatNumber(this.data.views)}次觀看`;
     },
   },
   mounted() {
@@ -124,7 +124,7 @@ export default {
   row-gap: 4px;
   width: calc(100% - 24px);
 }
-.b-audiovisual-card__viewers {
+.b-audiovisual-card__views {
   color: #26d07c;
   font-weight: 400;
   font-size: 13px;

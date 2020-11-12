@@ -55,7 +55,6 @@ export const formatVideo = x => {
     id: x.id,
     img: thumbnails[process.env.VIDEO_IMAGE.size],
     title: x.src_title,
-    viewers: 0,
     categories,
     planets,
     link: x.src_url,
@@ -65,6 +64,8 @@ export const formatVideo = x => {
     source: {
       img: "/news_detail_img_default.png",
       title: x.src_site.name
-    }
+    },
+    views: x.youtube_data.ViewCount,
+    description: x.youtube_data.Description
   };
 };
