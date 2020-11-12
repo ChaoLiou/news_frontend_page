@@ -1,8 +1,5 @@
 <template>
-  <nuxt-link
-    class="b-audiovisual-card"
-    :to="`/${planetId}/audiovisual/${data.id}`"
-  >
+  <div class="b-audiovisual-card" @click="navigate">
     <div
       class="b-audiovisual-card__body"
       :style="{ width, minWidth: width, height, minHeight: height }"
@@ -21,7 +18,7 @@
         </div>
       </div>
     </div>
-  </nuxt-link>
+  </div>
 </template>
 
 <script>
@@ -63,6 +60,9 @@ export default {
     thumbnailImage.src = this.data.img.url;
   },
   methods: {
+    navigate() {
+      this.$emit("navigate", this.data);
+    },
     heightChanged() {
       if (this.$el.offsetHeight > 0) {
         this.$parent.$emit("heightChanged", this.$el.offsetHeight);

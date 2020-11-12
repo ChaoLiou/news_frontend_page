@@ -57,6 +57,7 @@ export const formatVideo = x => {
     title: x.src_title,
     categories,
     planets,
+    representativePlanet: planets.length > 0 ? planets[0] : {},
     link: x.src_url,
     datetime: x.src_start_ymdt_unix
       ? new Date(x.src_start_ymdt_unix)

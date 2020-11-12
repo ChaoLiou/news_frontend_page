@@ -27,7 +27,7 @@
       </b-masonry-scroll>
       <b-horizontal-scroll v-else>
         <template v-for="(item, index) in source">
-          <b-audiovisual-card :key="index" :data="item" />
+          <b-audiovisual-card :key="index" :data="item" @navigate="navigate" />
         </template>
       </b-horizontal-scroll>
     </div>
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { openFullH5Webview } from "@/assets/js/beanfun";
 export default {
   props: {
     titleLabel: {
@@ -88,6 +89,15 @@ export default {
         .then((list) => this.loadMoreVideo(list, pageIndex))
         .then(() => (this.loading = false))
         .catch((_) => (this.loading = false));
+    },
+    navigate(data) {
+      const link = `${location.origin}/${this.planetId}/audiovisual/${data.id}`;
+      const { officialAccountId } = this.$store.getters["serverEnv/env"];
+      openFullH5Webview(
+        link,
+        data.representativePlanet.name,
+        officialAccountId
+      );
     },
   },
   watch: {
