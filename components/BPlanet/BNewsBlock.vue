@@ -1,6 +1,6 @@
 <template>
   <div class="b-news-block">
-    <div class="b-news-block__title" @click="enableVConsole">
+    <div class="b-news-block__title" @click="enableVConsole" ref="title">
       {{ titleLabel }}
     </div>
     <div
@@ -128,7 +128,16 @@ export default {
     resetScroll() {
       if (this.$refs.bMasonryScroll) {
         this.$refs.bMasonryScroll.reset();
-        const scrollY = this.$el.offsetTop;
+        const top = this.$el.offsetTop;
+        const styles = window.getComputedStyle(this.$el);
+        const paddingTop = parseFloat(styles["paddingTop"]);
+
+        const titleHeight = this.$refs.title.offsetHeight;
+        const titleStyles = window.getComputedStyle(this.$refs.title);
+        const titleMarginBottom = parseFloat(titleStyles["marginBottom"]);
+        const fullTitleHeight = titleHeight + titleMarginBottom;
+
+        const scrollY = top + paddingTop + fullTitleHeight;
         window.scroll(0, scrollY);
       }
     },
