@@ -12,7 +12,7 @@
         ]"
         v-for="(item, index) in source"
         :key="`tab-${index}`"
-        @click="selectedTab = item"
+        @click="switchTab(item)"
       >
         <slot name="tab" :item="item" />
       </div>
@@ -50,6 +50,10 @@ export default {
     this.$emit("ready", { tabsHeight: tabs.offsetHeight });
   },
   methods: {
+    switchTab(item) {
+      this.selectedTab = item;
+      this.$router.history.push({ name: this.name, hash: `#${item.id}` });
+    },
     selected(item) {
       return this.selectedTab && this.selectedTab.id === item.id;
     },
@@ -58,6 +62,17 @@ export default {
     source: {
       immediate: true,
       handler(value) {
+        if (!value || value.length === 0) return;
+
+        const hash = this.$route.hash;
+        if (hash) {
+          const id = parseInt(hash.substr(1));
+          const target = value.find((x) => id === x.id);
+          if (target) {
+            this.selectedTab = target;
+            return;
+          }
+        }
         this.selectedTab = value[0];
       },
     },
