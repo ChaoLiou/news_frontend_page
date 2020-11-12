@@ -1,6 +1,6 @@
 <template>
   <div class="_planet-audiovisual-index">
-    <b-audiovisual-block :planetId="planetId" masonry />
+    <b-audiovisual-block :top-priority-id="id" :planetId="planetId" masonry />
   </div>
 </template>
 
@@ -16,6 +16,9 @@ export default {
   computed: {
     planetId() {
       return parseInt(this.$route.params.planetId);
+    },
+    id() {
+      return this.$route.params.id;
     },
   },
 };

@@ -50,6 +50,10 @@ export default {
       type: Number,
       default: 0,
     },
+    topPriorityId: {
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {
@@ -72,7 +76,16 @@ export default {
     loadMoreVideo(list, pageIndex) {
       if (list) {
         if (pageIndex === 1) {
-          this.source = [];
+          if (this.topPriorityId) {
+            const isTopPriorityId = (id) => id === this.topPriorityId;
+            const topPriority = list.find((x) => isTopPriorityId(x.id));
+            const listExcludeTopPriority = list.filter(
+              (x) => !isTopPriorityId(x.id)
+            );
+            this.source.push(topPriority);
+            this.source.push(...listExcludeTopPriority);
+            return;
+          }
         }
         this.source.push(...list);
       }
