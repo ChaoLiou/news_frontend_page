@@ -71,6 +71,7 @@ export default {
    */
   build: {},
   router: {
+    mode: "hash",
     middleware: ["env", "serverEnv", "event"]
   }
 };

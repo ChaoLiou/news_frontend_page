@@ -104,7 +104,12 @@ export default {
         .catch((_) => (this.loading = false));
     },
     navigate(data) {
-      const link = `${location.origin}/${this.planetId}/audiovisual/${data.id}`;
+      const isHashMode = this.$router.mode === "hash";
+      let link = `${location.origin}/`;
+      if (isHashMode) {
+        link += "#/";
+      }
+      link += `${this.planetId}/audiovisual/${data.id}`;
       const { officialAccountId } = this.$store.getters["serverEnv/env"];
       openFullH5Webview(
         link,
