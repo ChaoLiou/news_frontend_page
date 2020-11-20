@@ -53,6 +53,7 @@ export const formatVideo = x => {
       : {};
   return {
     id: x.id,
+    youtubeId: x.youtube_data.ID,
     img: thumbnails[process.env.VIDEO_IMAGE.size],
     title: x.src_title,
     categories,

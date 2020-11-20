@@ -4,9 +4,9 @@
     <div class="b-audiovisual__menu">
       <div class="b-audiovisual__menu-title">
         <div class="b-audiovisual__title">
-          {{ data.title }}
+          {{ title }}
         </div>
-        <div class="b-audiovisual__info">
+        <div v-if="sourceExists" class="b-audiovisual__info">
           <div class="b-audiovisual__datetime">{{ datetime }}</div>
           <div class="b-audiovisual__views">{{ views }}</div>
         </div>
@@ -18,7 +18,10 @@
         ]"
         @click="menuToggle = !menuToggle"
       ></div>
-      <div v-show="menuToggle" class="b-audiovisual__menu-content">
+      <div
+        v-show="sourceExists && menuToggle"
+        class="b-audiovisual__menu-content"
+      >
         <div class="b-audiovisual__source">
           <div
             class="b-audiovisual__source-img"
@@ -58,18 +61,17 @@ export default {
     };
   },
   computed: {
+    title() {
+      return this.sourceExists ? this.data.title : "影片被下架";
+    },
+    sourceExists() {
+      return !!this.data.youtubeId;
+    },
     id() {
       return `iframe-${this.data.id}`;
     },
     frameSrc() {
-      return `http://www.youtube.com/embed/${this.youtubeId}`;
-    },
-    youtubeId() {
-      const result = /\?v=(.*?)$/.exec(this.data.link);
-      if (result) {
-        const [_, id] = result;
-        return id;
-      }
+      return `http://www.youtube.com/embed/${this.data.youtubeId}`;
     },
     datetime() {
       return transformMilliseconds(this.data.datetime);
@@ -93,36 +95,11 @@ export default {
   },
   mounted() {
     this.player = new YT.Player(this.id, {
-      // width: this.data.img.width,
-      // height: this.data.img.height,
-      videoId: this.youtubeId,
+      videoId: this.data.youtubeId,
       events: {
         onReady: onPlayerReady,
         onStateChange: onPlayerStateChange,
       },
-      // playerVars: {
-      //   autoplay: [0, 1],
-      //   cc_lang_pref: "",
-      //   cc_load_policy: [0, 1],
-      //   color: "",
-      //   controls: [0, 1],
-      //   disablekb: [0, 1],
-      //   enablejsapi: [0, 1],
-      //   end: "",
-      //   fs: [0, 1],
-      //   hl: "",
-      //   iv_load_policy: [0, 1],
-      //   list: "",
-      //   listType: ["playlist", "user_uploads"],
-      //   loop: [0, 1],
-      //   modestbranding: [0, 1],
-      //   origin: "",
-      //   playlist: "",
-      //   playsinline: [0, 1],
-      //   rel: [0, 1],
-      //   start: "",
-      //   widget_referrer: "",
-      // },
     });
   },
 };

@@ -48,6 +48,7 @@ export default {
   display: flex;
   flex-direction: row;
   overflow-x: scroll;
+  overflow-y: hidden;
   padding: 4px 0px;
   position: relative;
 }

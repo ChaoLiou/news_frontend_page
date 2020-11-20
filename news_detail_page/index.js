@@ -245,7 +245,7 @@ function bindEvents(news) {
       title,
       description,
       image,
-      deepLinkOutsideSharing,
+      deepLink: deepLinkOutsideSharing,
       api: BASE_URL.backendApi
     }).then(json => {
       if (json._id) {

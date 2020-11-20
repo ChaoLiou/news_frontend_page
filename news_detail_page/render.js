@@ -65,9 +65,15 @@ export const renderSourceTitle = text => {
 
 export const renderDateTimeInfo = (published, updated) => {
   const datetimeInfoDOM = document.querySelector(".header__published-updated");
-  const publishedText = `更新於 ${transformMilliseconds(published)}`;
-  const updatedText = `發布於 ${transformMilliseconds(updated)}`;
-  datetimeInfoDOM.innerHTML = `${publishedText}<br />${updatedText}`;
+  let publishedText = transformMilliseconds(published);
+  let updatedText = transformMilliseconds(updated);
+  if (publishedText === updatedText) {
+    publishedText = `更新於 ${transformMilliseconds(published)}`;
+    datetimeInfoDOM.innerHTML = `${publishedText}`;
+  } else {
+    updatedText = `發布於 ${transformMilliseconds(updated)}`;
+    datetimeInfoDOM.innerHTML = `${updatedText}`;
+  }
 };
 
 export const renderRecommendNewsTitle = text => {
