@@ -9,7 +9,7 @@
       <div class="b-audiovisual-block__title">{{ titleLabel }}</div>
     </div>
     <div>
-      <b-masonry-scroll
+      <b-masonry-scroll-using-grid
         v-if="masonry"
         :items="source"
         :loading="loading"
@@ -24,7 +24,7 @@
         <template #nomore>
           <div class="no-more-content">沒有更多影片了</div>
         </template>
-      </b-masonry-scroll>
+      </b-masonry-scroll-using-grid>
       <b-horizontal-scroll v-else>
         <template v-for="(item, index) in source">
           <b-audiovisual-card :key="index" :data="item" @navigate="navigate" />

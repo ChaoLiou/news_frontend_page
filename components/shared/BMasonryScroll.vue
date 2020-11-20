@@ -3,10 +3,14 @@
     <b-masonry-proxy
       v-for="(item, index) in items"
       :key="index"
-      :class="{ 'trigger-loading-more': triggerable(index) }"
+      :class="{
+        first: index === 0,
+        'trigger-loading-more': triggerable(index),
+      }"
       :trigger-loading-more="triggerable(index)"
       :style="{
-        gridRowEnd: getGridRowEnd(index),
+        transform: getTranslateXY(index),
+        width: `${itemWidth}px`,
       }"
       @heightChanged="(height) => heightChanged(index, height)"
       @load-more="loadMore(index)"
@@ -17,15 +21,28 @@
       <div
         class="b-masonry-scroll__placeholder"
         :style="{
-          gridRowEnd: getGridRowEnd(index),
+          height: `${placeholderHeight}px`,
+          top: pageIndex === 1 ? '0px' : undefined,
         }"
-        v-for="index in rowSpans.length"
-        :key="`placeholder-${index}`"
-      ></div>
+      >
+        <div
+          v-for="index in this.column"
+          class="b-masonry-scroll__placeholder-group"
+          :key="index"
+        >
+          <div
+            class="b-masonry-scroll__placeholder-item"
+            v-for="jndex in 4"
+            :key="`placeholder-${index}-${jndex}`"
+          ></div>
+        </div>
+      </div>
     </template>
-    <div class="b-masonry-scroll__no-more" v-else>
-      <slot name="nomore" />
-    </div>
+    <template v-else>
+      <div class="b-masonry-scroll__no-more">
+        <slot name="nomore" />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -57,31 +74,52 @@ export default {
   },
   data() {
     return {
-      rowSpans: [],
-      observer: undefined,
+      itemHeights: [],
+      itemTops: [],
+      itemLefts: [],
+      groups: [],
       pageIndex: 1,
       pageSize: 10,
+      arranged: false,
+      placeholderHeight: 860,
+      noMoreTextHeight: 30,
+      gap: 10,
     };
   },
   computed: {
     style() {
       return {
-        gridTemplateColumns: `repeat(${this.column}, minmax(150px, 1fr))`,
-        gridAutoRows: this.autoAdjustHeight ? "10px" : undefined,
-        gridGap: this.autoAdjustHeight ? "10px" : undefined,
+        minHeight: "100vh",
+        height:
+          this.itemTops[this.items.length - 1] +
+          this.itemHeights[this.items.length - 1] +
+          (this.loading ? this.placeholderHeight : this.noMoreTextHeight) +
+          "px",
       };
+    },
+    itemWidth() {
+      return this.$el ? (this.$el.offsetWidth - this.gap) / 2 : 0;
     },
   },
   mounted() {
-    this.rowSpans = Array.from({ length: this.items.length }, (v, i) => 0);
+    this.groups = Array.from({ length: this.column }, (v, i) => ({
+      index: i,
+      maxHeight: 0,
+      left: i * (this.itemWidth + this.gap),
+    }));
   },
   methods: {
-    getGridRowEnd(index) {
-      if (this.autoAdjustHeight) {
-        return this.rowSpans.length > 0
-          ? `span ${this.rowSpans[index] ? this.rowSpans[index] : "10"}`
-          : `span 10`;
+    getTranslateXY(index) {
+      let x, y;
+      if (index === 0) {
+        x = y = 0;
+      } else {
+        const left = this.itemLefts[index];
+        const top = this.itemTops[index];
+        x = left;
+        y = top;
       }
+      return `translate(${x}px, ${y}px)`;
     },
     triggerable(index) {
       return (index + 1) % (this.pageSize / 2) === 0;
@@ -90,10 +128,42 @@ export default {
       this.pageIndex = 1;
     },
     heightChanged(index, height) {
-      this.$set(this.rowSpans, index, Math.ceil((height + 10) / 20));
+      this.$set(this.itemHeights, index, height);
+      if (this.itemHeights.length === this.items.length) {
+        this.arrangeItems();
+      }
+    },
+    arrangeItems() {
+      this.itemHeights.forEach((height, index) => {
+        if (index < this.column) {
+          const group = this.groups[index];
+          this.$set(this.itemTops, index, 0);
+          this.$set(this.itemLefts, index, group.left);
+          this.$set(this.groups, index, {
+            ...group,
+            maxHeight: height + this.gap,
+          });
+        } else {
+          let targetGroup = this.groups[0];
+          this.groups.forEach((group) => {
+            if (!group.index) return;
+            if (group.maxHeight < targetGroup.maxHeight) {
+              targetGroup = group;
+            }
+          });
+          const updatedGroup = {
+            ...targetGroup,
+            maxHeight: targetGroup.maxHeight + height + this.gap,
+          };
+          this.$set(this.itemTops, index, targetGroup.maxHeight);
+          this.$set(this.itemLefts, index, targetGroup.left);
+          this.$set(this.groups, targetGroup.index, updatedGroup);
+        }
+      });
+      this.arranged = true;
     },
     loadMore(index) {
-      if ((index + 1) * 2 === this.pageIndex * this.pageSize) {
+      if (this.arranged && (index + 1) * 2 === this.pageIndex * this.pageSize) {
         this.$emit("load-more", {
           pageSize: this.pageSize,
           pageIndex: ++this.pageIndex,
@@ -106,9 +176,36 @@ export default {
 
 <style scoped>
 .b-masonry-scroll {
-  display: grid;
+  position: relative;
+}
+.b-masonry-proxy {
+  position: absolute;
+  transition: "transform" 0.3s;
+}
+.b-masonry-proxy.first {
+  z-index: 2;
 }
 .b-masonry-scroll__placeholder {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 10px;
+  width: 100%;
+}
+.b-masonry-scroll__placeholder,
+.b-masonry-scroll__no-more {
+  position: absolute;
+  bottom: 0px;
+}
+.b-masonry-scroll__placeholder-group {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  row-gap: 10px;
+}
+.b-masonry-scroll__placeholder-group:nth-child(even) {
+  height: calc(100% + 80px);
+}
+.b-masonry-scroll__placeholder-item {
+  border-radius: 20px;
   animation-duration: 1.5s;
   animation-fill-mode: forwards;
   animation-iteration-count: infinite;
@@ -118,12 +215,11 @@ export default {
   background: #eeeeee;
   background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
   background-size: 1200px 104px;
-  position: relative;
 }
 .b-masonry-scroll__no-more {
-  grid-column: 1/-1;
-  grid-row-end: span 2;
-  justify-self: center;
+  display: grid;
+  justify-content: center;
+  width: 100%;
   color: #00000081;
 }
 @keyframes placeload {

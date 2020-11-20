@@ -8,6 +8,7 @@
           :src="data.img"
           :alt="data.img"
           @load="heightChanged"
+          @error="heightChanged"
         />
         <div
           v-else
@@ -46,10 +47,9 @@ export default {
     },
   },
   mounted() {
+    this.heightChanged();
     if (this.autoImgHeight) {
       this.$el.addEventListener("resize", this.heightChanged);
-    } else {
-      this.heightChanged();
     }
   },
   methods: {

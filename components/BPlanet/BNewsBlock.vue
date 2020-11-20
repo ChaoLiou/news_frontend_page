@@ -8,7 +8,7 @@
       v-if="tags.length > 0"
       :style="stickyStyles"
     >
-      <b-horizontal-scroll fade-out>
+      <b-horizontal-scroll>
         <b-news-tag
           v-for="(tag, index) in tags"
           :key="index"
@@ -20,9 +20,10 @@
     </div>
     <div>
       <b-masonry-scroll
+        :key="`${planetId}-${this.selectedTag.id}`"
         :loading="loading"
         :items="source"
-        ref="bMasonryScroll"
+        ref="masonryScroll"
         @load-more="loadMore"
       >
         <template #default="props">
@@ -38,7 +39,7 @@
 import { planet_click_news } from "@/assets/js/tracking/events";
 import { openFullH5Webview } from "@/assets/js/beanfun";
 import { getVendorStageDetailUrl } from "@/assets/js/utils";
-const VENDOR_STAGE = process.env.VENDOR_STAGE;
+const VENDOR_STAGE = process.env.VENDOR_STAGE || { enabled: false };
 export default {
   props: {
     titleLabel: {
@@ -63,6 +64,9 @@ export default {
     };
   },
   computed: {
+    selectedTag() {
+      return this.tags.length > 0 ? this.tags.find((t) => t.tagged) : -1;
+    },
     categories() {
       return this.$store.getters["category/list"];
     },
@@ -72,7 +76,7 @@ export default {
           top: `${this.stickyTop}px`,
           position: "sticky",
           left: "0px",
-          zIndex: 2,
+          zIndex: 99,
         };
       }
     },
@@ -126,8 +130,8 @@ export default {
       }
     },
     resetScroll() {
-      if (this.$refs.bMasonryScroll) {
-        this.$refs.bMasonryScroll.reset();
+      if (this.$refs.masonryScroll) {
+        this.$refs.masonryScroll.reset();
         const top = this.$el.offsetTop;
         const styles = window.getComputedStyle(this.$el);
         const paddingTop = parseFloat(styles["paddingTop"]);
@@ -158,16 +162,15 @@ export default {
     },
     loadMore({ pageSize, pageIndex } = { pageSize: 10, pageIndex: 1 }) {
       this.loading = true;
-      const selectedTag = this.tags.find((t) => t.tagged);
-      if (selectedTag) {
+      if (this.selectedTag) {
         const payload = {
           pageIndex,
           pageSize,
         };
-        if (selectedTag.id === -1) {
+        if (this.selectedTag.id === -1) {
           payload.planetId = this.planetId;
         } else {
-          payload.categoryId = selectedTag.id;
+          payload.categoryId = this.selectedTag.id;
         }
         this.$store
           .dispatch("news/fetch", payload)
