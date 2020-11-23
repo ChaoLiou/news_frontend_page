@@ -58,6 +58,7 @@ export const actions = {
             `api/${name}/fetch`,
             getters.accessToken
           ).then(verification => {
+            console.log({ verification });
             commitWrapper(commit, `stateRepo/${name}/verify`, verification);
           });
         });
