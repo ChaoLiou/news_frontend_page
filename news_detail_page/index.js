@@ -234,7 +234,7 @@ function bindEvents(news) {
       description,
       widgetId,
       image,
-      deepLinkInsideSharing,
+      deepLink: deepLinkInsideSharing,
       title
     });
     sendMessageV2(msg_body, select_opt);
