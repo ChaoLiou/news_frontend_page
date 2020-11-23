@@ -61,11 +61,14 @@ export default {
       source: [],
       loading: true,
       VENDOR_STAGE,
+      theTagOfAll: { title: "全部", id: -1, tagged: true },
     };
   },
   computed: {
     selectedTag() {
-      return this.tags.length > 0 ? this.tags.find((t) => t.tagged) : -1;
+      return this.tags.length > 0
+        ? this.tags.find((t) => t.tagged)
+        : this.theTagOfAll;
     },
     categories() {
       return this.$store.getters["category/list"];
@@ -114,7 +117,7 @@ export default {
         id: c.id,
         tagged: false,
       }));
-      this.tags.unshift({ title: "全部", id: -1, tagged: true });
+      this.tags.unshift(this.theTagOfAll);
     },
     init(planetId) {
       this.source = [];

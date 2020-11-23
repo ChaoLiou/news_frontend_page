@@ -7,6 +7,7 @@
       <template #tab-item="props">
         <b-planet
           :planet="props.item"
+          :key="props.item.id"
           :news-block-title-sticky-top="newsTitleStickyTop"
         ></b-planet>
       </template>

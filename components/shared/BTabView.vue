@@ -19,7 +19,7 @@
     </div>
     <div class="b-tab-view__tab-items">
       <div>
-        <slot name="tab-item" :item="item" />
+        <slot name="tab-item" :item="selectedTab" />
       </div>
     </div>
   </div>
@@ -39,11 +39,6 @@ export default {
     return {
       selectedTab: undefined,
     };
-  },
-  computed: {
-    item() {
-      return this.source.find((s) => s.id === this.selectedTab.id);
-    },
   },
   mounted() {
     const tabs = this.$refs.tabs;

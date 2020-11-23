@@ -5,7 +5,7 @@
         v-if="contentType.id === 'audiovisual'"
         :key="index"
         :title-label="contentType.title"
-        :planet-id="planetId"
+        :planet-id="planet.id"
       />
       <b-live-broadcast-block
         v-else-if="contentType.id === 'livebroadcast'"
@@ -16,7 +16,7 @@
         v-else-if="contentType.id === 'news'"
         :key="index"
         :title-label="contentType.title"
-        :planet-id="planetId"
+        :planet-id="planet.id"
         :sticky-top="newsBlockTitleStickyTop"
       />
     </template>
@@ -46,9 +46,6 @@ export default {
     },
   },
   computed: {
-    planetId() {
-      return this.planet ? this.planet.id : 0;
-    },
     planetConf() {
       return planetConf.find((p) => p.id === this.planet.id);
     },
