@@ -83,7 +83,8 @@ export default {
   display: grid;
   width: 100vw;
   overflow-x: scroll;
-  position: fixed;
+  overflow-y: hidden;
+  position: sticky;
   top: 0px;
   left: 0px;
   z-index: 99;
@@ -102,8 +103,5 @@ export default {
 .b-tab-view__tab.b-tab-view__tab_selected > div {
   border-bottom: 2px solid #26d07c;
   color: #26d07c;
-}
-.b-tab-view__tab-items {
-  margin-top: 55px;
 }
 </style>
