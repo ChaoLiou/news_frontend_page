@@ -4,17 +4,17 @@ const debugMode = process.env.DEBUG_MODE;
 async function fetchBase(apiRelative, { method, body }, apiPrefix = "") {
   const url = `${apiPrefix ? apiPrefix : baseUrl.backendApi}/${apiRelative}`;
   if (debugMode) log(method, url);
+  let options = {
+    method,
+    headers: new Headers({
+      "Content-Type": "application/json"
+    }),
+    mode: "cors",
+    body: body ? JSON.stringify(body) : undefined
+  };
   try {
-    const res = body
-      ? await fetch(url, {
-          method,
-          headers: new Headers({
-            "Content-Type": "application/json"
-          }),
-          mode: "cors",
-          body: body ? JSON.stringify(body) : undefined
-        })
-      : await fetch(url);
+    if (debugMode) console.log(options);
+    const res = await fetch(url, options);
     const json = await res.json();
     return json;
   } catch (err) {
