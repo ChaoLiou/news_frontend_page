@@ -4,7 +4,7 @@ export const generateInsideSharingParams = ({
   description,
   widgetId,
   image,
-  deepLink,
+  link,
   title
 }) => {
   const msg_body = {
@@ -27,9 +27,9 @@ export const generateInsideSharingParams = ({
               options: [
                 {
                   opt_key: "app_link_option_key",
-                  opt_type: 2,
+                  opt_type: 3,
                   description: title,
-                  uri: deepLink
+                  uri: link
                 }
               ],
               interactive_key: "sdk_interactive_key"

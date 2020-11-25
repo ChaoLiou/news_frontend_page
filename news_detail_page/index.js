@@ -2,6 +2,7 @@ import config from "../nuxt.config.js";
 import { get, post } from "../assets/js/fetchAPI";
 import { hideVConsole, getVendorStageDetailUrl } from "../assets/js/utils";
 import { includeScriptSources, parseNewsIdWithinUrl } from "./utils";
+import { formatNews } from "../assets/js/formatter";
 import {
   renderToolMenu,
   renderSourceTitle,
@@ -47,7 +48,6 @@ const scripts = [
   { src: "/packages/b-recommend-news-block.umd.min.js", group: "beanfun_vue" }
 ];
 includeScriptSources(scripts);
-init();
 
 function beanfun_vueOnload() {
   get("variable", BASE_URL.backendApi)
@@ -71,6 +71,7 @@ function vconsoleOnload() {
 }
 
 function serverEnvReady() {
+  init();
   const { officialAccountId, token, clientId } = _serverEnv;
   checkAppExist(() => {
     getMeProfile(profile => {
@@ -98,8 +99,10 @@ function serverEnvReady() {
         accessToken: accessTokenResult
       };
       get(
-        `openid/token/verification?token=${accessTokenResult.access_token}`
+        `openid/token/verification?token=${accessTokenResult.access_token}`,
+        BASE_URL.backendApi
       ).then(verification => {
+        console.log({ verification });
         _beanfunState = {
           ..._beanfunState,
           verification
@@ -154,7 +157,7 @@ function initRecommendNewsBlock() {
     },
     methods: {
       navigate({ data, session_id, action_index }) {
-        trackEvent({
+        const success = trackEvent({
           session_id,
           action_index,
           event_id: planet_click_news.id,
@@ -167,16 +170,18 @@ function initRecommendNewsBlock() {
           })
         });
         const link = `${data.link}?session_id=${session_id}&action_index=${action_index}`;
-        openFullH5Webview(
-          VENDOR_STAGE.enabled
-            ? `${location.origin}/${getVendorStageDetailUrl(
-                location.pathname,
-                VENDOR_STAGE.detailUrls
-              )}`
-            : link,
-          data.representativePlanet.name,
-          _serverEnv.officialAccountId
-        );
+        if (success) {
+          openFullH5Webview(
+            VENDOR_STAGE.enabled
+              ? `${location.origin}/${getVendorStageDetailUrl(
+                  location.pathname,
+                  VENDOR_STAGE.detailUrls
+                )}`
+              : link,
+            data.representativePlanet.name,
+            _serverEnv.officialAccountId
+          );
+        }
       }
     }
   });
@@ -184,29 +189,39 @@ function initRecommendNewsBlock() {
 
 function trackEvent({ session_id, action_index, event_id, payload }) {
   const open_id = _beanfunState.verification.open_id;
-  _eventState = {
-    ..._eventState,
-    data: {
-      ..._eventState.data,
-      dtm: Date.now().toString(),
-      event_id,
-      payload,
-      openid: open_id,
-      session_id,
-      action_index
-    }
-  };
-  console.log({ env: _eventState.env });
-  console.log({ info: _eventState.info });
-  console.log({ data: _eventState.data });
-  const body = {
-    ..._eventState.env,
-    ..._eventState.info,
-    ..._eventState.data
-  };
-  post("tracking", body, BASE_URL.trackingApi).then(result =>
-    console.log({ result })
-  );
+  if (open_id) {
+    _eventState = {
+      ..._eventState,
+      data: {
+        ..._eventState.data,
+        dtm: Date.now().toString(),
+        event_id,
+        payload,
+        openid: open_id,
+        session_id,
+        action_index
+      }
+    };
+    console.log({ env: _eventState.env });
+    console.log({ info: _eventState.info });
+    console.log({ data: _eventState.data });
+    const body = {
+      ..._eventState.env,
+      ..._eventState.info,
+      ..._eventState.data
+    };
+    post("tracking", body, BASE_URL.trackingApi).then(result =>
+      console.log({ result })
+    );
+    return true;
+  } else {
+    console.log(
+      `open_id is not found in verification: ${JSON.stringify(
+        _beanfunState.verification
+      )}`
+    );
+    return false;
+  }
 }
 
 function bindEvents(news) {
@@ -220,22 +235,22 @@ function bindEvents(news) {
   const outsideSharingDOM = document.querySelector(
     ".tool-menu__outside-sharing"
   );
+  const formattedNews = formatNews(news);
   const link = news.article_path;
   const encodedLink = encodeURIComponent(link);
   const image = news.Images[0].file_path;
   const description = news.description;
-  const title = news.src_title;
+  const title = formattedNews.representativePlanet.name;
   const { widgetId, officialAccountId } = _serverEnv;
-  const deepLinkInsideSharing = `beanfunapp://Q/h5/w_id/${widgetId}?url=${encodedLink}`;
   const deepLinkOutsideSharing = `beanfunapp://Q/h5page/${officialAccountId}?url=${encodedLink}&theme=1&title=${title}`;
-
+  console.log({ widgetId, officialAccountId });
   insideSharingDOM.addEventListener("click", () => {
     const { msg_body, select_opt } = generateInsideSharingParams({
       description,
       widgetId,
       image,
-      deepLink: deepLinkInsideSharing,
-      title
+      link,
+      title: "前往星球"
     });
     sendMessageV2(msg_body, select_opt);
   });
