@@ -11,6 +11,7 @@ async function fetchBase(apiRelative, { method, body }, apiPrefix = "") {
           headers: new Headers({
             "Content-Type": "application/json"
           }),
+          mode: "cors",
           body: body ? JSON.stringify(body) : undefined
         })
       : await fetch(url);
