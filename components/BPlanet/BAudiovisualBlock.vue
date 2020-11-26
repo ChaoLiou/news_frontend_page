@@ -1,5 +1,6 @@
 <template>
   <div
+    v-show="source.length > 0"
     :class="[
       'b-audiovisual-block',
       masonry ? 'b-audiovisual-block_masonry' : '',
@@ -35,7 +36,7 @@
 </template>
 
 <script>
-import { openFullH5Webview } from "@/assets/js/beanfun";
+import { checkAppExist, openFullH5Webview } from "@/assets/js/beanfun";
 export default {
   props: {
     titleLabel: {
@@ -111,10 +112,17 @@ export default {
       }
       link += `${this.planetId}/audiovisual/${data.id}`;
       const { officialAccountId } = this.$store.getters["serverEnv/env"];
-      openFullH5Webview(
-        link,
-        data.representativePlanet.name,
-        officialAccountId
+      checkAppExist(
+        () => {
+          openFullH5Webview(
+            link,
+            data.representativePlanet.name,
+            officialAccountId
+          );
+        },
+        () => {
+          window.open(link, "_blank");
+        }
       );
     },
   },
@@ -141,10 +149,9 @@ export default {
   margin-right: 16px;
 }
 .no-more-content {
-  width: 100vw;
+  width: 100%;
   background-color: #262626;
   color: white;
-  display: grid;
-  justify-content: center;
+  text-align: center;
 }
 </style>

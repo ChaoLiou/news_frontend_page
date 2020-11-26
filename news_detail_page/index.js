@@ -1,4 +1,9 @@
-import config from "../nuxt.config.js";
+let config = {};
+if (DEVELOPMENT) {
+  config = require("../nuxt.config.dev.js").default;
+} else {
+  config = require("../nuxt.config.js").default;
+}
 import { get, post } from "../assets/js/fetchAPI";
 import { hideVConsole, getVendorStageDetailUrl } from "../assets/js/utils";
 import { includeScriptSources, parseNewsIdWithinUrl } from "./utils";
@@ -157,7 +162,7 @@ function initRecommendNewsBlock() {
     },
     methods: {
       navigate({ data, session_id, action_index }) {
-        const success = trackEvent({
+        trackEvent({
           session_id,
           action_index,
           event_id: planet_click_news.id,
@@ -169,19 +174,25 @@ function initRecommendNewsBlock() {
             news_id: data.id
           })
         });
-        const link = `${data.link}?session_id=${session_id}&action_index=${action_index}`;
-        if (success) {
-          openFullH5Webview(
-            VENDOR_STAGE.enabled
-              ? `${location.origin}/${getVendorStageDetailUrl(
-                  location.pathname,
-                  VENDOR_STAGE.detailUrls
-                )}`
-              : link,
-            data.representativePlanet.name,
-            _serverEnv.officialAccountId
-          );
-        }
+        let link = `${data.link}?session_id=${session_id}&action_index=${action_index}`;
+        link = VENDOR_STAGE.enabled
+          ? `${location.origin}/${getVendorStageDetailUrl(
+              location.pathname,
+              VENDOR_STAGE.detailUrls
+            )}`
+          : link;
+        checkAppExist(
+          () => {
+            openFullH5Webview(
+              link,
+              data.representativePlanet.name,
+              _serverEnv.officialAccountId
+            );
+          },
+          () => {
+            window.open(link, "_blank");
+          }
+        );
       }
     }
   });
@@ -213,14 +224,12 @@ function trackEvent({ session_id, action_index, event_id, payload }) {
     post("tracking", body, BASE_URL.trackingApi).then(result =>
       console.log({ result })
     );
-    return true;
   } else {
     console.log(
       `open_id is not found in verification: ${JSON.stringify(
         _beanfunState.verification
       )}`
     );
-    return false;
   }
 }
 

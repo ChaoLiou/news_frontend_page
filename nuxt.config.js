@@ -17,10 +17,7 @@ export default Object.assign(config, {
     },
     VENDOR_STAGE: {
       enabled: false,
-      detailUrls: [
-        "articles/tw/1/1329628436708200448/detail.html",
-        "articles/tw/1/1329628439400943616/detail.html"
-      ]
+      detailUrls: []
     },
     VIDEO_IMAGE: {
       size: ["default", "medium", "high", "standard", "maxres"][1]

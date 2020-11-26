@@ -1,9 +1,5 @@
 import { getOSType, getTimeZone } from "@/assets/js/tracking/utils";
-import {
-  getMeProfile,
-  getMeLocation,
-  checkAppExist
-} from "@/assets/js/beanfun";
+import { getMeProfile, checkAppExist } from "@/assets/js/beanfun";
 import { generateUUID } from "@/assets/js/utils";
 
 const name = "event";

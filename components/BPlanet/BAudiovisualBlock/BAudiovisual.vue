@@ -1,6 +1,8 @@
 <template>
   <div class="b-audiovisual">
-    <div :id="id" :style="frameStyle"></div>
+    <div class="b-audiovisual__frame" ref="frame" :style="frameStyle">
+      <div :id="id"></div>
+    </div>
     <div class="b-audiovisual__menu">
       <div class="b-audiovisual__menu-title">
         <div class="b-audiovisual__title">
@@ -36,9 +38,6 @@
 </template>
 
 <script>
-function onPlayerReady(event) {
-  console.log({ onPlayerReady: event });
-}
 function onPlayerStateChange(event) {
   console.log({ onPlayerStateChange: event });
 }
@@ -58,6 +57,7 @@ export default {
     return {
       menuToggle: false,
       player: undefined,
+      width: 0,
     };
   },
   computed: {
@@ -86,21 +86,30 @@ export default {
     description() {
       return replaceNewLineToBr(this.data.description);
     },
+    imageWidthHeightRate() {
+      return this.data.img.height / this.data.img.width;
+    },
     frameStyle() {
-      return {
-        width: "100vw",
-        height: `calc(100vw * ${this.data.img.height} / ${this.data.img.width})`,
-      };
+      if (this.width > 0) {
+        return {
+          height: `calc(${this.width}px * ${this.imageWidthHeightRate})`,
+        };
+      }
     },
   },
   mounted() {
     this.player = new YT.Player(this.id, {
       videoId: this.data.youtubeId,
       events: {
-        onReady: onPlayerReady,
+        onReady: this.onPlayerReady,
         onStateChange: onPlayerStateChange,
       },
     });
+  },
+  methods: {
+    onPlayerReady(e) {
+      this.width = this.$refs.frame.offsetWidth;
+    },
   },
 };
 </script>
@@ -170,8 +179,14 @@ export default {
   color: #ffffff;
   font-weight: 400;
 }
-iframe {
+.b-audiovisual__frame {
   width: 100%;
-  height: 100%;
+  height: 300px;
+}
+</style>
+<style>
+.b-audiovisual iframe {
+  width: inherit !important;
+  height: inherit !important;
 }
 </style>

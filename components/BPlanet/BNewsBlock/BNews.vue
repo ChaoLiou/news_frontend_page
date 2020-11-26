@@ -48,9 +48,6 @@ export default {
   },
   mounted() {
     this.heightChanged();
-    if (this.autoImgHeight) {
-      this.$el.addEventListener("resize", this.heightChanged);
-    }
   },
   methods: {
     navigate() {

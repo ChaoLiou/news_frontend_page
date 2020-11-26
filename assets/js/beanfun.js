@@ -19,13 +19,15 @@ export const initBGO = (officialAccountId, token) => {
   BGO.init(officialAccountInfo);
 };
 
-export const checkAppExist = (handler, forced = false) => {
+export const checkAppExist = (handler, fallbackHandler, forced = false) => {
   const name = "BGO.check_app_exist";
   console.log(`${name}()`);
   BGO.check_app_exist(res => {
     console.log({ checkAppExist: res });
     if (forced || (res.result && res.result === "ok")) {
       handler();
+    } else if (fallbackHandler) {
+      fallbackHandler();
     }
   });
 };

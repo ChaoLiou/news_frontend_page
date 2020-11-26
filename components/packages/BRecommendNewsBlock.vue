@@ -5,7 +5,6 @@
         :loading="loading"
         :items="source"
         @load-more="loadMore"
-        ref="bMasonryScroll"
       >
         <template #default="props">
           <b-news :data="props.item" @navigate="navigate" auto-img-height />

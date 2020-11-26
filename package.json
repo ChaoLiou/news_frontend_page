@@ -6,11 +6,13 @@
     "dev": "nuxt --config-file nuxt.config.dev.js",
     "build": "nuxt build",
     "start": "nuxt start",
+    "generate": "npm run pre-build && nuxt generate --fail-on-error",
     "pre-build": "npm run build:packages && npm run build:detail",
-    "generate": "npm run pre-build && npm run generate:only",
-    "generate:only": "nuxt generate --fail-on-error",
-    "build:detail": "webpack --progress --config news_detail_page/webpack.config.js",
     "build:packages": "vue-cli-service build --target lib --dest static/packages/ --name BRecommendNewsBlock --filename b-recommend-news-block --inline-vue --formats umd-min components/packages/BRecommendNewsBlock.vue",
+    "build:detail": "webpack --progress --config news_detail_page/webpack.config.js",
+    "generate:infostrum": "npm run pre-build:infostrum && nuxt generate --fail-on-error --config-file nuxt.config.dev.js",
+    "pre-build:infostrum": "npm run build:packages && npm run build:detail:infostrum",
+    "build:detail:infostrum": "webpack --progress --config news_detail_page/webpack.config.js --env development",
     "test": "jest"
   },
   "dependencies": {

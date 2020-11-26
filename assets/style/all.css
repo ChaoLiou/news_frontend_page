@@ -5,6 +5,9 @@ a {
   text-decoration: none;
   color: inherit;
 }
+body {
+  width: 100%;
+}
 body,
 p {
   margin: 0px;
@@ -20,4 +23,14 @@ figure {
 }
 #__vconsole.hidden {
   display: none;
+}
+
+@media screen and (min-width: 1024px) {
+  html {
+    background-color: #181a1b !important;
+  }
+  body {
+    width: 600px;
+    background-color: #ffffff;
+  }
 }

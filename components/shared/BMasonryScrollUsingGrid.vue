@@ -121,9 +121,7 @@ export default {
   position: relative;
 }
 .b-masonry-scroll__no-more {
-  grid-column: 1/-1;
-  grid-row-end: span 2;
-  justify-self: center;
+  width: 100%;
   color: #00000081;
 }
 @keyframes placeload {

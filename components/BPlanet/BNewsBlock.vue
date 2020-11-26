@@ -37,7 +37,7 @@
 
 <script>
 import { planet_click_news } from "@/assets/js/tracking/events";
-import { openFullH5Webview } from "@/assets/js/beanfun";
+import { checkAppExist, openFullH5Webview } from "@/assets/js/beanfun";
 import { getVendorStageDetailUrl } from "@/assets/js/utils";
 const VENDOR_STAGE = process.env.VENDOR_STAGE || { enabled: false };
 export default {
@@ -97,14 +97,22 @@ export default {
         }),
       });
       const { session_id, action_index } = this.$store.getters["event/data"];
-      const link = `${data.link}?session_id=${session_id}&action_index=${action_index}`;
+      let link = `${data.link}?session_id=${session_id}&action_index=${action_index}`;
       const { officialAccountId } = this.$store.getters["serverEnv/env"];
-      openFullH5Webview(
-        VENDOR_STAGE.enabled
-          ? `${location.origin}/${getVendorStageDetailUrl(location.pathname)}`
-          : link,
-        data.representativePlanet.name,
-        officialAccountId
+      link = VENDOR_STAGE.enabled
+        ? `${location.origin}/${getVendorStageDetailUrl(location.pathname)}`
+        : link;
+      checkAppExist(
+        () => {
+          openFullH5Webview(
+            link,
+            data.representativePlanet.name,
+            officialAccountId
+          );
+        },
+        () => {
+          window.open(link, "_blank");
+        }
       );
     },
     enableVConsole() {

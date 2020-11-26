@@ -81,7 +81,7 @@ export default {
 }
 .b-tab-view__tabs {
   display: grid;
-  width: 100vw;
+  width: 100%;
   overflow-x: scroll;
   overflow-y: hidden;
   position: sticky;

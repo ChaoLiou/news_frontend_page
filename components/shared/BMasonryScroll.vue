@@ -32,7 +32,7 @@
         >
           <div
             class="b-masonry-scroll__placeholder-item"
-            v-for="jndex in 4"
+            v-for="jndex in 5 - index"
             :key="`placeholder-${index}-${jndex}`"
           ></div>
         </div>
