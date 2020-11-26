@@ -163,7 +163,9 @@ export default {
       this.arranged = true;
     },
     loadMore(index) {
-      if (this.arranged && (index + 1) * 2 === this.pageIndex * this.pageSize) {
+      const lastIndex = this.pageIndex * this.pageSize - 1;
+      const currentIndex = index + this.pageSize / 2;
+      if (this.arranged && currentIndex === lastIndex) {
         this.$emit("load-more", {
           pageSize: this.pageSize,
           pageIndex: ++this.pageIndex,
