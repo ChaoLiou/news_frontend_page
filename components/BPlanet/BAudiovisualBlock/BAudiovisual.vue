@@ -178,6 +178,7 @@ export default {
   line-height: 24px;
   color: #ffffff;
   font-weight: 400;
+  word-break: break-word;
 }
 .b-audiovisual__frame {
   width: 100%;

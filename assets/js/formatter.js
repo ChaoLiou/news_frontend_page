@@ -1,14 +1,12 @@
 export const formatNews = x => {
-  const categories =
-    x.src_category && x.src_category.NewsSubCategory
-      ? x.src_category.NewsSubCategory
-      : [];
+  const categories = x.NewsSubCategory ? x.NewsSubCategory : [];
   const planets = categories.map(c => c.NewsMainBanner);
+  const rss = x.NewsSourceFetch ? x.NewsSourceFetch : {};
   return {
     id: x.id,
     img: x.Images && x.Images.length > 0 ? x.Images[0].file_path : undefined,
     title: x.src_title,
-    source: x.src_site.description,
+    source: rss.name,
     categories,
     planets,
     representativePlanet: planets.length > 0 ? planets[0] : {},
@@ -42,10 +40,7 @@ export const formatNumber = (x, shortenOptions) => {
 };
 
 export const formatVideo = x => {
-  const categories =
-    x.src_category && x.src_category.NewsSubCategory
-      ? x.src_category.NewsSubCategory
-      : [];
+  const categories = x.NewsSubCategory ? x.NewsSubCategory : [];
   const planets = categories.map(c => c.NewsMainBanner);
   const thumbnails =
     x.Images && x.Images.length > 0
