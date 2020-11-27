@@ -10,7 +10,11 @@ export const formatNews = x => {
     categories,
     planets,
     representativePlanet: planets.length > 0 ? planets[0] : {},
-    link: x.article_path
+    link: x.article_path,
+    externalLink: x.src_url,
+    publishTimeUnix: x.src_publish_time_unix,
+    updateTimeUnix: x.src_update_time_unix,
+    description: x.description
   };
 };
 

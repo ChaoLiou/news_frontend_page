@@ -137,7 +137,7 @@ function init() {
 
   get(`news?id=${_newsId}`, BASE_URL.backendApi).then(json =>
     typeof json.data === typeof [] && json.data.length > 0
-      ? initWithNews(json.data[0])
+      ? initWithNews(formatNews(json.data[0]))
       : console.error(
           `news(${_newsId}) is not found on [${BASE_URL.backendApi}]!`
         )
@@ -145,10 +145,10 @@ function init() {
 }
 
 function initWithNews(news) {
-  renderSourceTitle(news.src_site.description);
-  renderDateTimeInfo(news.src_publish_time_unix, news.src_update_time_unix);
+  renderSourceTitle(news.source);
+  renderDateTimeInfo(news.publishTimeUnix, news.updateTimeUnix);
   renderRecommendNewsTitle("你可能會喜歡");
-  renderSoureNewsLink("檢視原始文章", news.src_url);
+  renderSoureNewsLink("檢視原始文章", news.externalLink);
   bindEvents(news);
 }
 
@@ -244,12 +244,11 @@ function bindEvents(news) {
   const outsideSharingDOM = document.querySelector(
     ".tool-menu__outside-sharing"
   );
-  const formattedNews = formatNews(news);
-  const link = news.article_path;
+  const link = news.link;
   const encodedLink = encodeURIComponent(link);
-  const image = news.Images[0].file_path;
+  const image = news.img;
   const description = news.description;
-  const title = formattedNews.representativePlanet.name;
+  const title = news.representativePlanet.name;
   const { widgetId, officialAccountId } = _serverEnv;
   const deepLinkOutsideSharing = `beanfunapp://Q/h5page/${officialAccountId}?url=${encodedLink}&theme=1&title=${title}`;
   console.log({ widgetId, officialAccountId });
