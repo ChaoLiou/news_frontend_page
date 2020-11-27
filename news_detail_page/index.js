@@ -79,6 +79,7 @@ function serverEnvReady() {
   init();
   const { officialAccountId, token, clientId } = _serverEnv;
   checkAppExist(() => {
+    initBGO(officialAccountId, token);
     getMeProfile(profile => {
       _beanfunState = {
         ..._beanfunState,
@@ -97,7 +98,6 @@ function serverEnvReady() {
         }
       };
     });
-    initBGO(officialAccountId, token);
     getOpenidAccessToken(clientId, "", accessTokenResult => {
       _beanfunState = {
         ..._beanfunState,
