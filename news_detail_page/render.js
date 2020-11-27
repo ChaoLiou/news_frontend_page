@@ -67,11 +67,11 @@ export const renderDateTimeInfo = (published, updated) => {
   const datetimeInfoDOM = document.querySelector(".header__published-updated");
   let publishedText = transformMilliseconds(published);
   let updatedText = transformMilliseconds(updated);
-  if (publishedText === updatedText) {
-    publishedText = `更新於 ${transformMilliseconds(published)}`;
+  if (!updated || publishedText === updatedText) {
+    publishedText = `發布於  ${transformMilliseconds(published)}`;
     datetimeInfoDOM.innerHTML = `${publishedText}`;
   } else {
-    updatedText = `發布於 ${transformMilliseconds(updated)}`;
+    updatedText = `更新於${transformMilliseconds(updated)}`;
     datetimeInfoDOM.innerHTML = `${updatedText}`;
   }
 };
