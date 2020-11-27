@@ -146,13 +146,7 @@ export default {
         const top = this.$el.offsetTop;
         const styles = window.getComputedStyle(this.$el);
         const paddingTop = parseFloat(styles["paddingTop"]);
-
-        const titleHeight = this.$refs.title.offsetHeight;
-        const titleStyles = window.getComputedStyle(this.$refs.title);
-        const titleMarginBottom = parseFloat(titleStyles["marginBottom"]);
-        const fullTitleHeight = titleHeight + titleMarginBottom;
-
-        const scrollY = top + paddingTop + fullTitleHeight;
+        const scrollY = top - paddingTop;
         window.scroll(0, scrollY);
       }
     },
