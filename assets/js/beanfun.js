@@ -84,6 +84,12 @@ export const sendDataToApps = id => {
   BGO.send_data_to_apps({ text });
 };
 
+export const redirectUriByDefaultBrowser = url => {
+  const name = "BGO.redirect_uri_by_default_browser";
+  console.log(`${name}('${url}')`);
+  BGO.redirect_uri_by_default_browser(url);
+};
+
 function checkSuccessful(data) {
   return data.error === undefined;
 }

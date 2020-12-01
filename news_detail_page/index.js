@@ -26,7 +26,8 @@ import {
   getOpenidAccessToken,
   checkAppExist,
   getMeProfile,
-  openFullH5Webview
+  openFullH5Webview,
+  redirectUriByDefaultBrowser
 } from "../assets/js/beanfun";
 import { getOSType, getTimeZone } from "../assets/js/tracking/utils";
 import { planet_click_news } from "../assets/js/tracking/events";
@@ -234,6 +235,16 @@ function trackEvent({ session_id, action_index, event_id, payload }) {
 }
 
 function bindEvents(news) {
+  document
+    .querySelectorAll(".detail__content a.link__open-by-default-browser")
+    .forEach(aDOM => {
+      const url = aDOM.href;
+      aDOM.href = "#";
+      aDOM.addEventListener("click", () => {
+        redirectUriByDefaultBrowser(url);
+      });
+    });
+
   const titleDOM = document.querySelector(".title");
   titleDOM.addEventListener("click", () => {
     const vConsoleDOM = document.querySelector("#__vconsole");
