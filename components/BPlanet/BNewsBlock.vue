@@ -40,6 +40,8 @@ import { planet_click_news } from "@/assets/js/tracking/events";
 import { checkAppExist, openFullH5Webview } from "@/assets/js/beanfun";
 import { getVendorStageDetailUrl } from "@/assets/js/utils";
 const VENDOR_STAGE = process.env.VENDOR_STAGE || { enabled: false };
+const RECOMMENDATION_ENABLED = process.env.RECOMMENDATION_ENABLED;
+
 export default {
   props: {
     titleLabel: {
@@ -175,11 +177,7 @@ export default {
         };
         if (this.selectedTag.id === -1) {
           payload.planetId = this.planetId;
-          if (pageIndex === 1) {
-            payload.recommendation = true;
-            const { open_id } = this.$store.getters["beanfun/verification"];
-            payload.openId = open_id;
-          }
+          payload.recommendation = RECOMMENDATION_ENABLED && pageIndex === 1;
         } else {
           payload.categoryId = this.selectedTag.id;
         }

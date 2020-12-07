@@ -3,7 +3,6 @@ import { formatNews } from "@/assets/js/formatter";
 import { formatNews as formatRecommendationNews } from "@/assets/js/recommendation/formatter";
 
 const name = "news";
-const recommendationEnabled = process.env.RECOMMENDATION_ENABLED;
 
 export const getters = {
   list: (state, getters, rootState, rootGetters) => {
@@ -15,13 +14,14 @@ export const actions = {
   async fetch({ rootState, rootGetters, dispatch, commit }, data) {
     try {
       let list = [];
-      if (recommendationEnabled && data.recommendation) {
+      if (data.recommendation) {
+        const { open_id } = await rootGetters["beanfun/verification"];
         const res = await dispatchWrapper(
           dispatch,
           `api/${name}/fetchRecommendation`,
-          data
+          { ...data, openId: open_id }
         );
-        list = res.map(formatRecommendationNews);
+        list = (res || []).map(formatRecommendationNews);
       }
 
       if (!rootGetters["token/ts"]) {

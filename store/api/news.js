@@ -28,6 +28,9 @@ export const actions = {
         apiRelative += `newsToNews?limit=${limit}&categoryId=${categoryId}&newsId=${newsId}`;
       } else if (openId) {
         apiRelative += `userToNews?limit=${limit}&categoryId=${categoryId}&openid=${openId}`;
+      } else {
+        console.log("[fetchRecommendation] empty keyword, newsId and openId");
+        return;
       }
     }
     return await get(
