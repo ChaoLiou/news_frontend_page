@@ -6,14 +6,20 @@ if (DEVELOPMENT) {
 }
 import { get, post } from "../assets/js/fetchAPI";
 import { hideVConsole, getVendorStageDetailUrl } from "../assets/js/utils";
-import { includeScriptSources, parseNewsIdWithinUrl } from "./utils";
+import {
+  includeScriptSources,
+  parseNewsIdWithinUrl,
+  parseQueryString
+} from "./utils";
 import { formatNews } from "../assets/js/formatter";
 import {
   renderToolMenu,
   renderSourceTitle,
   renderDateTimeInfo,
   renderRecommendNewsTitle,
-  renderSoureNewsLink
+  renderRecommendAdTitle,
+  renderSoureNewsLink,
+  toggleToolMenuItemForLoading
 } from "./render";
 import {
   generateInsideSharingParams,
@@ -36,6 +42,7 @@ import { state as initEventState } from "../store/stateRepo/event";
 let _beanfunState = initBeanfunState();
 let _eventState = initEventState();
 const _newsId = parseNewsIdWithinUrl();
+const _queryStringMap = parseQueryString();
 const { BASE_URL = {}, TRACKING_EVENT = {}, VENDOR_STAGE = {} } = config.env;
 let _serverEnv = {
   officialAccountId: "",
@@ -51,7 +58,14 @@ window.beanfun_vueOnload = beanfun_vueOnload;
 const scripts = [
   ...config.head.script.filter(x => !!x.group),
   { src: "https://cdn.jsdelivr.net/npm/vue/dist/vue.js", group: "beanfun_vue" },
-  { src: "/packages/b-recommend-news-block.umd.min.js", group: "beanfun_vue" }
+  {
+    src: "/packages/b-recommend-news-block/index.umd.min.js",
+    group: "beanfun_vue"
+  },
+  {
+    src: "/packages/b-recommend-ad-block/index.umd.min.js",
+    group: "beanfun_vue"
+  }
 ];
 includeScriptSources(scripts);
 
@@ -137,7 +151,7 @@ function init() {
   renderToolMenu("轉傳", "分享");
 
   get(`news?id=${_newsId}`, BASE_URL.backendApi).then(json =>
-    typeof json.data === typeof [] && json.data.length > 0
+    Array.isArray(json.data) && json.data.length > 0
       ? initWithNews(formatNews(json.data[0]))
       : console.error(
           `news(${_newsId}) is not found on [${BASE_URL.backendApi}]!`
@@ -149,15 +163,38 @@ function initWithNews(news) {
   renderSourceTitle(news.source);
   renderDateTimeInfo(news.publishTimeUnix, news.updateTimeUnix);
   renderRecommendNewsTitle("你可能會喜歡");
+  // renderRecommendAdTitle("不能錯過");
   renderSoureNewsLink("檢視原始文章", news.externalLink);
   bindEvents(news);
+  initRecommendAdBlock(news);
+}
+
+function initRecommendAdBlock(news) {
+  new Vue({
+    el: ".ads",
+    template:
+      `<b-recommend-ad-block ` +
+      `recommendation-api-prefix="${BASE_URL.recommendationApi}" ` +
+      `news-title="${news.title}" />`,
+    components: {
+      "b-recommend-ad-block": BRecommendAdBlock
+    }
+  });
 }
 
 function initRecommendNewsBlock() {
   const { language, country } = _beanfunState.profile;
   new Vue({
     el: ".masonry-scroll",
-    template: `<b-recommend-news-block api-prefix="${BASE_URL.backendApi}" news-id="${_newsId}" @navigate="navigate" lang="${language}" country="${country}" />`,
+    template:
+      `<b-recommend-news-block ` +
+      `api-prefix="${BASE_URL.backendApi}" ` +
+      `recommendation-api-prefix="${BASE_URL.recommendationApi}" ` +
+      `news-id="${_newsId}" ` +
+      `planet-id="${_queryStringMap.planetId}" ` +
+      `lang="${language}" ` +
+      `country="${country}" ` +
+      `@navigate="navigate" />`,
     components: {
       "b-recommend-news-block": BRecommendNewsBlock
     },
@@ -182,6 +219,7 @@ function initRecommendNewsBlock() {
               VENDOR_STAGE.detailUrls
             )}`
           : link;
+        link += `?planetId=${data.representativePlanet.id}`;
         checkAppExist(
           () => {
             openFullH5Webview(
@@ -275,6 +313,7 @@ function bindEvents(news) {
   });
 
   outsideSharingDOM.addEventListener("click", () => {
+    toggleToolMenuItemForLoading(".tool-menu__outside-sharing");
     generateOutsideSharingParamsPromise({
       title,
       description,
@@ -282,6 +321,7 @@ function bindEvents(news) {
       deepLink: deepLinkOutsideSharing,
       api: BASE_URL.backendApi
     }).then(json => {
+      toggleToolMenuItemForLoading(".tool-menu__outside-sharing");
       if (json._id) {
         sendDataToApps(json._id);
       } else {

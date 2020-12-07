@@ -102,6 +102,7 @@ export default {
       link = VENDOR_STAGE.enabled
         ? `${location.origin}/${getVendorStageDetailUrl(location.pathname)}`
         : link;
+      link += `?planetId=${data.representativePlanet.id}`;
       checkAppExist(
         () => {
           openFullH5Webview(
@@ -174,6 +175,11 @@ export default {
         };
         if (this.selectedTag.id === -1) {
           payload.planetId = this.planetId;
+          if (pageIndex === 1) {
+            payload.recommendation = true;
+            const { open_id } = this.$store.getters["beanfun/verification"];
+            payload.openId = open_id;
+          }
         } else {
           payload.categoryId = this.selectedTag.id;
         }

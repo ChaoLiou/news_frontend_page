@@ -1,7 +1,9 @@
 import { dispatchWrapper, commitWrapper } from "@/assets/js/vuex-utils";
 import { formatNews } from "@/assets/js/formatter";
+import { formatNews as formatRecommendationNews } from "@/assets/js/recommendation/formatter";
 
 const name = "news";
+const recommendationEnabled = process.env.RECOMMENDATION_ENABLED;
 
 export const getters = {
   list: (state, getters, rootState, rootGetters) => {
@@ -12,6 +14,16 @@ export const getters = {
 export const actions = {
   async fetch({ rootState, rootGetters, dispatch, commit }, data) {
     try {
+      let list = [];
+      if (recommendationEnabled && data.recommendation) {
+        const res = await dispatchWrapper(
+          dispatch,
+          `api/${name}/fetchRecommendation`,
+          data
+        );
+        list = res.map(formatRecommendationNews);
+      }
+
       if (!rootGetters["token/ts"]) {
         dispatchWrapper(dispatch, "token/update", Date.now());
       }
@@ -23,7 +35,8 @@ export const actions = {
         country: countrycode
       };
       const res = await dispatchWrapper(dispatch, `api/${name}/fetch`, payload);
-      const list = res.data.map(formatNews);
+      list.push(...res.data.map(formatNews));
+
       commitWrapper(commit, `stateRepo/${name}/fetch`, list);
       return list;
     } catch (error) {

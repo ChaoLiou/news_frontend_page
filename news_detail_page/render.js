@@ -81,6 +81,17 @@ export const renderRecommendNewsTitle = text => {
   recommendsTitle.textContent = text;
 };
 
+export const renderRecommendAdTitle = text => {
+  const recommendAdsArea = document.querySelector(".ads");
+  const recommendAdsTitle = createElement("div", { class: ".ads__title" });
+  recommendAdsTitle.textContent = text;
+  const recommendAdsContainer = createElement("div", {
+    class: ".ads__container"
+  });
+  recommendAdsArea.append(recommendAdsTitle);
+  recommendAdsArea.append(recommendAdsContainer);
+};
+
 export const renderSoureNewsLink = (text, link) => {
   const detailContainer = document.querySelector(".detail");
   const externalLinkIcon = createElement("div", {
@@ -92,4 +103,15 @@ export const renderSoureNewsLink = (text, link) => {
   detailContainer.append(
     createElement("div", { class: "detail__source-link" }, [aLink])
   );
+};
+
+export const toggleToolMenuItemForLoading = selector => {
+  const menuItemDOM = document.querySelector(selector);
+  if (menuItemDOM) {
+    if (menuItemDOM.classList.contains("loading")) {
+      menuItemDOM.classList.remove("loading");
+    } else {
+      menuItemDOM.classList.add("loading");
+    }
+  }
 };

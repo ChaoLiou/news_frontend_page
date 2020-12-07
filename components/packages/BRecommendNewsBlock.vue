@@ -22,6 +22,8 @@ import bNews from "../BPlanet/BNewsBlock/BNews";
 import { openFullH5Webview } from "./../../assets/js/beanfun";
 import { generateUUID, getQueryString } from "./../../assets/js/utils";
 import { get } from "./../../assets/js/fetchAPI";
+import { actions } from "../../store/api/news";
+import { formatNews as formatRecommendationNews } from "../../assets/js/recommendation/formatter";
 
 export default {
   components: {
@@ -33,7 +35,15 @@ export default {
       type: String,
       default: "",
     },
+    recommendationApiPrefix: {
+      type: String,
+      default: "",
+    },
     newsId: {
+      type: String,
+      default: "",
+    },
+    planetId: {
       type: String,
       default: "",
     },
@@ -95,14 +105,37 @@ export default {
       }
       this.loading = false;
     },
-    loadMore({ pageSize, pageIndex } = { pageSize: 10, pageIndex: 1 }) {
-      this.loading = true;
-      const apiRelative = `recommendedNews?page=${pageIndex}&pageSize=${pageSize}&news_id=${this.newsId}&lang=${this.lang}&country=${this.country}`;
-      get(apiRelative, this.apiPrefix)
-        .then((json) => json.data.map(formatNews))
-        .then((list) => this.loadMoreNews(list, pageIndex))
-        .then(() => (this.loading = false))
-        .catch(() => (this.loading = false));
+    async loadMore({ pageSize, pageIndex } = { pageSize: 10, pageIndex: 1 }) {
+      try {
+        this.loading = true;
+        let list = [];
+        if (pageIndex === 1) {
+          const { fetchRecommendation } = actions;
+          const res = await fetchRecommendation(
+            undefined,
+            {
+              newsId: this.newsId,
+              planetId: this.planetId,
+            },
+            this.recommendationApiPrefix
+          );
+          list = res.map(formatRecommendationNews);
+        }
+
+        const apiRelative =
+          `recommendedNews?` +
+          `page=${pageIndex}&` +
+          `pageSize=${pageSize}&` +
+          `news_id=${this.newsId}&` +
+          `lang=${this.lang}&` +
+          `country=${this.country}`;
+        const res = await get(apiRelative, this.apiPrefix);
+        list.push(...res.data.map(formatNews));
+
+        this.loadMoreNews(list, pageIndex);
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
   watch: {

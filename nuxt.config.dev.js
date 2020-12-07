@@ -1,11 +1,13 @@
-import config from "./nuxt.config.default";
+import config from "./nuxt.config.base";
 
 export default Object.assign(config, {
   env: {
     BASE_URL: {
       backendApi: "https://753f40f86863.ngrok.io/v1",
-      trackingApi: "https://fb1b2bcc52bd.ngrok.io/v1"
+      trackingApi: "https://fb1b2bcc52bd.ngrok.io/v1",
+      recommendationApi: "https://stg-news-api.beanfun.com/v1"
     },
+    RECOMMENDATION_ENABLED: true,
     TRACKING_EVENT: {
       appVer: "1.0.0",
       appBuild: 1,

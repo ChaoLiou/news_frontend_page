@@ -181,6 +181,25 @@ iframe[src^="https://www.youtube.com/embed/"] {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+.tool-menu__outside-sharing.loading {
+  pointer-events: none;
+}
+.tool-menu__outside-sharing.loading > .tool-menu__text {
+  display: none;
+}
+.tool-menu__outside-sharing.loading > .tool-menu__icon::before {
+  width: 24px;
+  height: 24px;
+  background-image: url("/icons/sync-black-24dp.svg");
+}
+.tool-menu__outside-sharing.loading > .tool-menu__icon {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  100% {
+    transform: rotate(-360deg);
+  }
+}
 .tool-menu__outside-sharing > .tool-menu__icon {
   position: relative;
 }
@@ -276,4 +295,7 @@ iframe[src^="https://www.youtube.com/embed/"] {
     width: 600px;
     background-color: #ffffff;
   }
+}
+.b-recommend-ad-block {
+  margin-left: 12px;
 }

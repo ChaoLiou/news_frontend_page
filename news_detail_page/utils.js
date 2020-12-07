@@ -48,3 +48,16 @@ export const parseNewsIdWithinUrl = () => {
   const parts = location.pathname.split("/").filter(v => !!v);
   return parts[parts.length - 2];
 };
+
+export const parseQueryString = () => {
+  const queryString = location.search;
+  const result = {};
+  queryString
+    .slice(1)
+    .split("&")
+    .forEach(pair => {
+      const [key, value] = pair.split("=");
+      result[key] = value;
+    });
+  return result;
+};

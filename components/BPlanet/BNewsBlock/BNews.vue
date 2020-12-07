@@ -1,5 +1,9 @@
 <template>
-  <div class="b-news" @click="navigate">
+  <div
+    class="b-news"
+    :class="{ 'b-news_recommendation': data.recommendation }"
+    @click="navigate"
+  >
     <div class="b-news__card">
       <div class="b-news__thumbnail">
         <img
@@ -97,5 +101,9 @@ export default {
   font-weight: bold;
   line-height: 21px;
   font-size: 15px;
+}
+.b-news_recommendation .b-news__card {
+  border-color: #26d07c;
+  background-color: #26d07b46;
 }
 </style>
