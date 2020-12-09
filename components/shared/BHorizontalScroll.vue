@@ -1,6 +1,16 @@
 <template>
   <div class="b-horizontal-scroll" :style="{ maxWidth }">
-    <slot></slot>
+    <template v-if="loading">
+      <div
+        v-for="index in 10"
+        class="b-horizontal-scroll__placeholder-item"
+        :key="index"
+        :style="placeholderStyle"
+      ></div>
+    </template>
+    <template v-else>
+      <slot></slot>
+    </template>
     <div
       v-show="fadeOut && fadeOutEnabled"
       class="b-horizontal-scroll__fade-mask"
@@ -19,6 +29,16 @@ export default {
     fadeOut: {
       type: Boolean,
       default: false,
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+    placeholderStyle: {
+      type: Object,
+      default() {
+        return {};
+      },
     },
   },
   data() {
@@ -64,5 +84,24 @@ export default {
   width: 42px;
   height: 100%;
   background: linear-gradient(270deg, #fafafa 30%, rgba(250, 250, 250, 0) 70%);
+}
+.b-horizontal-scroll__placeholder-item {
+  animation-duration: 1.5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeload;
+  animation-timing-function: linear;
+  background: #f6f7f8;
+  background: #eeeeee;
+  background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+  background-size: 1200px 104px;
+}
+@keyframes placeload {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
 }
 </style>

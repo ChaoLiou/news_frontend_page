@@ -3,12 +3,16 @@
     <div class="b-news-block__title" @click="enableVConsole" ref="title">
       {{ titleLabel }}
     </div>
-    <div
-      class="b-news-block__tags"
-      v-if="tags.length > 0"
-      :style="stickyStyles"
-    >
-      <b-horizontal-scroll>
+    <div class="b-news-block__tags" :style="stickyStyles">
+      <b-horizontal-scroll
+        :loading="tagsLoading"
+        :placeholder-style="{
+          height: '30px',
+          width: '50px',
+          marginRight: '16px',
+          borderRadius: '10px',
+        }"
+      >
         <b-news-tag
           v-for="(tag, index) in tags"
           :key="index"
@@ -62,6 +66,7 @@ export default {
       tags: [],
       source: [],
       loading: true,
+      tagsLoading: true,
       VENDOR_STAGE,
       theTagOfAll: { title: "全部", id: -1, tagged: true },
     };
@@ -129,11 +134,13 @@ export default {
         tagged: false,
       }));
       this.tags.unshift(this.theTagOfAll);
+      this.tagsLoading = false;
     },
     init(planetId) {
       this.source = [];
       this.resetScroll();
       if (planetId) {
+        this.tagsLoading = true;
         this.tags = [];
         this.$store
           .dispatch("category/fetch", planetId)

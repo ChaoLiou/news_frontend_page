@@ -1,6 +1,5 @@
 <template>
   <div
-    v-show="source.length > 0"
     :class="[
       'b-audiovisual-block',
       masonry ? 'b-audiovisual-block_masonry' : '',
@@ -26,7 +25,16 @@
           <div class="no-more-content">沒有更多影片了</div>
         </template>
       </b-masonry-scroll-using-grid>
-      <b-horizontal-scroll v-else>
+      <b-horizontal-scroll
+        v-else
+        :loading="loading"
+        :placeholder-style="{
+          height: '230px',
+          width: '320px',
+          marginRight: '16px',
+          borderRadius: '20px',
+        }"
+      >
         <template v-for="(item, index) in source">
           <b-audiovisual-card :key="index" :data="item" @navigate="navigate" />
         </template>

@@ -24,7 +24,9 @@ figure {
 #__vconsole.hidden {
   display: none;
 }
-
+::-webkit-scrollbar {
+  display: none;
+}
 @media screen and (min-width: 1024px) {
   html {
     background-color: #181a1b !important;
