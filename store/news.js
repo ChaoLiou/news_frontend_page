@@ -21,7 +21,13 @@ export const actions = {
           `api/${name}/fetchRecommendation`,
           { ...data, openId: open_id }
         );
-        list = (res || []).map(formatRecommendationNews);
+        if (Array.isArray(res)) {
+          list = res.map(formatRecommendationNews);
+        } else {
+          console.error(
+            `[fetchRecommendation] an error has occured: ${res.message}`
+          );
+        }
       }
 
       if (!rootGetters["token/ts"]) {
