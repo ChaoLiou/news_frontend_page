@@ -1,7 +1,7 @@
 import { dispatchWrapper, commitWrapper } from "@/assets/js/vuex-utils";
 import { formatNews } from "@/assets/js/formatter";
 import { formatNews as formatRecommendationNews } from "@/assets/js/recommendation/formatter";
-
+const { openId: testingOpenId } = process.env.VENDOR_STAGE;
 const name = "news";
 
 export const getters = {
@@ -19,13 +19,13 @@ export const actions = {
         const res = await dispatchWrapper(
           dispatch,
           `api/${name}/fetchRecommendation`,
-          { ...data, openId: open_id }
+          { ...data, openId: testingOpenId ? testingOpenId : open_id }
         );
         if (Array.isArray(res)) {
           list = res.map(formatRecommendationNews);
         } else {
           console.error(
-            `[fetchRecommendation] an error has occured: ${res.message}`
+            `[store/news/fetch] an error has occured: ${res ? res.message : ""}`
           );
         }
       }

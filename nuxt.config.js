@@ -20,7 +20,8 @@ export default Object.assign(config, {
     },
     VENDOR_STAGE: {
       enabled: false,
-      detailUrls: []
+      detailUrls: [],
+      openId: ""
     },
     VIDEO_IMAGE: {
       size: ["default", "medium", "high", "standard", "maxres"][3]

@@ -39,6 +39,10 @@ export default {
       type: String,
       default: "",
     },
+    recommendationEnabled: {
+      type: Boolean,
+      default: true,
+    },
     newsId: {
       type: String,
       default: "",
@@ -109,7 +113,7 @@ export default {
       try {
         this.loading = true;
         let list = [];
-        if (pageIndex === 1) {
+        if (this.recommendationEnabled && pageIndex === 1) {
           const { fetchRecommendation } = actions;
           const res = await fetchRecommendation(
             undefined,
@@ -119,7 +123,15 @@ export default {
             },
             this.recommendationApiPrefix
           );
-          list = res.map(formatRecommendationNews);
+          if (Array.isArray(res)) {
+            list = res.map(formatRecommendationNews);
+          } else {
+            console.error(
+              `[store/news/fetch] an error has occured: ${
+                res ? res.message : ""
+              }`
+            );
+          }
         }
 
         const apiRelative =

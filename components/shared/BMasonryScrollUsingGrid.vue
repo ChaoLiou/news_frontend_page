@@ -93,10 +93,29 @@ export default {
       this.$set(this.rowSpans, index, Math.ceil((height + 10) / 20));
     },
     loadMore(index) {
-      if ((index + 1) * 2 === this.pageIndex * this.pageSize) {
+      const targetIndex = (index + 1) * 2;
+      console.log({
+        index,
+        targetIndex,
+        pageIndex: this.pageIndex,
+        pageSize: this.pageSize,
+      });
+      const totals = this.pageIndex * this.pageSize;
+      if (targetIndex === this.pageIndex * this.pageSize) {
         this.$emit("load-more", {
           pageSize: this.pageSize,
           pageIndex: ++this.pageIndex,
+        });
+      } else if (targetIndex > totals) {
+        const currentPageIndex = targetIndex / this.pageSize;
+        Array.from(
+          { length: currentPageIndex - this.pageIndex },
+          () => {}
+        ).forEach(() => {
+          this.$emit("load-more", {
+            pageSize: this.pageSize,
+            pageIndex: ++this.pageIndex,
+          });
         });
       }
     },

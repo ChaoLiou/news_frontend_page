@@ -43,7 +43,12 @@ let _beanfunState = initBeanfunState();
 let _eventState = initEventState();
 const _newsId = parseNewsIdWithinUrl();
 const _queryStringMap = parseQueryString();
-const { BASE_URL = {}, TRACKING_EVENT = {}, VENDOR_STAGE = {} } = config.env;
+const {
+  BASE_URL = {},
+  TRACKING_EVENT = {},
+  VENDOR_STAGE = {},
+  RECOMMENDATION_ENABLED = true
+} = config.env;
 let _serverEnv = {
   officialAccountId: "",
   token: "",
@@ -190,6 +195,9 @@ function initRecommendNewsBlock() {
       `<b-recommend-news-block ` +
       `api-prefix="${BASE_URL.backendApi}" ` +
       `recommendation-api-prefix="${BASE_URL.recommendationApi}" ` +
+      `:recommendation-enabled="${
+        RECOMMENDATION_ENABLED ? "true" : "false"
+      }" ` +
       `news-id="${_newsId}" ` +
       `planet-id="${_queryStringMap.planetId}" ` +
       `lang="${language}" ` +
