@@ -1,7 +1,16 @@
 <template>
   <div class="b-news-block">
-    <div class="b-news-block__title" @click="enableVConsole" ref="title">
+    <div
+      class="b-news-block__title"
+      ref="title"
+      @touchstart="startDetectingLongTouch"
+      @touchend="stopDetectingLongTouch"
+      @touchcancel="stopDetectingLongTouch"
+    >
       {{ titleLabel }}
+      <span v-if="longTouch.counter">
+        {{ longTouch.duration - longTouch.counter + 1 }}
+      </span>
     </div>
     <div class="b-news-block__tags" :style="stickyStyles">
       <b-horizontal-scroll
@@ -42,7 +51,7 @@
 <script>
 import { planet_click_news } from "@/assets/js/tracking/events";
 import { checkAppExist, openFullH5Webview } from "@/assets/js/beanfun";
-import { getVendorStageDetailUrl } from "@/assets/js/utils";
+import { getVendorStageDetailUrl, enableVConsole } from "@/assets/js/utils";
 const VENDOR_STAGE = process.env.VENDOR_STAGE || { enabled: false };
 const RECOMMENDATION_ENABLED = process.env.RECOMMENDATION_ENABLED;
 
@@ -69,6 +78,11 @@ export default {
       tagsLoading: true,
       VENDOR_STAGE,
       theTagOfAll: { title: "全部", id: -1, tagged: true },
+      longTouch: {
+        interval: 0,
+        duration: 3,
+        counter: 0,
+      },
     };
   },
   computed: {
@@ -92,6 +106,21 @@ export default {
     },
   },
   methods: {
+    startDetectingLongTouch() {
+      this.longTouch.interval = setInterval(() => {
+        if (this.longTouch.counter >= this.longTouch.duration) {
+          enableVConsole();
+          this.stopDetectingLongTouch();
+        } else {
+          this.longTouch.counter++;
+        }
+      }, 1000);
+    },
+    stopDetectingLongTouch() {
+      clearInterval(this.longTouch.interval);
+      this.longTouch.interval = 0;
+      this.longTouch.counter = 0;
+    },
     navigate(data) {
       this.$store.dispatch("event/emit", {
         event_id: planet_click_news.id,
@@ -122,10 +151,6 @@ export default {
           window.open(link, "_blank");
         }
       );
-    },
-    enableVConsole() {
-      const vConsoleDOM = document.querySelector("#__vconsole");
-      vConsoleDOM.classList.remove("hidden");
     },
     initTags() {
       this.tags = this.categories.map((c) => ({
@@ -215,6 +240,7 @@ export default {
   margin-bottom: 6px;
 }
 .b-news-block__title {
+  user-select: none;
   font-weight: bold;
   font-size: 17px;
   line-height: 23.8px;

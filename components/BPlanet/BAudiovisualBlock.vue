@@ -19,7 +19,7 @@
         @load-more="loadMore"
       >
         <template #default="props">
-          <b-audiovisual :data="props.item" />
+          <b-audiovisual :data="props.item" @long-touch="enableVConsole" />
         </template>
         <template #nomore>
           <div class="no-more-content">沒有更多影片了</div>
@@ -45,6 +45,7 @@
 
 <script>
 import { checkAppExist, openFullH5Webview } from "@/assets/js/beanfun";
+import { enableVConsole } from "@/assets/js/utils";
 export default {
   props: {
     titleLabel: {
@@ -71,6 +72,7 @@ export default {
     };
   },
   methods: {
+    enableVConsole,
     init() {
       this.loading = true;
       this.source = [];

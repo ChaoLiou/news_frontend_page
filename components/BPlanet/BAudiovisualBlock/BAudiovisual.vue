@@ -1,5 +1,10 @@
 <template>
-  <div class="b-audiovisual">
+  <div
+    class="b-audiovisual"
+    @touchstart="startDetectingLongTouch"
+    @touchend="stopDetectingLongTouch"
+    @touchcancel="stopDetectingLongTouch"
+  >
     <div class="b-audiovisual__frame" ref="frame" :style="frameStyle">
       <div :id="id"></div>
     </div>
@@ -7,6 +12,9 @@
       <div class="b-audiovisual__menu-title">
         <div class="b-audiovisual__title">
           {{ title }}
+          <span v-if="longTouch.counter">
+            {{ longTouch.duration - longTouch.counter + 1 }}
+          </span>
         </div>
         <div v-if="sourceExists" class="b-audiovisual__info">
           <div class="b-audiovisual__datetime">{{ datetime }}</div>
@@ -58,6 +66,11 @@ export default {
       menuToggle: false,
       player: undefined,
       width: 0,
+      longTouch: {
+        interval: 0,
+        duration: 3,
+        counter: 0,
+      },
     };
   },
   computed: {
@@ -107,6 +120,21 @@ export default {
     });
   },
   methods: {
+    startDetectingLongTouch() {
+      this.longTouch.interval = setInterval(() => {
+        if (this.longTouch.counter >= this.longTouch.duration) {
+          this.$emit("long-touch");
+          this.stopDetectingLongTouch();
+        } else {
+          this.longTouch.counter++;
+        }
+      }, 1000);
+    },
+    stopDetectingLongTouch() {
+      clearInterval(this.longTouch.interval);
+      this.longTouch.interval = 0;
+      this.longTouch.counter = 0;
+    },
     onPlayerReady(e) {
       this.width = this.$refs.frame.offsetWidth;
     },
@@ -126,6 +154,7 @@ export default {
   column-gap: 6px;
 }
 .b-audiovisual__title {
+  user-select: none;
   color: #ffffff;
   font-size: 15px;
   line-height: 21px;

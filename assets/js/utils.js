@@ -31,6 +31,13 @@ export const hideVConsole = () => {
   }, 100);
 };
 
+export const enableVConsole = () => {
+  const vConsoleDOM = document.querySelector("#__vconsole");
+  if (vConsoleDOM) {
+    vConsoleDOM.classList.remove("hidden");
+  }
+};
+
 export const getVendorStageDetailUrl = (
   url,
   urls = process.env.VENDOR_STAGE.detailUrls

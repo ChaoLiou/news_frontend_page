@@ -5,7 +5,11 @@ if (DEVELOPMENT) {
   config = require("../nuxt.config.js").default;
 }
 import { get, post } from "../assets/js/fetchAPI";
-import { hideVConsole, getVendorStageDetailUrl } from "../assets/js/utils";
+import {
+  hideVConsole,
+  getVendorStageDetailUrl,
+  enableVConsole
+} from "../assets/js/utils";
 import {
   includeScriptSources,
   parseNewsIdWithinUrl,
@@ -19,7 +23,8 @@ import {
   renderRecommendNewsTitle,
   renderRecommendAdTitle,
   renderSoureNewsLink,
-  toggleToolMenuItemForLoading
+  toggleToolMenuItemForLoading,
+  createElement
 } from "./render";
 import {
   generateInsideSharingParams,
@@ -56,6 +61,20 @@ let _serverEnv = {
   clientId: "",
   widgetId: ""
 };
+
+const longTouch = {
+  interval: 0,
+  duration: 3,
+  counter: 0
+};
+
+function stopDetectingLongTouch() {
+  const titleDOM = document.querySelector(".title");
+  titleDOM.querySelector("span").innerText = "";
+  clearInterval(longTouch.interval);
+  longTouch.interval = 0;
+  longTouch.counter = 0;
+}
 
 window.vconsoleOnload = vconsoleOnload;
 window.beanfun_vueOnload = beanfun_vueOnload;
@@ -292,10 +311,23 @@ function bindEvents(news) {
     });
 
   const titleDOM = document.querySelector(".title");
-  titleDOM.addEventListener("click", () => {
-    const vConsoleDOM = document.querySelector("#__vconsole");
-    vConsoleDOM.classList.remove("hidden");
+  titleDOM.append(createElement("span"));
+  titleDOM.addEventListener("touchstart", () => {
+    longTouch.interval = setInterval(() => {
+      if (longTouch.counter >= longTouch.duration) {
+        enableVConsole();
+        stopDetectingLongTouch();
+      } else {
+        longTouch.counter++;
+        titleDOM.querySelector("span").innerText = `${longTouch.duration -
+          longTouch.counter +
+          1}`;
+      }
+    }, 1000);
   });
+
+  titleDOM.addEventListener("touchend", stopDetectingLongTouch);
+  titleDOM.addEventListener("touchcancel", stopDetectingLongTouch);
 
   const insideSharingDOM = document.querySelector(".tool-menu__inside-sharing");
   const outsideSharingDOM = document.querySelector(

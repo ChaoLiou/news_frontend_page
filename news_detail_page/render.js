@@ -1,6 +1,6 @@
 import { transformMilliseconds } from "./formatter";
 
-export const createElement = (tagName, options, childList) => {
+export const createElement = (tagName, options = {}, childList = undefined) => {
   const DOM = document.createElement(tagName);
   if (options.class) {
     DOM.classList.add(options.class);

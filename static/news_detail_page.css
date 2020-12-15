@@ -57,6 +57,7 @@ figure {
   font-weight: bold;
 }
 .header__title {
+  user-select: none;
   font-weight: bold;
   padding-bottom: 10px;
   grid-column: 1/-1;
