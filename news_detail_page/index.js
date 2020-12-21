@@ -52,7 +52,7 @@ const {
   BASE_URL = {},
   TRACKING_EVENT = {},
   VENDOR_STAGE = {},
-  RECOMMENDATION_ENABLED = true
+  RECOMMENDATION_ENABLED = { news: true, product: true }
 } = config.env;
 let _serverEnv = {
   officialAccountId: "",
@@ -199,6 +199,7 @@ function initRecommendAdBlock(news) {
     template:
       `<b-recommend-ad-block ` +
       `recommendation-api-prefix="${BASE_URL.recommendationApi}" ` +
+      `recommendation-enabled="${RECOMMENDATION_ENABLED.product}" ` +
       `news-title="${news.title}" />`,
     components: {
       "b-recommend-ad-block": BRecommendAdBlock
@@ -214,9 +215,7 @@ function initRecommendNewsBlock() {
       `<b-recommend-news-block ` +
       `api-prefix="${BASE_URL.backendApi}" ` +
       `recommendation-api-prefix="${BASE_URL.recommendationApi}" ` +
-      `:recommendation-enabled="${
-        RECOMMENDATION_ENABLED ? "true" : "false"
-      }" ` +
+      `:recommendation-enabled="${RECOMMENDATION_ENABLED.news}" ` +
       `news-id="${_newsId}" ` +
       `planet-id="${_queryStringMap.planetId}" ` +
       `lang="${language}" ` +

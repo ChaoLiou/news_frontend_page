@@ -1,12 +1,10 @@
 <template>
   <div class="b-recommend-ad-block">
-    <div>
-      <b-horizontal-scroll>
-        <template v-for="(item, index) in source">
-          <b-ad-card :key="index" :data="item" />
-        </template>
-      </b-horizontal-scroll>
-    </div>
+    <b-horizontal-scroll>
+      <template v-for="(item, index) in source">
+        <b-ad-card :key="index" :data="item" />
+      </template>
+    </b-horizontal-scroll>
   </div>
 </template>
 <script>
@@ -26,6 +24,10 @@ export default {
       type: String,
       default: "",
     },
+    recommendationEnabled: {
+      type: Boolean,
+      default: true,
+    },
     newsTitle: {
       type: String,
       default: "",
@@ -41,15 +43,17 @@ export default {
     async load(keyword) {
       try {
         this.loading = true;
-        const { fetchRecommendation } = actions;
-        const res = await fetchRecommendation(
-          undefined,
-          {
-            keyword,
-          },
-          this.recommendationApiPrefix
-        );
-        this.source = (res.products || []).map(formatProduct);
+        if (recommendationEnabled) {
+          const { fetchRecommendation } = actions;
+          const res = await fetchRecommendation(
+            undefined,
+            {
+              keyword,
+            },
+            this.recommendationApiPrefix
+          );
+          this.source = (res.products || []).map(formatProduct);
+        }
         this.loading = false;
       } catch (error) {
         console.error(error);

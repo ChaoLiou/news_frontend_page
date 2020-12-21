@@ -7,7 +7,10 @@ export default Object.assign(config, {
       trackingApi: "https://fb1b2bcc52bd.ngrok.io/v1",
       recommendationApi: "https://stg-news-api.beanfun.com/v1"
     },
-    RECOMMENDATION_ENABLED: true,
+    RECOMMENDATION_ENABLED: {
+      news: true,
+      product: true
+    },
     TRACKING_EVENT: {
       appVer: "1.0.0",
       appBuild: 1,

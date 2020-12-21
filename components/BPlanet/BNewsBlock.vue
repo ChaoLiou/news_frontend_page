@@ -209,7 +209,8 @@ export default {
         };
         if (this.selectedTag.id === -1) {
           payload.planetId = this.planetId;
-          payload.recommendation = RECOMMENDATION_ENABLED && pageIndex === 1;
+          payload.recommendation =
+            RECOMMENDATION_ENABLED.news && pageIndex === 1;
         } else {
           payload.categoryId = this.selectedTag.id;
         }

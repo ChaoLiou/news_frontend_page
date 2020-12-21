@@ -9,7 +9,10 @@ export default Object.assign(config, {
       recommendationApi:
         process.env.RECOMMENDATION_API || "https://stg-news-api.beanfun.com/v1"
     },
-    RECOMMENDATION_ENABLED: process.env.RECOMMENDATION_ENABLED !== false,
+    RECOMMENDATION_ENABLED: {
+      news: process.env.RECOMMENDATION_ENABLED_NEWS !== false,
+      product: process.env.RECOMMENDATION_ENABLED_PRODUCT !== false
+    },
     TRACKING_EVENT: {
       appVer: process.env.APP_VER || "1.0.0",
       appBuild: process.env.APP_BUILD || 1,
