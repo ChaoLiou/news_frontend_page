@@ -12,7 +12,11 @@
         {{ longTouch.duration - longTouch.counter + 1 }}
       </span>
     </div>
-    <div class="b-news-block__tags" :style="stickyStyles">
+    <div
+      class="b-news-block__tags"
+      :class="{ 'b-news-block__tags_disabled': this.loading }"
+      :style="stickyStyles"
+    >
       <b-horizontal-scroll
         :loading="tagsLoading"
         :placeholder-style="{
@@ -186,11 +190,13 @@ export default {
       }
     },
     toggleTag(targetIndex) {
-      this.tags = this.tags.map((t, i) => ({
-        ...t,
-        tagged: targetIndex === i,
-      }));
-      this.init();
+      if (!this.loading) {
+        this.tags = this.tags.map((t, i) => ({
+          ...t,
+          tagged: targetIndex === i,
+        }));
+        this.init();
+      }
     },
     loadMoreNews(list, pageIndex) {
       if (list) {
@@ -257,5 +263,8 @@ export default {
 }
 .b-news-block__tags .b-horizontal-scroll > *:not(:last-child) {
   margin-right: 16px;
+}
+.b-news-block__tags_disabled {
+  opacity: 0.5;
 }
 </style>

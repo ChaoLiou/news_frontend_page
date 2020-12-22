@@ -58,9 +58,13 @@ export const renderToolMenu = (insideSharingText, outsideSharingText) => {
   document.body.prepend(toolMenuDOM);
 };
 
-export const renderSourceTitle = text => {
+export const renderSource = source => {
+  if (source.logoImage) {
+    const sourceImgDOM = document.querySelector(".header__source-img");
+    sourceImgDOM.style.backgroundImage = `url("/${source.logoImage}"), url("/news_detail_img_default.png")`;
+  }
   const sourceTitleDOM = document.querySelector(".header__source-title");
-  sourceTitleDOM.textContent = text;
+  sourceTitleDOM.textContent = source.name;
 };
 
 export const renderDateTimeInfo = (published, updated) => {

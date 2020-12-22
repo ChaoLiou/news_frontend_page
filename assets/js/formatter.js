@@ -1,12 +1,17 @@
 export const formatNews = x => {
   const categories = x.NewsSubCategory ? x.NewsSubCategory : [];
-  const planets = categories.map(c => c.NewsMainBanner);
+  const planets = categories
+    .map(c => c.NewsMainBanner)
+    .map(p => ({ name: p.name, id: p.id }));
   const rss = x.NewsSourceFetch ? x.NewsSourceFetch : {};
   return {
     id: x.id,
     img: x.Images && x.Images.length > 0 ? x.Images[0].file_path : undefined,
     title: x.src_title,
-    source: rss.name,
+    source: {
+      name: rss.name,
+      logoImage: rss.icon_image_path
+    },
     categories,
     planets,
     representativePlanet: planets.length > 0 ? planets[0] : {},

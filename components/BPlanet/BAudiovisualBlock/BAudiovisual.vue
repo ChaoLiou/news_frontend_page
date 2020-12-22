@@ -5,7 +5,18 @@
     @touchend="stopDetectingLongTouch"
     @touchcancel="stopDetectingLongTouch"
   >
-    <div class="b-audiovisual__frame" ref="frame" :style="frameStyle">
+    <div
+      class="b-audiovisual__frame"
+      ref="frame"
+      :style="frameStyle"
+      @click="initPlayer"
+    >
+      <div
+        v-if="!playerEnabled"
+        class="b-audiovisual__play-icon b-audiovisual__play-icon_center"
+      >
+        <div></div>
+      </div>
       <div :id="id"></div>
     </div>
     <div class="b-audiovisual__menu">
@@ -103,23 +114,30 @@ export default {
       return this.data.img.height / this.data.img.width;
     },
     frameStyle() {
-      if (this.width > 0) {
-        return {
-          height: `calc(${this.width}px * ${this.imageWidthHeightRate})`,
-        };
-      }
+      return {
+        backgroundImage: this.playerEnabled
+          ? undefined
+          : `url(${this.data.img.url})`,
+        height: `calc(${this.width}px * ${this.imageWidthHeightRate})`,
+      };
+    },
+    playerEnabled() {
+      return !!this.player;
     },
   },
   mounted() {
-    this.player = new YT.Player(this.id, {
-      videoId: this.data.youtubeId,
-      events: {
-        onReady: this.onPlayerReady,
-        onStateChange: onPlayerStateChange,
-      },
-    });
+    this.width = this.$el.offsetWidth;
   },
   methods: {
+    initPlayer() {
+      this.player = new YT.Player(this.id, {
+        videoId: this.data.youtubeId,
+        events: {
+          onReady: this.onPlayerReady,
+          onStateChange: onPlayerStateChange,
+        },
+      });
+    },
     startDetectingLongTouch() {
       this.longTouch.interval = setInterval(() => {
         if (this.longTouch.counter >= this.longTouch.duration) {
@@ -135,8 +153,8 @@ export default {
       this.longTouch.interval = 0;
       this.longTouch.counter = 0;
     },
-    onPlayerReady(e) {
-      this.width = this.$refs.frame.offsetWidth;
+    onPlayerReady(event) {
+      event.target.playVideo();
     },
   },
 };
@@ -210,8 +228,28 @@ export default {
   word-break: break-word;
 }
 .b-audiovisual__frame {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  cursor: pointer;
   width: 100%;
-  height: 300px;
+  position: relative;
+}
+.b-audiovisual__play-icon {
+  position: absolute;
+  width: fit-content;
+  height: fit-content;
+  z-index: 2;
+}
+.b-audiovisual__play-icon > div {
+  background-image: url("/icons/btn_play.svg");
+  width: 50px;
+  height: 50px;
+}
+.b-audiovisual__play-icon_center {
+  left: 50%;
+  transform: translate(-50%, -50%);
+  top: 50%;
 }
 </style>
 <style>

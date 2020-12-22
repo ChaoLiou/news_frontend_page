@@ -18,10 +18,9 @@ import {
 import { formatNews } from "../assets/js/formatter";
 import {
   renderToolMenu,
-  renderSourceTitle,
+  renderSource,
   renderDateTimeInfo,
   renderRecommendNewsTitle,
-  renderRecommendAdTitle,
   renderSoureNewsLink,
   toggleToolMenuItemForLoading,
   createElement
@@ -185,10 +184,9 @@ function init() {
 }
 
 function initWithNews(news) {
-  renderSourceTitle(news.source);
+  renderSource(news.source);
   renderDateTimeInfo(news.publishTimeUnix, news.updateTimeUnix);
   renderRecommendNewsTitle("你可能會喜歡");
-  // renderRecommendAdTitle("不能錯過");
   renderSoureNewsLink("檢視原始文章", news.externalLink);
   bindEvents(news);
   initRecommendAdBlock(news);
@@ -202,9 +200,15 @@ function initRecommendAdBlock(news) {
       `recommendation-api-prefix="${BASE_URL.recommendationApi}" ` +
       `:recommendation-enabled="${RECOMMENDATION_ENABLED.product}" ` +
       `news-title="${news.title}" ` +
+      `:title-text="titleText" ` +
       `@navigate="navigate" />`,
     components: {
       "b-recommend-ad-block": BRecommendAdBlock
+    },
+    data() {
+      return {
+        titleText: "購物推薦"
+      };
     },
     methods: {
       navigate(data) {

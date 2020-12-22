@@ -1,5 +1,8 @@
 <template>
-  <div class="b-recommend-ad-block">
+  <div class="b-recommend-ad-block" v-show="recommendationEnabled">
+    <div class="b-recommend-ad-block__title" v-if="titleText">
+      {{ titleText }}
+    </div>
     <b-horizontal-scroll
       :loading="loading"
       :placeholder-style="{
@@ -37,6 +40,10 @@ export default {
       default: true,
     },
     newsTitle: {
+      type: String,
+      default: "",
+    },
+    titleText: {
       type: String,
       default: "",
     },
@@ -91,5 +98,9 @@ export default {
 }
 .b-horizontal-scroll > .b-ad-card:not(:last-child) {
   margin-right: 1em;
+}
+.b-recommend-ad-block__title {
+  font-weight: bold;
+  margin: 16px 0px;
 }
 </style>
