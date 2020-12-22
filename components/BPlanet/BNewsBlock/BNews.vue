@@ -10,6 +10,7 @@
           v-if="autoImgHeight"
           class="b-news__thumbnail-img"
           :class="{ 'b-news__thumbnail-img_loading': imgLoading }"
+          :style="imgLoading ? { height: `${defaultImgHeight}px` } : undefined"
           :src="data.img"
           :alt="data.img"
           ref="img"
