@@ -43,7 +43,7 @@ export default {
     async load(keyword) {
       try {
         this.loading = true;
-        if (recommendationEnabled) {
+        if (this.recommendationEnabled) {
           const { fetchRecommendation } = actions;
           const res = await fetchRecommendation(
             undefined,

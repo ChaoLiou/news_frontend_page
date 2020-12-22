@@ -9,7 +9,7 @@ export default Object.assign(config, {
     },
     RECOMMENDATION_ENABLED: {
       news: true,
-      product: true
+      product: false
     },
     TRACKING_EVENT: {
       appVer: "1.0.0",

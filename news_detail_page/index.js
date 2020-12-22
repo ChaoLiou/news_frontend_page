@@ -199,7 +199,7 @@ function initRecommendAdBlock(news) {
     template:
       `<b-recommend-ad-block ` +
       `recommendation-api-prefix="${BASE_URL.recommendationApi}" ` +
-      `recommendation-enabled="${RECOMMENDATION_ENABLED.product}" ` +
+      `:recommendation-enabled="${RECOMMENDATION_ENABLED.product}" ` +
       `news-title="${news.title}" />`,
     components: {
       "b-recommend-ad-block": BRecommendAdBlock
