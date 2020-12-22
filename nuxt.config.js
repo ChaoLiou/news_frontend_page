@@ -19,8 +19,7 @@ export default Object.assign(config, {
       trackingVer: process.env.TRACKING_VER || "0.07"
     },
     BUILD: {
-      builtAt: new Date().toLocaleString(),
-      version: process.env.BUILD_VERSION || "abcdefghijklmnopqrstuvwxyz"
+      builtAt: new Date().toLocaleString()
     },
     VENDOR_STAGE: {
       enabled: false,
