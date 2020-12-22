@@ -8,13 +8,15 @@
     />
     <title>BRecommendAdBlock.vue</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
-    <script src="/packages/b-recommend-ad-block.umd.min.js"></script>
+    <script src="/packages/b-recommend-ad-block/index.umd.min.js"></script>
   </head>
   <body>
     <div id="app">
       <b-recommend-ad-block
         :recommendation-api-prefix="recommendationApiPrefix"
+        :recommendation-enabled="recommendationEnabled"
         :news-title="newsTitle"
+        @navigate="navigate"
       />
     </div>
   </body>
@@ -27,8 +29,14 @@
       data() {
         return {
           recommendationApiPrefix: "https://stg-news-api.beanfun.com/v1",
+          recommendationEnabled: { news: true, product: true },
           newsTitle: "美國總統⼤選"
         };
+      },
+      methods: {
+        navigate(data) {
+          window.open(data.link, "_blank");
+        }
       }
     });
   </script>

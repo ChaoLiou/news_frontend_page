@@ -52,7 +52,8 @@ const {
   BASE_URL = {},
   TRACKING_EVENT = {},
   VENDOR_STAGE = {},
-  RECOMMENDATION_ENABLED = { news: true, product: true }
+  RECOMMENDATION_ENABLED = { news: true, product: true },
+  AD = {}
 } = config.env;
 let _serverEnv = {
   officialAccountId: "",
@@ -200,9 +201,23 @@ function initRecommendAdBlock(news) {
       `<b-recommend-ad-block ` +
       `recommendation-api-prefix="${BASE_URL.recommendationApi}" ` +
       `:recommendation-enabled="${RECOMMENDATION_ENABLED.product}" ` +
-      `news-title="${news.title}" />`,
+      `news-title="${news.title}" ` +
+      `@navigate="navigate" />`,
     components: {
       "b-recommend-ad-block": BRecommendAdBlock
+    },
+    methods: {
+      navigate(data) {
+        console.log({ data });
+        checkAppExist(
+          () => {
+            openFullH5Webview(data.link, "", AD.officialAccountId);
+          },
+          () => {
+            window.open(data.link, "_blank");
+          }
+        );
+      }
     }
   });
 }

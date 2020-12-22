@@ -19,7 +19,8 @@ export default Object.assign(config, {
       trackingVer: process.env.TRACKING_VER || "0.07"
     },
     BUILD: {
-      builtAt: new Date().toLocaleString()
+      builtAt: new Date().toLocaleString(),
+      version: process.env.BUILD_VERSION || "abcdefghijklmnopqrstuvwxyz"
     },
     VENDOR_STAGE: {
       enabled: false,
@@ -28,6 +29,11 @@ export default Object.assign(config, {
     },
     VIDEO_IMAGE: {
       size: ["default", "medium", "high", "standard", "maxres"][3]
+    },
+    AD: {
+      officialAccountId:
+        process.env.AD_OFFICIAL_ACCOUNT_ID ||
+        "690c8cba53934c138e997f7685e98412_oa"
     },
     DEBUG_MODE: false
   }

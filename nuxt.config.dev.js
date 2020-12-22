@@ -9,7 +9,7 @@ export default Object.assign(config, {
     },
     RECOMMENDATION_ENABLED: {
       news: true,
-      product: false
+      product: true
     },
     TRACKING_EVENT: {
       appVer: "1.0.0",
@@ -17,7 +17,8 @@ export default Object.assign(config, {
       trackingVer: "0.07"
     },
     BUILD: {
-      builtAt: new Date().toLocaleString()
+      builtAt: new Date().toLocaleString(),
+      version: "abcdefghijklmnopqrstuvwxyz"
     },
     VENDOR_STAGE: {
       enabled: true,
@@ -30,6 +31,9 @@ export default Object.assign(config, {
     },
     VIDEO_IMAGE: {
       size: ["default", "medium", "high", "standard", "maxres"][3]
+    },
+    AD: {
+      officialAccountId: "690c8cba53934c138e997f7685e98412_oa"
     },
     DEBUG_MODE: true
   }

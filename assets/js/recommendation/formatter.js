@@ -24,6 +24,8 @@ export const formatProduct = x => {
     img: x.imageUrl,
     title: x.productName,
     link: x.url,
-    salePrice: x.salePrice
+    salePrice: x.salePrice,
+    price: x.price,
+    discounted: !!x.salePrice
   };
 };

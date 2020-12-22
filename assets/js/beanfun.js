@@ -90,6 +90,12 @@ export const redirectUriByDefaultBrowser = url => {
   BGO.redirect_uri_by_default_browser(url);
 };
 
+export const forceReloadPage = () => {
+  const name = "BGO.force_reload_page";
+  console.log(`${name}()`);
+  BGO.force_reload_page();
+};
+
 function checkSuccessful(data) {
   return data.error === undefined;
 }

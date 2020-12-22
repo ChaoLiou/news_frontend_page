@@ -1,8 +1,16 @@
 <template>
   <div class="b-recommend-ad-block">
-    <b-horizontal-scroll>
+    <b-horizontal-scroll
+      :loading="loading"
+      :placeholder-style="{
+        height: '325px',
+        width: '200px',
+        marginRight: '16px',
+        borderRadius: '16px',
+      }"
+    >
       <template v-for="(item, index) in source">
-        <b-ad-card :key="index" :data="item" />
+        <b-ad-card :key="index" :data="item" @navigate="navigate" />
       </template>
     </b-horizontal-scroll>
   </div>
@@ -35,11 +43,18 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      loading: true,
       source: [],
     };
   },
   methods: {
+    navigate(data) {
+      /**
+       * 點擊廣告
+       * @property {Object} data 廣告資料, 結構如同 [BAdCard](#badcard) 的 data property
+       */
+      this.$emit("navigate", data);
+    },
     async load(keyword) {
       try {
         this.loading = true;

@@ -72,6 +72,6 @@ export default {
   build: {},
   router: {
     mode: "hash",
-    middleware: ["env", "serverEnv", "event"]
+    middleware: ["env", "serverEnv", "appCache", "event"]
   }
 };
