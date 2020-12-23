@@ -7,6 +7,7 @@ a {
 }
 body {
   width: 100%;
+  margin-bottom: 50px;
 }
 body,
 p {
@@ -141,6 +142,7 @@ iframe[src^="https://www.youtube.com/embed/"] {
   z-index: 999;
   background-color: #fafafa;
   display: grid;
+  height: 50px;
   grid-template-columns: repeat(2, calc(50% - 0.5px));
 }
 .tool-menu > div {

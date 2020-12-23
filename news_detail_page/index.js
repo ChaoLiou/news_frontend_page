@@ -212,7 +212,6 @@ function initRecommendAdBlock(news) {
     },
     methods: {
       navigate(data) {
-        console.log({ data });
         checkAppExist(
           () => {
             openFullH5Webview(data.link, data.title, AD.officialAccountId);
