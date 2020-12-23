@@ -30,9 +30,7 @@ export default Object.assign(config, {
       size: ["default", "medium", "high", "standard", "maxres"][3]
     },
     AD: {
-      officialAccountId:
-        process.env.AD_OFFICIAL_ACCOUNT_ID ||
-        "690c8cba53934c138e997f7685e98412_oa"
+      officialAccountId: "690c8cba53934c138e997f7685e98412_oa"
     },
     DEBUG_MODE: false
   }
