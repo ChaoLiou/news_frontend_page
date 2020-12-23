@@ -68,7 +68,7 @@ export const formatVideo = x => {
       ? new Date(x.src_start_ymdt_unix)
       : undefined,
     source: {
-      img: "/news_detail_img_default.png",
+      img: x.src_site.SiteIconURL,
       title: x.src_site.name
     },
     views: x.youtube_data.ViewCount,
