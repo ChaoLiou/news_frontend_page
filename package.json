@@ -7,18 +7,19 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "npm run pre-build && nuxt generate --fail-on-error",
-    "pre-build": "npm run build:packages && npm run build:detail",
+    "pre-build": "npm run generate:version && npm run build:packages && npm run build:detail",
     "build:packages": "npm run build:package:BRecommendNewsBlock && npm run build:package:BRecommendAdBlock",
     "build:package:BRecommendNewsBlock": "vue-cli-service build --target lib --dest static/packages/b-recommend-news-block --name BRecommendNewsBlock --filename index --inline-vue --formats umd-min components/packages/BRecommendNewsBlock.vue",
     "build:package:BRecommendAdBlock": "vue-cli-service build --target lib --dest static/packages/b-recommend-ad-block --name BRecommendAdBlock --filename index --inline-vue --formats umd-min components/packages/BRecommendAdBlock.vue",
     "build:detail": "webpack --progress --config news_detail_page/webpack.config.js",
     "build:tracker": "webpack --progress --config beanfun_tracker/webpack.config.js",
     "generate:supplier": "npm run pre-build:supplier && nuxt generate --fail-on-error --config-file nuxt.config.dev.js",
-    "pre-build:supplier": "npm run build:packages && npm run build:detail:supplier",
+    "pre-build:supplier": "npm run generate:version &&npm run build:packages && npm run build:detail:supplier",
     "build:detail:supplier": "webpack --progress --config news_detail_page/webpack.config.js --env development",
     "test": "jest",
     "styleguide": "vue-styleguidist server",
-    "styleguide:build": "vue-styleguidist build"
+    "styleguide:build": "vue-styleguidist build",
+    "generate:version": "node version/index.js"
   },
   "dependencies": {
     "@analytics/snowplow": "^0.2.1",
