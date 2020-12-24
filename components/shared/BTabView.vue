@@ -1,24 +1,32 @@
 <template>
   <div class="b-tab-view">
     <div
-      ref="tabs"
-      class="b-tab-view__tabs"
+      ref="tabBar"
+      class="b-tab-view__tab-bar"
       :style="{ gridTemplateColumns: `repeat(${source.length}, max-content)` }"
     >
       <div
         :class="[
           'b-tab-view__tab',
-          selected(item) ? 'b-tab-view__tab_selected' : '',
+          isSelected(item) ? 'b-tab-view__tab_selected' : '',
         ]"
         v-for="(item, index) in source"
         :key="`tab-${index}`"
         @click="switchTab(item)"
       >
+        <!--
+        @slot 頁籤項目
+        @binding {Object} item 結構如同 source 陣列中的物件
+        -->
         <slot name="tab" :item="item" />
       </div>
     </div>
-    <div class="b-tab-view__tab-items">
+    <div class="b-tab-view__view">
       <div>
+        <!--
+        @slot 頁籤內容
+        @binding {Object} item 已選取的頁籤, 結構如同 source 陣列中的物件
+        -->
         <slot name="tab-item" :item="selectedTab" />
       </div>
     </div>
@@ -26,13 +34,26 @@
 </template>
 
 <script>
+/**
+ * 分頁檢視
+ */
 export default {
   props: {
+    /**
+     * 分頁項目的物件陣列, 可自訂結構
+     */
     source: {
       type: Array,
       default() {
         return [];
       },
+    },
+    /**
+     * 在自訂結構的物件中, 從中選出一個 key 用於識別分頁項目(若使用預設值 `"id"`, 請確認自訂結構中有此屬性且是唯一值)
+     */
+    identifierKey: {
+      type: String,
+      default: "id",
     },
   },
   data() {
@@ -41,16 +62,35 @@ export default {
     };
   },
   mounted() {
-    const tabs = this.$refs.tabs;
-    this.$emit("ready", { tabsHeight: tabs.offsetHeight });
+    const tabBar = this.$refs.tabBar;
+    if (tabBar) {
+      /**
+       * TabView mounted
+       * @property {Object} tabInfo { tabBarDOM: tab bar 的 dom, selectedTab: 已選取的 tab }
+       */
+      this.$emit("ready", { tabBarDOM: tabBar, selectedTab: this.selectedTab });
+    }
   },
   methods: {
     switchTab(item) {
-      this.selectedTab = item;
-      this.$router.history.push({ name: this.name, hash: `#${item.id}` });
+      if (this.selectedTab[this.identifierKey] !== item[this.identifierKey]) {
+        /**
+         * 切換頁籤
+         * @property {Object} item 已選取的 tab, 自訂結構
+         */
+        this.$emit("switch-tab", item);
+        this.selectedTab = item;
+        this.$router.history.push({
+          name: this.name,
+          hash: `#${item[this.identifierKey]}`,
+        });
+      }
     },
-    selected(item) {
-      return this.selectedTab && this.selectedTab.id === item.id;
+    isSelected(item) {
+      return (
+        this.selectedTab &&
+        this.selectedTab[this.identifierKey] === item[this.identifierKey]
+      );
     },
   },
   watch: {
@@ -59,10 +99,10 @@ export default {
       handler(value) {
         if (!value || value.length === 0) return;
 
-        const hash = this.$route.hash;
-        if (hash) {
+        if (this.$route && this.$route.hash) {
+          const hash = this.$route.hash;
           const id = parseInt(hash.substr(1));
-          const target = value.find((x) => id === x.id);
+          const target = value.find((x) => id === x[this.identifierKey]);
           if (target) {
             this.selectedTab = target;
             return;
@@ -79,7 +119,7 @@ export default {
 .b-tab-view {
   position: relative;
 }
-.b-tab-view__tabs {
+.b-tab-view__tab-bar {
   display: grid;
   width: 100%;
   overflow-x: scroll;
@@ -88,10 +128,13 @@ export default {
   top: 0px;
   left: 0px;
   z-index: 99;
-  background-color: white;
+  background-color: #ffffff;
 }
 .b-tab-view__tab {
   margin: 6.5px 15px;
+}
+.b-tab-view__tab:hover {
+  cursor: pointer;
 }
 .b-tab-view__tab > *:first-child {
   font-size: 1.2em;

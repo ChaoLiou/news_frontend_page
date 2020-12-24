@@ -24,25 +24,46 @@ import BHorizontalScroll from "../shared/BHorizontalScroll";
 import { get } from "./../../assets/js/fetchAPI";
 import { formatProduct } from "../../assets/js/recommendation/formatter";
 import { actions } from "../../store/api/news";
-
+/**
+ * 推薦廣告區塊
+ */
 export default {
   components: {
     BAdCard,
     BHorizontalScroll,
   },
   props: {
+    /**
+     * api 前綴, e.g. `https://your.api.origin/vn`
+     */
+    apiPrefix: {
+      type: String,
+      default: "",
+    },
+    /**
+     * 推薦 api 前綴, e.g. `https://your.api.origin/vn`
+     */
     recommendationApiPrefix: {
       type: String,
       default: "",
     },
+    /**
+     * 啟用推薦 api
+     */
     recommendationEnabled: {
       type: Boolean,
       default: true,
     },
-    newsTitle: {
+    /**
+     * 以關鍵字取得廣告
+     */
+    keyword: {
       type: String,
       default: "",
     },
+    /**
+     * 標題文字
+     */
     titleText: {
       type: String,
       default: "",
@@ -74,7 +95,9 @@ export default {
             },
             this.recommendationApiPrefix
           );
-          this.source = (res.products || []).map(formatProduct);
+          if (res && Array.isArray(res.products)) {
+            this.source = res.products.map(formatProduct);
+          }
         }
         this.loading = false;
       } catch (error) {
@@ -83,10 +106,12 @@ export default {
     },
   },
   watch: {
-    newsTitle: {
+    keyword: {
       immediate: true,
       handler(value) {
-        this.load(value);
+        if (value) {
+          this.load(value);
+        }
       },
     },
   },

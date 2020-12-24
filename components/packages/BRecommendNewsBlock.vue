@@ -3,11 +3,15 @@
     <div>
       <b-masonry-scroll
         :loading="loading"
-        :items="source"
+        :source="source"
+        :triggerable-predicate="(x) => !x.recommendation"
+        :placeholder-style="{
+          borderRadius: '20px',
+        }"
         @load-more="loadMore"
       >
         <template #default="props">
-          <b-news :data="props.item" @navigate="navigate" auto-img-height />
+          <b-news-card :data="props.item" @navigate="navigate" />
         </template>
         <template #nomore>沒有更多新聞了</template>
       </b-masonry-scroll>
@@ -16,45 +20,66 @@
 </template>
 
 <script>
-import { formatNews } from "./../../assets/js/formatter";
-import bMasonryScroll from "../shared/BMasonryScroll";
-import bNews from "../BPlanet/BNewsBlock/BNews";
-import { openFullH5Webview } from "./../../assets/js/beanfun";
-import { generateUUID, getQueryString } from "./../../assets/js/utils";
+import BMasonryScroll from "../shared/BMasonryScroll";
+import BNewsCard from "../BPlanet/BNewsBlock/BNewsCard";
 import { get } from "./../../assets/js/fetchAPI";
 import { actions } from "../../store/api/news";
+import { formatNews } from "./../../assets/js/formatter";
 import { formatNews as formatRecommendationNews } from "../../assets/js/recommendation/formatter";
-
+/**
+ * 推薦新聞區塊
+ */
 export default {
   components: {
-    bMasonryScroll,
-    bNews,
+    BMasonryScroll,
+    BNewsCard,
   },
   props: {
+    /**
+     * api 前綴, e.g. `https://your.api.origin/vn`
+     */
     apiPrefix: {
       type: String,
       default: "",
     },
+    /**
+     * 推薦服務的 api 前綴, e.g. `https://your.api.origin/vn`
+     */
     recommendationApiPrefix: {
       type: String,
       default: "",
     },
+    /**
+     * 啟用推薦服務
+     */
     recommendationEnabled: {
       type: Boolean,
       default: true,
     },
+    /**
+     * 新聞內頁的新聞 Id
+     */
     newsId: {
       type: String,
       default: "",
     },
+    /**
+     * 新聞內頁的新聞所屬星球 Id
+     */
     planetId: {
       type: String,
       default: "",
     },
+    /**
+     * 語言
+     */
     lang: {
       type: String,
-      default: "",
+      default: "zh_TW",
     },
+    /**
+     * 國家地區
+     */
     country: {
       type: String,
       default: "",
@@ -74,26 +99,12 @@ export default {
         this.apiPrefix
       ).then((res) => (this.planets = res.data));
     },
-    getPlanetTitle(planetId) {
-      console.log({ planets: this.planets, planetId });
-      const planet = this.planets.find((x) => x.id === planetId);
-      return planet ? planet.name : "星球";
-    },
     navigate(data) {
-      const { session_id, action_index } = getQueryString();
-      let new_session_id, new_action_index;
-      if (session_id && action_index) {
-        new_session_id = session_id;
-        new_action_index = parseInt(action_index) + 1;
-      } else {
-        new_session_id = generateUUID();
-        new_action_index = 0;
-      }
-      this.$emit("navigate", {
-        data,
-        session_id: new_session_id,
-        action_index: new_action_index,
-      });
+      /**
+       * 點擊新聞
+       * @property {Object} data 新聞資料, 結構如同 [BNewsCard](#bnewscard) 的 data property
+       */
+      this.$emit("navigate", data);
     },
     init() {
       this.loading = true;
@@ -142,8 +153,8 @@ export default {
           `lang=${this.lang}&` +
           `country=${this.country}`;
         const res = await get(apiRelative, this.apiPrefix);
-        list.push(...res.data.map(formatNews));
-
+        const pagelist = res.data.map(formatNews);
+        list.push(...pagelist);
         this.loadMoreNews(list, pageIndex);
       } catch (error) {
         console.error(error);

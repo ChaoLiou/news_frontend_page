@@ -3,8 +3,8 @@ import config from "./nuxt.config.base";
 export default Object.assign(config, {
   env: {
     BASE_URL: {
-      backendApi: "https://753f40f86863.ngrok.io/v1",
-      trackingApi: "https://fb1b2bcc52bd.ngrok.io/v1",
+      backendApi: "https://stg-news-api.beanfun.com/v1",
+      trackingApi: "https://stg-news-api.beanfun.com/v1",
       recommendationApi: "https://stg-news-api.beanfun.com/v1"
     },
     RECOMMENDATION_ENABLED: {
@@ -12,15 +12,13 @@ export default Object.assign(config, {
       product: true
     },
     TRACKING_EVENT: {
-      appVer: "1.0.0",
-      appBuild: 1,
       trackingVer: "0.07"
     },
     BUILD: {
       builtAt: new Date().toLocaleString(),
       version: "abcdefghijklmnopqrstuvwxyz"
     },
-    VENDOR_STAGE: {
+    SUPPLIER: {
       enabled: true,
       detailUrls: [
         "articles/tw/1/1329628436708200448/detail.html",
@@ -35,6 +33,7 @@ export default Object.assign(config, {
     AD: {
       officialAccountId: "690c8cba53934c138e997f7685e98412_oa"
     },
-    DEBUG_MODE: true
+    APP_DEBUG_MODE: true,
+    TRACKER_DEBUG_MODE: true
   }
 });

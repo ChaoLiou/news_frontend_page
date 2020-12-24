@@ -1,5 +1,4 @@
 import { get } from "../../assets/js/fetchAPI";
-import { getCategoryIdByPlanetId } from "../../assets/js/recommendation/index";
 
 export const actions = {
   async fetch(
@@ -17,27 +16,26 @@ export const actions = {
   async fetchRecommendation(
     _,
     { limit = 20, planetId, newsId, openId, keyword },
-    recommendationApiPrefix
+    apiPrefix
   ) {
     let apiRelative = `recommendation/`;
     if (keyword) {
       apiRelative += `stringToProduct?limit=${limit}&string=${keyword}`;
     } else {
-      const categoryId = getCategoryIdByPlanetId(planetId);
       if (newsId) {
-        apiRelative += `newsToNews?limit=${limit}&categoryId=${categoryId}&newsId=${newsId}`;
+        apiRelative += `newsToNews?limit=${limit}&categoryId=${planetId}&newsId=${newsId}`;
       } else if (openId) {
-        apiRelative += `userToNews?limit=${limit}&categoryId=${categoryId}&openid=${openId}`;
+        apiRelative += `userToNews?limit=${limit}&categoryId=${planetId}&openid=${openId}`;
       } else {
-        console.log("[fetchRecommendation] empty keyword, newsId and openId");
+        console.error(
+          `[store/api/news:fetchRecommendation] keyword, newsId or openId required`
+        );
         return;
       }
     }
     return await get(
       apiRelative,
-      recommendationApiPrefix
-        ? recommendationApiPrefix
-        : process.env.BASE_URL.recommendationApi
+      apiPrefix ? apiPrefix : process.env.BASE_URL.recommendationApi
     );
   }
 };

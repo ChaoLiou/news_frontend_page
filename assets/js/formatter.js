@@ -12,14 +12,13 @@ export const formatNews = x => {
       name: rss.name,
       logoImage: rss.icon_image_path
     },
-    categories,
-    planets,
+    categories: categories.map(c => ({ name: c.name })),
     representativePlanet: planets.length > 0 ? planets[0] : {},
     link: x.article_path,
     externalLink: x.src_url,
     publishTimeUnix: x.src_publish_time_unix,
     updateTimeUnix: x.src_update_time_unix,
-    description: x.description
+    recommendation: false
   };
 };
 
@@ -50,20 +49,21 @@ export const formatNumber = (x, shortenOptions) => {
 
 export const formatVideo = x => {
   const categories = x.NewsSubCategory ? x.NewsSubCategory : [];
-  const planets = categories.map(c => c.NewsMainBanner);
+  const planets = categories
+    .map(c => c.NewsMainBanner)
+    .map(p => ({ id: p.id }));
   const thumbnails =
     x.Images && x.Images.length > 0
       ? JSON.parse(x.Images[0].src_thumbnails)
       : {};
+  const representativePlanet = planets.length > 0 ? planets[0] : {};
   return {
     id: x.id,
     youtubeId: x.youtube_data.ID,
     img: thumbnails[process.env.VIDEO_IMAGE.size],
     title: x.src_title,
-    categories,
     planets,
-    representativePlanet: planets.length > 0 ? planets[0] : {},
-    link: x.src_url,
+    representativePlanet: { name: representativePlanet.name },
     datetime: x.src_start_ymdt_unix
       ? new Date(x.src_start_ymdt_unix)
       : undefined,

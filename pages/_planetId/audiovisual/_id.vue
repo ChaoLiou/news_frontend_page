@@ -1,12 +1,10 @@
 <template>
   <div class="_planet-audiovisual-index">
-    <b-audiovisual-block :top-priority-id="id" :planetId="planetId" masonry />
+    <b-audiovisual-block :top-priority-id="id" :planetId="planetId" vertical />
   </div>
 </template>
 
 <script>
-import audiovisuals from "@/assets/json/fake/audiovisual.json";
-
 export default {
   data() {
     return {
@@ -24,5 +22,5 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 </style>

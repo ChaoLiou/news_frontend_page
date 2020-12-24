@@ -29,14 +29,20 @@
 </template>
 
 <script>
+import VueTypes from "vue-types";
+/**
+ * 廣告卡片
+ */
 export default {
   props: {
-    data: {
-      type: Object,
-      default() {
-        return {};
-      },
-    },
+    data: VueTypes.shape({
+      img: VueTypes.string, // 廣告圖片
+      title: VueTypes.string, // 廣告標題
+      link: VueTypes.string, // 廣告連結
+      salePrice: VueTypes.integer, // 廣告折扣價
+      price: VueTypes.integer, // 廣告原價
+      discounted: VueTypes.bool, // 是否折扣
+    }),
   },
   computed: {
     img() {
@@ -53,6 +59,10 @@ export default {
   },
   methods: {
     navigate() {
+      /**
+       * 點擊廣告
+       * @property {Object} data 廣告資料, 結構如同 data property
+       */
       this.$emit("navigate", this.data);
     },
   },

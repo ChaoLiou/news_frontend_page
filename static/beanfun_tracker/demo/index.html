@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <title>beanfun_tracker</title>
+    <script src="https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beanfun.min.js"></script>
+    <script src="/beanfun_tracker/sdk/beanfun_tracker-0.01.min.js"></script>
+    <script src="/beanfun_tracker/demo/app.js"></script>
+    <script src="/beanfun_tracker/snowplow/init.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css"
+    />
+    <style>
+      .markdown-body {
+        box-sizing: border-box;
+        min-width: 200px;
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 45px;
+      }
+    </style>
+  </head>
+  <body class="markdown-body">
+    <div>
+      <ul>
+        <li><a href="#initialization">初始化</a></li>
+        <li>
+          <a href="#creation">建立 Tracker</a>
+          <ul>
+            <li><a href="#creation-snowplow">建立 Snowplow Tracker</a></li>
+            <li><a href="#creation-beanfun">建立 Beanfun Tracker</a></li>
+            <li><a href="#creation-ga">建立 Google Analytics Tracker</a></li>
+          </ul>
+        </li>
+        <li><a href="#sending-event">送出 Event</a></li>
+        <li>
+          <a href="#additional-features">Beanfun Tracker 需額外實作功能</a>
+        </li>
+        <li>
+          <a href="#tracker-types">Tracker Types</a>
+        </li>
+      </ul>
+    </div>
+    <div id="initialization">
+      <h1>初始化</h1>
+      <div>
+        <pre>
+function initTracker(userId, openId, trackingVersion, logEnabled)
+        </pre>
+        <table>
+          <tr>
+            <th align="left">參數名稱</th>
+            <th align="left">型態</th>
+            <th align="left">描述</th>
+          </tr>
+          <tr>
+            <td>userId</td>
+            <td>Long</td>
+            <td>beanfun 使用者的 snowflake ID</td>
+          </tr>
+          <tr>
+            <td>openId</td>
+            <td>String</td>
+            <td>beanfun 使用者的 Openid</td>
+          </tr>
+          <tr>
+            <td>trackingVersion</td>
+            <td>String</td>
+            <td>使用的 event 版本</td>
+          </tr>
+          <tr>
+            <td>logEnabled</td>
+            <td>Boolean</td>
+            <td>
+              是否打開除錯訊息，如果是，則把除錯訊息都印在
+              console.log，反之則不輸出
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div id="creation">
+      <h1>建立 Tracker</h1>
+      <div>
+        <div id="creation-snowplow">
+          <h2>建立 Snowplow Tracker</h2>
+          <pre>
+function addSnowplowTracker(trackingGroup, serverUrl, verifyKey)
+          </pre>
+          <table>
+            <tr>
+              <th align="left">參數名稱</th>
+              <th align="left">型態</th>
+              <th align="left">描述</th>
+            </tr>
+            <tr>
+              <td>trackingGroup</td>
+              <td>String</td>
+              <td>
+                將這個 tracker 放到指定的 group 中，group name 可以自己取名字
+              </td>
+            </tr>
+            <tr>
+              <td>serverUrl</td>
+              <td>String</td>
+              <td>Snowplow 的 server URL</td>
+            </tr>
+            <tr>
+              <td>verifyKey</td>
+              <td>String</td>
+              <td>用來確認 event 是否合法的 token</td>
+            </tr>
+          </table>
+        </div>
+        <div id="creation-beanfun">
+          <h2>建立 Beanfun Tracker</h2>
+          <pre>
+function addBeanfunTracker(trackingGroup, serverUrl, oaid, officialAccountAccessToken)
+          </pre>
+          <table>
+            <tr>
+              <th align="left">參數名稱</th>
+              <th align="left">型態</th>
+              <th align="left">描述</th>
+            </tr>
+            <tr>
+              <td>trackingGroup</td>
+              <td>String</td>
+              <td>
+                將這個 tracker 放到指定的 group 中，group name 可以⾃⼰取名字
+              </td>
+            </tr>
+            <tr>
+              <td>serverUrl</td>
+              <td>String</td>
+              <td>beanfun! Event Tracker 的 URL</td>
+            </tr>
+            <tr>
+              <td>oaid</td>
+              <td>String</td>
+              <td>beanfun! 核發的 h5 oaid</td>
+            </tr>
+            <tr>
+              <td>officialAccountAccessToken</td>
+              <td>String</td>
+              <td>beanfun! 核發的 oaid token</td>
+            </tr>
+          </table>
+        </div>
+        <div id="creation-ga">
+          <h2>建立 Google Analytics Tracker</h2>
+          <pre>
+function addGATracker(trackingGroup, trackingId)
+          </pre>
+          <table>
+            <tr>
+              <th align="left">參數名稱</th>
+              <th align="left">型態</th>
+              <th align="left">描述</th>
+            </tr>
+            <tr>
+              <td>trackingGroup</td>
+              <td>String</td>
+              <td>
+                將這個 tracker 放到指定的 group 中，group name 可以自己取名字
+              </td>
+            </tr>
+            <tr>
+              <td>trackingId</td>
+              <td>String</td>
+              <td>GA 提供的 Tracking ID，通常為 UA 開頭的一組字串</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="sending-event">
+      <h1>送出 Event</h1>
+      <div>
+        <pre>
+- (void)trackEvent(eventId, eventCategory, eventAction, payload, trackerType, trackingName)
+        </pre>
+        <table>
+          <tr>
+            <th align="left">參數名稱</th>
+            <th align="left">型態</th>
+            <th align="left">描述</th>
+          </tr>
+          <tr>
+            <td>eventId</td>
+            <td>Int</td>
+            <td>event 的 ID</td>
+          </tr>
+          <tr>
+            <td>eventCategory</td>
+            <td>String</td>
+            <td>event 的分類，例如：chatroom</td>
+          </tr>
+          <tr>
+            <td>eventAction</td>
+            <td>String</td>
+            <td>Event 被觸發的動作，例如：enter、click</td>
+          </tr>
+          <tr>
+            <td>payload</td>
+            <td>JSON</td>
+            <td>
+              該 event 相關的額外資訊，例如：chatroom_title、chatroom_id
+            </td>
+          </tr>
+          <tr>
+            <td>trackerType</td>
+            <td>Bitwise(<a href="#tracker-types">Tracker Types</a>)</td>
+            <td>
+              要送出的目的地，目前有：SNOWPLOW、BEANFUN、GA 和 ALL
+            </td>
+          </tr>
+          <tr>
+            <td>trackingGroup</td>
+            <td>String</td>
+            <td>
+              要使用哪個 tracker 名稱的 tracker 來送出 event
+            </td>
+          </tr>
+        </table>
+
+        <blockquote>
+          不同⽬的地的 tracker 會有相同的 trackingGroup，透過 trackerType
+          來決定要送往何處；⽽ trackingGroup 是為了切開在同⼀個 application
+          內的不同單位/平台的 event，例如: beanfun! app 內會有 beanfun! event 和
+          gameplay event 兩種平台會送往不同的 server 或 account
+        </blockquote>
+      </div>
+    </div>
+    <div id="additional-features">
+      <h1>Beanfun Tracker 需額外實作功能</h1>
+      <div>
+        <blockquote>
+          1. Fail-Retry，需接收 response 為 201
+          才代表送出成功；否則就必須在每次有新的 event 產生時，re-send 未送出的
+          event
+        </blockquote>
+      </div>
+    </div>
+    <div id="tracker-types">
+      <h1>Tracker Types</h1>
+      <pre>
+TYPE: {
+  SNOWPLOW,
+  BEANFUN,
+  GA,
+  ALL // same as SNOWPLOW | BEANFUN | GA
+}
+
+e.g. TYPE.SNOWPLOW                  // if send to Snowplow
+e.g. TYPE.SNOWPLOW | TYPE.BEANFUN   // if send to Snowplow and Beanfun
+e.g. TYPE.ALL                       // if send to all types
+      </pre>
+    </div>
+  </body>
+</html>

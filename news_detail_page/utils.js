@@ -17,7 +17,9 @@ export const includeScriptSources = scripts => {
         );
         if (counter === max) {
           console.log(`${script.group}Onload`);
-          script.onload();
+          if (script.onload) {
+            script.onload();
+          }
         }
       };
       headDOM.append(scriptDOM);

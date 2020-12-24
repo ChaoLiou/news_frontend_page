@@ -31,16 +31,16 @@ export const hideVConsole = () => {
   }, 100);
 };
 
-export const enableVConsole = () => {
+export const showVConsole = () => {
   const vConsoleDOM = document.querySelector("#__vconsole");
   if (vConsoleDOM) {
     vConsoleDOM.classList.remove("hidden");
   }
 };
 
-export const getVendorStageDetailUrl = (
+export const getSupplierDetailUrl = (
   url,
-  urls = process.env.VENDOR_STAGE.detailUrls
+  urls = process.env.SUPPLIER.detailUrls
 ) => {
   url = url.replace(/^\//, "");
   const list = urls.filter(x => x !== url);
@@ -49,4 +49,11 @@ export const getVendorStageDetailUrl = (
 
 export const replaceNewLineToBr = text => {
   return text.replace(/\n/g, "<br />");
+};
+
+export const getHashModeOrigin = $router => {
+  const isHashMode = $router.mode === "hash";
+  if (isHashMode) {
+    return `${location.origin}/#`;
+  }
 };

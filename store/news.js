@@ -1,7 +1,7 @@
 import { dispatchWrapper, commitWrapper } from "@/assets/js/vuex-utils";
 import { formatNews } from "@/assets/js/formatter";
 import { formatNews as formatRecommendationNews } from "@/assets/js/recommendation/formatter";
-const { openId: testingOpenId } = process.env.VENDOR_STAGE;
+const { openId: testingOpenId } = process.env.SUPPLIER;
 const name = "news";
 
 export const getters = {

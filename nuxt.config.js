@@ -14,15 +14,13 @@ export default Object.assign(config, {
       product: process.env.RECOMMENDATION_ENABLED_PRODUCT !== false
     },
     TRACKING_EVENT: {
-      appVer: process.env.APP_VER || "1.0.0",
-      appBuild: process.env.APP_BUILD || 1,
       trackingVer: process.env.TRACKING_VER || "0.07"
     },
     BUILD: {
       builtAt: new Date().toLocaleString(),
       version: process.env.BUILD_VERSION || "abcdefghijklmnopqrstuvwxyz"
     },
-    VENDOR_STAGE: {
+    SUPPLIER: {
       enabled: false,
       detailUrls: [],
       openId: ""
@@ -35,6 +33,7 @@ export default Object.assign(config, {
         process.env.AD_OFFICIAL_ACCOUNT_ID ||
         "690c8cba53934c138e997f7685e98412_oa"
     },
-    DEBUG_MODE: false
+    APP_DEBUG_MODE: true,
+    TRACKER_DEBUG_MODE: true
   }
 });

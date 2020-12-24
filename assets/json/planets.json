@@ -2,7 +2,7 @@
   {
     "id": 1,
     "link": "/video-game",
-    "contentTypes": [
+    "blocks": [
       {
         "id": "audiovisual",
         "title": "電星影音"
@@ -16,7 +16,7 @@
   {
     "id": 2,
     "link": "/chill",
-    "contentTypes": [
+    "blocks": [
       {
         "id": "audiovisual",
         "title": "鬆一個影音"
@@ -30,7 +30,7 @@
   {
     "id": 3,
     "link": "/current-news",
-    "contentTypes": [
+    "blocks": [
       {
         "id": "audiovisual",
         "title": "快充影音"

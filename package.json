@@ -12,23 +12,30 @@
     "build:package:BRecommendNewsBlock": "vue-cli-service build --target lib --dest static/packages/b-recommend-news-block --name BRecommendNewsBlock --filename index --inline-vue --formats umd-min components/packages/BRecommendNewsBlock.vue",
     "build:package:BRecommendAdBlock": "vue-cli-service build --target lib --dest static/packages/b-recommend-ad-block --name BRecommendAdBlock --filename index --inline-vue --formats umd-min components/packages/BRecommendAdBlock.vue",
     "build:detail": "webpack --progress --config news_detail_page/webpack.config.js",
-    "generate:infostrum": "npm run pre-build:infostrum && nuxt generate --fail-on-error --config-file nuxt.config.dev.js",
-    "pre-build:infostrum": "npm run build:packages && npm run build:detail:infostrum",
-    "build:detail:infostrum": "webpack --progress --config news_detail_page/webpack.config.js --env development",
-    "test": "jest"
+    "build:tracker": "webpack --progress --config beanfun_tracker/webpack.config.js",
+    "generate:supplier": "npm run pre-build:supplier && nuxt generate --fail-on-error --config-file nuxt.config.dev.js",
+    "pre-build:supplier": "npm run build:packages && npm run build:detail:supplier",
+    "build:detail:supplier": "webpack --progress --config news_detail_page/webpack.config.js --env development",
+    "test": "jest",
+    "styleguide": "vue-styleguidist server",
+    "styleguide:build": "vue-styleguidist build"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
-    "nuxt": "^2.14.0"
+    "@analytics/snowplow": "^0.2.1",
+    "analytics": "^0.6.2",
+    "core-js": "^3.8.1",
+    "nuxt": "^2.14.12",
+    "vue-types": "^2.0.2"
   },
   "devDependencies": {
-    "@vue/cli-service": "^4.5.7",
-    "vue-template-compiler": "^2.6.12",
-    "webpack-cli": "^4.0.0",
-    "@vue/test-utils": "^1.1.0",
+    "@vue/cli-service": "^4.5.9",
+    "@vue/test-utils": "^1.1.2",
     "babel-core": "7.0.0-bridge.0",
-    "babel-jest": "^26.5.0",
-    "jest": "^26.5.0",
-    "vue-jest": "^3.0.4"
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3",
+    "vue-jest": "^3.0.4",
+    "vue-styleguidist": "^4.34.2",
+    "vue-template-compiler": "^2.6.12",
+    "webpack-cli": "^4.2.0"
   }
 }

@@ -1,25 +1,42 @@
 <template>
   <div
+    class="b-news-tag"
     :class="{
-      'b-news-tag': true,
-      tagged: tagged,
+      'b-news-tag__selected': selected,
     }"
-    @click="$emit('toggle')"
+    @click="toggle"
   >
-    <div class="b-news-tag__title">{{ titleLabel }}</div>
+    <div class="b-news-tag__title">{{ titleText }}</div>
   </div>
 </template>
 
 <script>
+/**
+ * 新聞標籤
+ */
 export default {
   props: {
-    titleLabel: {
+    /**
+     * 標題文字
+     */
+    titleText: {
       type: String,
       default: "",
     },
-    tagged: {
+    /**
+     * 被選取
+     */
+    selected: {
       type: Boolean,
       default: false,
+    },
+  },
+  methods: {
+    toggle() {
+      /**
+       * 切換選取
+       */
+      this.$emit("toggle");
     },
   },
 };
@@ -30,11 +47,15 @@ export default {
   background-color: #fafafa;
   border-radius: 10px;
   line-height: 22px;
+  user-select: none;
 }
-.b-news-tag.tagged {
+.b-news-tag:hover {
+  cursor: pointer;
+}
+.b-news-tag__selected {
   background-color: #767676;
 }
-.b-news-tag.tagged .b-news-tag__title {
+.b-news-tag__selected .b-news-tag__title {
   color: #ffffff;
 }
 .b-news-tag__title {

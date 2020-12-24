@@ -18,14 +18,16 @@ export const formatNews = x => {
       name: rss.name,
       logoImage: rss.fetch_icon_url
     },
-    categories,
-    planets,
+    categories: categories.map(c => ({ name: c.name })),
     representativePlanet: planets.length > 0 ? planets[0] : {},
     link: x.article_path,
     externalLink: x.src_url,
-    publishTimeUnix: x.src_publish_time_unix,
-    updateTimeUnix: x.src_update_time_unix,
-    description: x.description,
+    publishTimeUnix: x.src_publish_time_unix
+      ? parseInt(x.src_publish_time_unix)
+      : 0,
+    updateTimeUnix: x.src_update_time_unix
+      ? parseInt(x.src_update_time_unix)
+      : 0,
     recommendation: true
   };
 };

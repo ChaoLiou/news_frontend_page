@@ -40,6 +40,10 @@ export default {
         src:
           "https://beangochat.blob.core.windows.net/beango-static-prod/sdk/vconsole.min.js",
         group: "vconsole"
+      },
+      {
+        src: "/beanfun_tracker/sdk/beanfun_tracker-0.01.min.js",
+        group: "tracker"
       }
     ]
   },

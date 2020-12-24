@@ -1,5 +1,5 @@
 const baseUrl = process.env.BASE_URL;
-const debugMode = process.env.DEBUG_MODE;
+const debugMode = process.env.APP_DEBUG_MODE;
 
 async function fetchBase(apiRelative, { method, body }, apiPrefix = "") {
   const url = `${apiPrefix ? apiPrefix : baseUrl.backendApi}/${apiRelative}`;

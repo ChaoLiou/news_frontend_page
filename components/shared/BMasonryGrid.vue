@@ -1,29 +1,37 @@
 <template>
   <div class="b-masonry-scroll" :style="style">
     <b-masonry-proxy
-      v-for="(item, index) in items"
+      v-for="(item, index) in source"
       :key="index"
-      :class="{ 'trigger-loading-more': triggerable(index) }"
-      :trigger-loading-more="triggerable(index)"
+      :class="{ 'load-more-triggerable': triggerable(index) }"
+      :load-more-triggerable="triggerable(index)"
       :style="{
         gridRowEnd: getGridRowEnd(index),
       }"
-      @heightChanged="(height) => heightChanged(index, height)"
+      @height-changed="(height) => heightChanged(index, height)"
       @load-more="loadMore(index)"
     >
+      <!--
+      @slot 自訂項目
+      @binding {Object} item 自訂結構
+      -->
       <slot :item="{ ...item, index }"></slot>
     </b-masonry-proxy>
     <template v-if="loading">
       <div
         class="b-masonry-scroll__placeholder"
         :style="{
-          gridRowEnd: getGridRowEnd(index),
+          gridRowEnd: index % 2 === 0 ? 'span 11' : 'span 10',
+          ...placeholderStyle,
         }"
-        v-for="index in rowSpans.length"
+        v-for="index in 7"
         :key="`placeholder-${index}`"
       ></div>
     </template>
     <div class="b-masonry-scroll__no-more" v-else>
+      <!--
+          @slot 當沒有更多項目時顯示
+        -->
       <slot name="nomore" />
     </div>
   </div>
@@ -31,28 +39,52 @@
 
 <script>
 import BMasonryProxy from "../shared/BMasonryScroll/BMasonryProxy";
+/**
+ * Masonry 卷軸, 又稱作瀑布式排版(使用 css-grid)
+ */
 export default {
   components: {
     BMasonryProxy,
   },
   props: {
-    items: {
+    /**
+     * Scroll 項目的物件陣列, 可自訂結構
+     */
+    source: {
       type: Array,
       default() {
         return [];
       },
     },
+    /**
+     * 是否正在載入
+     */
     loading: {
       type: Boolean,
-      default: true,
+      default: false,
     },
+    /**
+     * 列數, 決定要有幾列 Masonry Scroll
+     */
     column: {
       type: Number,
       default: 2,
     },
-    autoAdjustHeight: {
+    /**
+     * 是否自動調整高度
+     */
+    autoHeight: {
       type: Boolean,
       default: true,
+    },
+    /**
+     * placeholder 的 css 樣式, 若 loading 為 true, 會採用此 style 顯示 placeholder
+     */
+    placeholderStyle: {
+      type: Object,
+      default() {
+        return {};
+      },
     },
   },
   data() {
@@ -64,20 +96,34 @@ export default {
     };
   },
   computed: {
+    heightWontChanged() {
+      return (
+        this.source.length > 0 &&
+        this.source.every((x) => x.height !== undefined)
+      );
+    },
     style() {
       return {
         gridTemplateColumns: `repeat(${this.column}, minmax(150px, 1fr))`,
-        gridAutoRows: this.autoAdjustHeight ? "10px" : undefined,
-        gridGap: this.autoAdjustHeight ? "10px" : undefined,
+        gridAutoRows: this.autoHeight || this.loading ? "10px" : undefined,
+        gridGap: this.autoHeight || this.loading ? "10px" : undefined,
       };
     },
   },
   mounted() {
-    this.rowSpans = Array.from({ length: this.items.length }, (v, i) => 0);
+    this.rowSpans = Array.from({ length: this.source.length }, (v, i) => 0);
+    this.init(this.source);
   },
   methods: {
+    init(source) {
+      if (this.heightWontChanged) {
+        source.forEach((item, index) => {
+          this.heightChanged(index, item.height);
+        });
+      }
+    },
     getGridRowEnd(index) {
-      if (this.autoAdjustHeight) {
+      if (this.autoHeight || this.loading) {
         return this.rowSpans.length > 0
           ? `span ${this.rowSpans[index] ? this.rowSpans[index] : "10"}`
           : `span 10`;
@@ -93,30 +139,35 @@ export default {
       this.$set(this.rowSpans, index, Math.ceil((height + 10) / 20));
     },
     loadMore(index) {
-      const targetIndex = (index + 1) * 2;
-      console.log({
-        index,
-        targetIndex,
-        pageIndex: this.pageIndex,
-        pageSize: this.pageSize,
-      });
+      const targetIndex = (index + 1) * this.column;
       const totals = this.pageIndex * this.pageSize;
       if (targetIndex === this.pageIndex * this.pageSize) {
-        this.$emit("load-more", {
-          pageSize: this.pageSize,
-          pageIndex: ++this.pageIndex,
-        });
+        this.emitLoadMore();
       } else if (targetIndex > totals) {
         const currentPageIndex = targetIndex / this.pageSize;
         Array.from(
           { length: currentPageIndex - this.pageIndex },
           () => {}
         ).forEach(() => {
-          this.$emit("load-more", {
-            pageSize: this.pageSize,
-            pageIndex: ++this.pageIndex,
-          });
+          this.emitLoadMore();
         });
+      }
+    },
+    emitLoadMore() {
+      /**
+       * 載入更多
+       * @property {object} pageInfo `{ pageSize, pageIndex }`, pageSize: 一頁有幾筆, pageIndex: 目前第幾頁
+       */
+      this.$emit("load-more", {
+        pageSize: this.pageSize,
+        pageIndex: ++this.pageIndex,
+      });
+    },
+  },
+  watch: {
+    source(value) {
+      if (value) {
+        this.init(value);
       }
     },
   },
@@ -133,14 +184,13 @@ export default {
   animation-iteration-count: infinite;
   animation-name: placeload;
   animation-timing-function: linear;
-  background: #f6f7f8;
-  background: #eeeeee;
   background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
   background-size: 1200px 104px;
   position: relative;
 }
 .b-masonry-scroll__no-more {
-  width: 100%;
+  grid-column: 1/-1;
+  justify-self: center;
   color: #00000081;
 }
 @keyframes placeload {

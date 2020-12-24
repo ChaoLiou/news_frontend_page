@@ -9,8 +9,7 @@ export const mutations = {
       token: env.Token,
       secret: env.Secret,
       clientId: env.ClientID,
-      widgetId: env.WidgetID,
-      newsFrontendPageBuildVersion: env.NewsFrontendPageBuildVersion
+      widgetId: env.WidgetID
     };
   }
 };

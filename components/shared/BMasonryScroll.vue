@@ -1,20 +1,26 @@
 <template>
   <div class="b-masonry-scroll" :style="style">
     <b-masonry-proxy
-      v-for="(item, index) in items"
+      v-for="(item, index) in source"
       :key="index"
       :class="{
         first: index === 0,
-        'trigger-loading-more': triggerable(index),
+        'load-more-triggerable':
+          triggerablePredicate(item) && triggerable(index),
       }"
-      :trigger-loading-more="triggerable(index)"
+      :load-more-triggerable="triggerablePredicate(item) && triggerable(index)"
       :style="{
         transform: getTranslateXY(index),
         width: `${itemWidth}px`,
+        height: getHeight(index),
       }"
-      @heightChanged="(height) => heightChanged(index, height)"
+      @height-changed="(height) => heightChanged(index, height)"
       @load-more="loadMore(index)"
     >
+      <!--
+      @slot 自訂項目
+      @binding {Object} item 自訂結構
+      -->
       <slot :item="{ ...item, index }"></slot>
     </b-masonry-proxy>
     <template v-if="loading">
@@ -34,12 +40,16 @@
             class="b-masonry-scroll__placeholder-item"
             v-for="jndex in 5 - index"
             :key="`placeholder-${index}-${jndex}`"
+            :style="placeholderStyle"
           ></div>
         </div>
       </div>
     </template>
     <template v-else>
       <div class="b-masonry-scroll__no-more">
+        <!--
+          @slot 當沒有更多項目時顯示
+        -->
         <slot name="nomore" />
       </div>
     </template>
@@ -48,33 +58,67 @@
 
 <script>
 import BMasonryProxy from "../shared/BMasonryScroll/BMasonryProxy";
+/**
+ * Masonry 卷軸, 又稱作瀑布式排版
+ */
 export default {
   components: {
     BMasonryProxy,
   },
   props: {
-    items: {
+    /**
+     * Scroll 項目的物件陣列, 可自訂結構
+     */
+    source: {
       type: Array,
       default() {
         return [];
       },
     },
+    /**
+     * 是否正在載入
+     */
     loading: {
       type: Boolean,
       default: true,
     },
+    /**
+     * 列數, 決定要有幾列 Masonry Scroll
+     */
     column: {
       type: Number,
       default: 2,
     },
-    autoAdjustHeight: {
-      type: Boolean,
-      default: true,
+    /**
+     * 篩選出可附加 `載入更多` 的項目, `(event: object): bool`
+     */
+    triggerablePredicate: {
+      type: Function,
+      default() {
+        return () => true;
+      },
+    },
+    /**
+     * Scroll 高度
+     */
+    scrollHeight: {
+      type: String,
+      default: "100vh",
+    },
+    /**
+     * placeholder 的 css 樣式, 若 loading 為 true, 會採用此 style 顯示 placeholder
+     */
+    placeholderStyle: {
+      type: Object,
+      default() {
+        return {};
+      },
     },
   },
   data() {
     return {
       itemHeights: [],
+      itemWidth: 0,
       itemTops: [],
       itemLefts: [],
       groups: [],
@@ -87,28 +131,44 @@ export default {
     };
   },
   computed: {
+    heightWontChanged() {
+      return (
+        this.source.length > 0 &&
+        this.source.every((x) => x.height !== undefined)
+      );
+    },
+    inactiveTotals() {
+      return this.source.filter((x) => !this.triggerablePredicate(x)).length;
+    },
     style() {
       return {
-        minHeight: "100vh",
+        minHeight: this.scrollHeight,
         height:
-          this.itemTops[this.items.length - 1] +
-          this.itemHeights[this.items.length - 1] +
+          this.itemTops[this.source.length - 1] +
+          this.itemHeights[this.source.length - 1] +
           (this.loading ? this.placeholderHeight : this.noMoreTextHeight) +
           "px",
       };
     },
-    itemWidth() {
-      return this.$el ? (this.$el.offsetWidth - this.gap) / 2 : 0;
-    },
   },
   mounted() {
-    this.groups = Array.from({ length: this.column }, (v, i) => ({
-      index: i,
-      maxHeight: 0,
-      left: i * (this.itemWidth + this.gap),
-    }));
+    this.init(this.source);
   },
   methods: {
+    init(source) {
+      if (this.heightWontChanged) {
+        source.forEach((item, index) => {
+          this.heightChanged(index, item.height);
+        });
+      }
+    },
+    getHeight(index) {
+      if (this.itemHeights.length > index) {
+        return `${this.itemHeights[index]}px`;
+      } else {
+        return "0px";
+      }
+    },
     getTranslateXY(index) {
       let x, y;
       if (index === 0) {
@@ -122,18 +182,29 @@ export default {
       return `translate(${x}px, ${y}px)`;
     },
     triggerable(index) {
-      return (index + 1) % (this.pageSize / 2) === 0;
+      const index1Base = index + 1;
+      if (index1Base > this.pageSize) {
+        return index1Base % (this.pageSize / 2) === 0;
+      } else {
+        return index1Base === this.pageSize;
+      }
     },
     reset() {
       this.pageIndex = 1;
     },
     heightChanged(index, height) {
       this.$set(this.itemHeights, index, height);
-      if (this.itemHeights.length === this.items.length) {
-        this.arrangeItems();
+      if (this.itemHeights.length === this.source.length) {
+        this.arrangeSource();
       }
     },
-    arrangeItems() {
+    arrangeSource() {
+      this.itemWidth = (this.$el.offsetWidth - this.gap) / this.column;
+      this.groups = Array.from({ length: this.column }, (v, i) => ({
+        index: i,
+        maxHeight: 0,
+        left: i * (this.itemWidth + this.gap),
+      }));
       this.itemHeights.forEach((height, index) => {
         if (index < this.column) {
           const group = this.groups[index];
@@ -164,8 +235,15 @@ export default {
     },
     loadMore(index) {
       const lastIndex = this.pageIndex * this.pageSize - 1;
-      const currentIndex = index + this.pageSize / 2;
+      const currentIndex =
+        index === this.pageSize - 1
+          ? index
+          : index - this.inactiveTotals + this.pageSize / 2;
       if (this.arranged && currentIndex === lastIndex) {
+        /**
+         * 載入更多
+         * @property {object} pageInfo `{ pageSize, pageIndex }`, pageSize: 一頁有幾筆, pageIndex: 目前第幾頁
+         */
         this.$emit("load-more", {
           pageSize: this.pageSize,
           pageIndex: ++this.pageIndex,
@@ -182,7 +260,6 @@ export default {
 }
 .b-masonry-proxy {
   position: absolute;
-  transition: "transform" 0.3s;
 }
 .b-masonry-proxy.first {
   z-index: 2;
@@ -207,14 +284,11 @@ export default {
   height: calc(100% + 80px);
 }
 .b-masonry-scroll__placeholder-item {
-  border-radius: 20px;
   animation-duration: 1.5s;
   animation-fill-mode: forwards;
   animation-iteration-count: infinite;
   animation-name: placeload;
   animation-timing-function: linear;
-  background: #f6f7f8;
-  background: #eeeeee;
   background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
   background-size: 1200px 104px;
 }

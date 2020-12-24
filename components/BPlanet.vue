@@ -1,53 +1,60 @@
 <template>
   <div class="b-planet">
-    <template v-for="(contentType, index) in planetConf.contentTypes">
+    <template v-for="(block, index) in blocks">
       <b-audiovisual-block
-        v-if="contentType.id === 'audiovisual'"
+        v-if="block.id === 'audiovisual'"
         :key="index"
-        :title-label="contentType.title"
-        :planet-id="planet.id"
-      />
-      <b-live-broadcast-block
-        v-else-if="contentType.id === 'livebroadcast'"
-        :key="index"
-        :title-label="contentType.title"
+        :title-text="block.title"
+        :planet-id="planetId"
       />
       <b-news-block
-        v-else-if="contentType.id === 'news'"
+        v-else-if="block.id === 'news'"
         :key="index"
-        :title-label="contentType.title"
-        :planet-id="planet.id"
-        :sticky-top="newsBlockTitleStickyTop"
+        :title-text="block.title"
+        :planet-id="planetId"
+        :sticky-top="newsBlockToolBarStickyTop"
       />
     </template>
   </div>
 </template>
 
 <script>
-import planetConf from "@/assets/json/planets.json";
-
+import planetConfigs from "./../assets/json/planets.json";
+/**
+ * 星球主頁內容, 包含兩區塊: 影音與新聞
+ */
 export default {
   props: {
-    planet: {
-      type: Object,
-      default() {
-        return undefined;
-      },
+    /**
+     * 星球 Id
+     */
+    planetId: {
+      type: Number,
+      default: -1,
     },
-    newsTags: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
-    newsBlockTitleStickyTop: {
+    /**
+     * 設定新聞區塊工具列需要 sticky 在 top 多少的位置
+     */
+    newsBlockToolBarStickyTop: {
       type: Number,
       default: 0,
     },
   },
   computed: {
-    planetConf() {
-      return planetConf.find((p) => p.id === this.planet.id);
+    blocks() {
+      const target = planetConfigs.find((x) => x.id === this.planetId);
+      return target
+        ? target.blocks
+        : [
+            {
+              id: "audiovisual",
+              title: "影音區塊標題",
+            },
+            {
+              id: "news",
+              title: "新聞區塊標題",
+            },
+          ];
     },
   },
 };

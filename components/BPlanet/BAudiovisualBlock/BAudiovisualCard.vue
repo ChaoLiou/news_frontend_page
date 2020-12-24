@@ -1,44 +1,81 @@
 <template>
-  <div class="b-audiovisual-card" @click="navigate">
-    <div
-      class="b-audiovisual-card__body"
-      :style="{ width, minWidth: width, height, minHeight: height }"
-    >
-      <div class="b-audiovisual-card__thumbnail">
-        <div class="b-audiovisual-card__thumbnail-img" ref="thumbnailImg"></div>
-        <div
-          class="b-audiovisual-card__play-icon b-audiovisual-card__play-icon_center"
-        >
-          <div></div>
-        </div>
-        <div class="b-audiovisual-card__info">
-          <div class="b-audiovisual-card__views">{{ views }}</div>
-          <div class="b-audiovisual-card__title">{{ data.title }}</div>
-          <div class="b-audiovisual-card__source">{{ data.source.title }}</div>
-        </div>
+  <div
+    class="b-audiovisual-card"
+    :style="{ width, minWidth: width, height, minHeight: height }"
+    @click="navigate"
+  >
+    <div class="b-audiovisual-card__thumbnail">
+      <div
+        class="b-audiovisual-card__thumbnail-img"
+        :style="thumbnailImgStyle"
+      ></div>
+      <div
+        class="b-audiovisual-card__play-icon b-audiovisual-card__play-icon_center"
+      >
+        <div></div>
+      </div>
+      <div class="b-audiovisual-card__info">
+        <div class="b-audiovisual-card__views">{{ views }}</div>
+        <div class="b-audiovisual-card__title">{{ data.title }}</div>
+        <div class="b-audiovisual-card__source">{{ data.source.title }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { formatNumber } from "@/assets/js/formatter";
+import { formatNumber } from "./../../../assets/js/formatter";
+import VueTypes from "vue-types";
+/**
+ * 影音卡片
+ */
 export default {
   props: {
-    data: {
-      type: Object,
-      default() {
-        return undefined;
-      },
-    },
+    data: VueTypes.shape({
+      id: VueTypes.string, // 影音 Id
+      youtubeId: VueTypes.string, // Youtube Id
+      title: VueTypes.string, // 影音標題
+      datetime: VueTypes.instanceOf(Date), // 影音上傳時間
+      views: VueTypes.string, // 影音觀看數
+      description: VueTypes.string, // 影音描述
+      planets: VueTypes.arrayOf(
+        VueTypes.shape({
+          id: VueTypes.number, // 影音所屬星球 - 星球 Id
+        })
+      ),
+      representativePlanet: VueTypes.shape({
+        name: VueTypes.string, // 影音所屬星球中的代表星球 - 星球名稱
+      }),
+      img: VueTypes.shape({
+        url: VueTypes.string, // 影音預覽圖 - 網址
+        width: VueTypes.number, // 影音預覽圖 - 寬
+        height: VueTypes.number, // 影音預覽圖 - 高
+      }),
+      source: VueTypes.shape({
+        title: VueTypes.string, // 影音來源 - 標題
+        img: VueTypes.string, // 影音來源 - 圖片
+      }),
+      index: VueTypes.integer, // 影音 index
+    }),
+    /**
+     * 影音卡片 - 寬(css width)
+     */
     width: {
       type: String,
-      default: "320px",
+      default: "300px",
     },
+    /**
+     * 影音卡片 - 高(css height)
+     */
     height: {
       type: String,
-      default: "228px",
+      default: "300px",
     },
+  },
+  data() {
+    return {
+      observer: undefined,
+    };
   },
   computed: {
     planetId() {
@@ -47,26 +84,37 @@ export default {
     views() {
       return `${formatNumber(this.data.views)}次觀看`;
     },
+    thumbnailImgStyle() {
+      return {
+        backgroundImage: `url(${this.data.img.url})`,
+      };
+    },
   },
   mounted() {
-    const thumbnailImgDOM = this.$refs.thumbnailImg;
-    const $rootDOM = this.$el;
-    const parentVueComp = this.$parent;
-    var thumbnailImage = new Image();
-    thumbnailImage.onload = () => {
-      thumbnailImgDOM.style.backgroundImage = `url(${this.data.img.url})`;
-      parentVueComp.$emit("heightChanged", $rootDOM.offsetHeight);
-    };
-    thumbnailImage.src = this.data.img.url;
+    this.observer = new IntersectionObserver(this.handler, {
+      root: null,
+      threshold: 0,
+    });
+    this.observer.observe(this.$el);
   },
   methods: {
-    navigate() {
-      this.$emit("navigate", this.data);
+    handler(entries, observer) {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          /**
+           * 影音卡片出現於 viewport
+           * @property {Object} data 影音資料, 結構如同 data property
+           */
+          this.$emit("show-up", this.data);
+        }
+      });
     },
-    heightChanged() {
-      if (this.$el.offsetHeight > 0) {
-        this.$parent.$emit("heightChanged", this.$el.offsetHeight);
-      }
+    navigate() {
+      /**
+       * 點擊影音卡片
+       * @property {Object} data 影音資料, 結構如同 data property
+       */
+      this.$emit("navigate", this.data);
     },
   },
 };
@@ -75,11 +123,12 @@ export default {
 <style scoped>
 .b-audiovisual-card {
   display: block;
-}
-.b-audiovisual-card__body {
   border-radius: 16px;
   overflow: hidden;
   border: 0.5px solid #dbdbdb;
+}
+.b-audiovisual-card:hover {
+  cursor: pointer;
 }
 .b-audiovisual-card-card > div {
   background-color: #fafafa;

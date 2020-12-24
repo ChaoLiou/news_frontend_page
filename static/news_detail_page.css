@@ -98,7 +98,7 @@ figure {
 .footer__original-link {
   justify-self: end;
   display: block;
-  color: white;
+  color: #ffffff;
   background-color: #979797;
   padding: 8px 12px;
   font-size: 1.2em;
@@ -204,10 +204,10 @@ iframe[src^="https://www.youtube.com/embed/"] {
 .tool-menu__outside-sharing > .tool-menu__icon {
   position: relative;
 }
-.b-news {
+.b-news-card {
   display: block;
 }
-.b-news > a {
+.b-news-card > a {
   display: block;
 }
 .b-news__card {

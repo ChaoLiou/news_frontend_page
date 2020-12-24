@@ -6,11 +6,16 @@
       @touchstart="startDetectingLongTouch"
       @touchend="stopDetectingLongTouch"
       @touchcancel="stopDetectingLongTouch"
+      @mousedown="startDetectingLongTouch"
+      @mousemove="stopDetectingLongTouch"
+      @mouseup="stopDetectingLongTouch"
     >
-      {{ titleLabel }}
-      <span v-if="longTouch.counter">
-        {{ longTouch.duration - longTouch.counter + 1 }}
-      </span>
+      <div>{{ titleText }}</div>
+      <div class="b-news-block__countdown">
+        <span v-if="longTouch.counter">
+          {{ longTouch.duration - longTouch.counter + 1 }}
+        </span>
+      </div>
     </div>
     <div
       class="b-news-block__tags"
@@ -29,8 +34,8 @@
         <b-news-tag
           v-for="(tag, index) in tags"
           :key="index"
-          :title-label="tag.title"
-          :tagged="tag.tagged"
+          :title-text="tag.title"
+          :selected="tag.selected"
           @toggle="toggleTag(index)"
         />
       </b-horizontal-scroll>
@@ -39,12 +44,16 @@
       <b-masonry-scroll
         :key="`${planetId}-${this.selectedTag.id}`"
         :loading="loading"
-        :items="source"
+        :source="source"
+        :triggerable-predicate="(x) => !x.recommendation"
         ref="masonryScroll"
+        :placeholder-style="{
+          borderRadius: '20px',
+        }"
         @load-more="loadMore"
       >
         <template #default="props">
-          <b-news :data="props.item" @navigate="navigate" auto-img-height />
+          <b-news-card :data="props.item" @navigate="navigate" />
         </template>
         <template #nomore>沒有更多新聞了</template>
       </b-masonry-scroll>
@@ -53,22 +62,52 @@
 </template>
 
 <script>
-import { planet_click_news } from "@/assets/js/tracking/events";
-import { checkAppExist, openFullH5Webview } from "@/assets/js/beanfun";
-import { getVendorStageDetailUrl, enableVConsole } from "@/assets/js/utils";
-const VENDOR_STAGE = process.env.VENDOR_STAGE || { enabled: false };
+import {
+  click_news,
+  impression_landing_page,
+  click_news_category,
+  BLOCK_TYPE,
+} from "./../../assets/js/tracking/events";
+import {
+  checkAppExistAsync,
+  openFullH5WebviewAsync,
+} from "./../../assets/js/beango/index.async";
+import { getSupplierDetailUrl, showVConsole } from "./../../assets/js/utils";
+import BNewsCard from "./BNewsBlock/BNewsCard";
+import BNewsTag from "./BNewsBlock/BNewsTag";
+import BHorizontalScroll from "./../shared/BHorizontalScroll";
+import BMasonryScroll from "./../shared/BMasonryScroll";
+import { trackEvent } from "./../../assets/js/tracking";
+const SUPPLIER = process.env.SUPPLIER || { enabled: false };
 const RECOMMENDATION_ENABLED = process.env.RECOMMENDATION_ENABLED;
-
+/**
+ * 新聞區塊
+ */
 export default {
+  components: {
+    BNewsCard,
+    BNewsTag,
+    BHorizontalScroll,
+    BMasonryScroll,
+  },
   props: {
-    titleLabel: {
+    /**
+     * 標題文字
+     */
+    titleText: {
       type: String,
       default: "",
     },
+    /**
+     * 星球 Id
+     */
     planetId: {
       type: Number,
-      default: 0,
+      default: -1,
     },
+    /**
+     * 設定標題需要 sticky 在 top 多少的位置
+     */
     stickyTop: {
       type: Number,
       default: 0,
@@ -80,11 +119,11 @@ export default {
       source: [],
       loading: true,
       tagsLoading: true,
-      VENDOR_STAGE,
-      theTagOfAll: { title: "全部", id: -1, tagged: true },
+      SUPPLIER,
+      theTagOfAll: { title: "全部", id: -1, selected: true },
       longTouch: {
         interval: 0,
-        duration: 3,
+        duration: 2,
         counter: 0,
       },
     };
@@ -92,28 +131,32 @@ export default {
   computed: {
     selectedTag() {
       return this.tags.length > 0
-        ? this.tags.find((t) => t.tagged)
+        ? this.tags.find((t) => t.selected)
         : this.theTagOfAll;
     },
     categories() {
       return this.$store.getters["category/list"];
     },
     stickyStyles() {
-      if (this.stickyTop) {
-        return {
-          top: `${this.stickyTop}px`,
-          position: "sticky",
-          left: "0px",
-          zIndex: 99,
-        };
-      }
+      return {
+        top: `${this.stickyTop}px`,
+        position: "sticky",
+        left: "0px",
+        zIndex: 99,
+      };
     },
   },
   methods: {
+    triggerLongTouch() {
+      showVConsole();
+    },
     startDetectingLongTouch() {
       this.longTouch.interval = setInterval(() => {
         if (this.longTouch.counter >= this.longTouch.duration) {
-          enableVConsole();
+          /**
+           * 長按 2 秒
+           */
+          this.triggerLongTouch();
           this.stopDetectingLongTouch();
         } else {
           this.longTouch.counter++;
@@ -125,59 +168,55 @@ export default {
       this.longTouch.interval = 0;
       this.longTouch.counter = 0;
     },
-    navigate(data) {
-      this.$store.dispatch("event/emit", {
-        event_id: planet_click_news.id,
-        payload: planet_click_news.generatePayload({
-          planet_name: data.representativePlanet.name,
-          category: data.categories.map((x) => x.name),
-          url: data.link,
-          title: data.title,
-          news_id: data.id,
-        }),
-      });
-      const { session_id, action_index } = this.$store.getters["event/data"];
-      let link = `${data.link}?session_id=${session_id}&action_index=${action_index}`;
-      const { officialAccountId } = this.$store.getters["serverEnv/env"];
-      link = VENDOR_STAGE.enabled
-        ? `${location.origin}/${getVendorStageDetailUrl(location.pathname)}`
+    async navigate(data) {
+      const categoryNames = data.categories.map((x) => x.name);
+      await trackEvent(
+        click_news.id,
+        click_news.category,
+        click_news.action,
+        click_news.formatPayload(
+          data.representativePlanet.name,
+          categoryNames,
+          data.link,
+          data.title,
+          data.id,
+          data.index
+        )
+      );
+      let link = data.link;
+      link = SUPPLIER.enabled
+        ? `${location.origin}/${getSupplierDetailUrl(location.pathname)}`
         : link;
       link += `?planetId=${data.representativePlanet.id}`;
-      checkAppExist(
-        () => {
-          openFullH5Webview(
-            link,
-            data.representativePlanet.name,
-            officialAccountId
-          );
-        },
-        () => {
-          window.open(link, "_blank");
-        }
-      );
+      if (await checkAppExistAsync()) {
+        await openFullH5WebviewAsync(
+          link,
+          this.planetName,
+          this.serverEnv.officialAccountId
+        );
+      } else {
+        await window.open(link, "_blank");
+      }
     },
     initTags() {
       this.tags = this.categories.map((c) => ({
         title: c.name,
         id: c.id,
-        tagged: false,
+        selected: false,
       }));
       this.tags.unshift(this.theTagOfAll);
       this.tagsLoading = false;
     },
-    init(planetId) {
+    async init(planetId) {
       this.source = [];
       this.resetScroll();
-      if (planetId) {
+      if (planetId >= 0) {
         this.tagsLoading = true;
         this.tags = [];
-        this.$store
-          .dispatch("category/fetch", planetId)
-          .then(this.initTags)
-          .then(this.loadMore);
-      } else {
-        this.loadMore();
+        await this.$store.dispatch("category/fetch", planetId);
+        this.initTags();
       }
+      await this.loadMore();
     },
     resetScroll() {
       if (this.$refs.masonryScroll) {
@@ -189,13 +228,22 @@ export default {
         window.scroll(0, scrollY);
       }
     },
-    toggleTag(targetIndex) {
-      if (!this.loading) {
+    async toggleTag(targetIndex) {
+      if (!this.loading && this.selectedTag.index !== targetIndex) {
         this.tags = this.tags.map((t, i) => ({
           ...t,
-          tagged: targetIndex === i,
+          selected: targetIndex === i,
         }));
-        this.init();
+        await trackEvent(
+          click_news_category.id,
+          click_news_category.category,
+          click_news_category.action,
+          click_news_category.formatPayload({
+            categoryName: this.selectedTag.title,
+            categoryIndex: targetIndex,
+          })
+        );
+        await this.init();
       }
     },
     loadMoreNews(list, pageIndex) {
@@ -206,9 +254,9 @@ export default {
         this.source.push(...list);
       }
     },
-    loadMore({ pageSize, pageIndex } = { pageSize: 10, pageIndex: 1 }) {
+    async loadMore({ pageSize, pageIndex } = { pageSize: 10, pageIndex: 1 }) {
       this.loading = true;
-      if (this.selectedTag) {
+      if (this.planetId >= 0 && this.selectedTag) {
         const payload = {
           pageIndex,
           pageSize,
@@ -220,19 +268,32 @@ export default {
         } else {
           payload.categoryId = this.selectedTag.id;
         }
-        this.$store
-          .dispatch("news/fetch", payload)
-          .then((list) => this.loadMoreNews(list, pageIndex))
-          .then(() => (this.loading = false))
-          .catch((_) => (this.loading = false));
+        const list = await this.$store.dispatch("news/fetch", payload);
+        this.loadMoreNews(list, pageIndex);
+
+        const ids = list.map((x) => x.id);
+        await trackEvent(
+          impression_landing_page.id,
+          impression_landing_page.category,
+          impression_landing_page.action,
+          impression_landing_page.formatPayload(
+            ids,
+            BLOCK_TYPE.NEWS,
+            this.selectedTag.title,
+            this.planetName
+          )
+        );
+        this.loading = false;
       }
     },
   },
   watch: {
     planetId: {
       immediate: true,
-      handler(value) {
-        this.init(value);
+      async handler(value) {
+        if (value) {
+          await this.init(value);
+        }
       },
     },
   },
@@ -253,10 +314,12 @@ export default {
   line-height: 23.8px;
   color: #393939;
   position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1em;
 }
 .b-news-block__tags {
   margin-right: -12px;
-  background-color: white;
+  background-color: #ffffff;
 }
 .b-news-block__tags .b-horizontal-scroll {
   align-items: center;
@@ -264,7 +327,7 @@ export default {
 .b-news-block__tags .b-horizontal-scroll > *:not(:last-child) {
   margin-right: 16px;
 }
-.b-news-block__tags_disabled {
+.b-news-block__tags_disabled .b-horizontal-scroll > * {
   opacity: 0.5;
 }
 </style>

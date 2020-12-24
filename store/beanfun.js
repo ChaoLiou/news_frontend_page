@@ -1,10 +1,9 @@
 import { dispatchWrapper, commitWrapper } from "@/assets/js/vuex-utils";
 import {
   initBGO,
-  getOpenidAccessToken,
-  checkAppExist
-} from "@/assets/js/beanfun";
-
+  getOpenidAccessTokenAsync,
+  checkAppExistAsync
+} from "@/assets/js/beango/index.async";
 const name = "beanfun";
 
 export const getters = {
@@ -13,8 +12,8 @@ export const getters = {
   },
   verification: (state, getters, rootState, rootGetters) => {
     return new Promise((resolve, reject) => {
-      checkAppExist(
-        () => {
+      checkAppExistAsync()
+        .then(() => {
           let retry = 0;
           const interval = setInterval(() => {
             const verification = rootState.stateRepo[name].verification;
@@ -25,11 +24,10 @@ export const getters = {
               retry++;
             }
           }, 500);
-        },
-        () => {
+        })
+        .catch(err => {
           resolve(rootState.stateRepo[name].verification);
-        }
-      );
+        });
     });
   },
   profile: (state, getters, rootState, rootGetters) => {
@@ -62,25 +60,26 @@ export const actions = {
   async fetch({ dispatch, commit, getters }, env) {
     try {
       const { officialAccountId, token, clientId } = env;
-      checkAppExist(() => {
+      if (await checkAppExistAsync()) {
         initBGO(officialAccountId, token);
-
-        getOpenidAccessToken(clientId, "", accessToken => {
+        const accessToken = await getOpenidAccessTokenAsync(clientId, "");
+        if (accessToken) {
           commitWrapper(
             commit,
             `stateRepo/${name}/fetchAccessToken`,
             accessToken
           );
-          dispatchWrapper(
+          const verification = await dispatchWrapper(
             dispatch,
             `api/${name}/fetch`,
             getters.accessToken
-          ).then(verification => {
+          );
+          if (verification) {
             console.log({ verification });
             commitWrapper(commit, `stateRepo/${name}/verify`, verification);
-          });
-        });
-      });
+          }
+        }
+      }
     } catch (error) {
       console.error(error);
     }

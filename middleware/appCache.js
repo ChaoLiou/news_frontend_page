@@ -1,4 +1,4 @@
-import { forceReloadPage } from "@/assets/js/beanfun";
+import { forceReloadPage } from "@/assets/js/beango/index";
 export default function({ store, env }) {
   const { newsFrontendPageBuildVersion = "" } = store.getters[`serverEnv/env`];
   if (

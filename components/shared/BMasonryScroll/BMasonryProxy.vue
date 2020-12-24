@@ -1,13 +1,22 @@
 <template>
   <div class="b-masonry-proxy">
+    <!--
+      @slot Masonry Scroll 的項目
+    -->
     <slot></slot>
   </div>
 </template>
 
 <script>
+/**
+ * Masonry Scroll 的項目代理
+ */
 export default {
   props: {
-    triggerLoadingMore: {
+    /**
+     * 決定此代理是否能夠觸發 `載入更多`
+     */
+    loadMoreTriggerable: {
       type: Boolean,
       default: false,
     },
@@ -18,8 +27,8 @@ export default {
     };
   },
   mounted() {
-    if (this.triggerLoadingMore) {
-      this.observer = new IntersectionObserver(this.handleScroll, {
+    if (this.loadMoreTriggerable) {
+      this.observer = new IntersectionObserver(this.handler, {
         root: null,
         threshold: 0,
       });
@@ -27,16 +36,19 @@ export default {
     }
   },
   methods: {
-    handleScroll(entries, observer) {
+    handler(entries, observer) {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
+          /**
+           * 載入更多
+           */
           this.$emit("load-more");
         }
       });
     },
   },
   watch: {
-    triggerLoadingMore(value) {
+    loadMoreTriggerable(value) {
       if (!value) {
         this.observer.disconnect();
         this.observer = undefined;

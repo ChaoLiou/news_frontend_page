@@ -1,30 +1,37 @@
 <template>
   <div
-    :class="[
-      'b-audiovisual-block',
-      masonry ? 'b-audiovisual-block_masonry' : '',
-    ]"
+    class="b-audiovisual-block"
+    :class="{ 'b-audiovisual-block_masonry': vertical }"
   >
-    <div v-if="titleLabel">
-      <div class="b-audiovisual-block__title">{{ titleLabel }}</div>
+    <div v-if="!!titleText">
+      <div class="b-audiovisual-block__title">{{ titleText }}</div>
     </div>
     <div>
-      <b-masonry-scroll-using-grid
-        v-if="masonry"
-        :items="source"
+      <b-masonry-grid
+        v-if="vertical"
+        :source="source"
         :loading="loading"
         :column="1"
-        :auto-adjust-height="false"
+        :auto-height="false"
         ref="bMasonryScroll"
+        :placeholderStyle="{
+          background:
+            'linear-gradient(to right, #262626 8%, #363636 28%, #262626 43%)',
+          height: '200px',
+        }"
         @load-more="loadMore"
       >
         <template #default="props">
-          <b-audiovisual :data="props.item" @long-touch="enableVConsole" />
+          <b-audiovisual-player
+            :data="props.item"
+            @long-touch="showVConsole"
+            @start-playing="startPlayingAudiovisual"
+          />
         </template>
         <template #nomore>
           <div class="no-more-content">沒有更多影片了</div>
         </template>
-      </b-masonry-scroll-using-grid>
+      </b-masonry-grid>
       <b-horizontal-scroll
         v-else
         :loading="loading"
@@ -34,9 +41,17 @@
           marginRight: '16px',
           borderRadius: '20px',
         }"
+        @scroll-end="horizontalOnScrollEnd"
       >
         <template v-for="(item, index) in source">
-          <b-audiovisual-card :key="index" :data="item" @navigate="navigate" />
+          <b-audiovisual-card
+            :key="index"
+            :data="{ ...item, index }"
+            height="228px"
+            width="320px"
+            @navigate="navigate"
+            @show-up="(data) => (currentLastItem = data)"
+          />
         </template>
       </b-horizontal-scroll>
     </div>
@@ -44,22 +59,59 @@
 </template>
 
 <script>
-import { checkAppExist, openFullH5Webview } from "@/assets/js/beanfun";
-import { enableVConsole } from "@/assets/js/utils";
+import {
+  checkAppExistAsync,
+  openFullH5WebviewAsync,
+} from "./../../assets/js/beango/index.async";
+import { showVConsole, getHashModeOrigin } from "./../../assets/js/utils";
+import {
+  click_video,
+  impression_video_page,
+  impression_landing_page,
+  click_video_play,
+  BLOCK_TYPE,
+  swipe_banner,
+} from "./../../assets/js/tracking/events";
+import { trackEvent } from "./../../assets/js/tracking";
+import BAudiovisualPlayer from "./BAudiovisualBlock/BAudiovisualPlayer";
+import BAudiovisualCard from "./BAudiovisualBlock/BAudiovisualCard";
+import BHorizontalScroll from "./../shared/BHorizontalScroll";
+import BMasonryGrid from "./../shared/BMasonryGrid";
+/**
+ * 影音區塊
+ */
 export default {
+  components: {
+    BAudiovisualPlayer,
+    BAudiovisualCard,
+    BHorizontalScroll,
+    BMasonryGrid,
+  },
   props: {
-    titleLabel: {
+    /**
+     * 標題文字
+     */
+    titleText: {
       type: String,
       default: "",
     },
-    masonry: {
+    /**
+     * 垂直 / 水平排版
+     */
+    vertical: {
       type: Boolean,
       default: false,
     },
+    /**
+     * 星球 Id
+     */
     planetId: {
       type: Number,
-      default: 0,
+      default: -1,
     },
+    /**
+     * 置頂的影音 Id
+     */
     topPriorityId: {
       type: String,
       default: "",
@@ -69,10 +121,11 @@ export default {
     return {
       source: [],
       loading: false,
+      currentLastItem: undefined,
     };
   },
   methods: {
-    enableVConsole,
+    showVConsole,
     init() {
       this.loading = true;
       this.source = [];
@@ -85,54 +138,91 @@ export default {
       }
     },
     loadMoreVideo(list, pageIndex) {
-      if (list) {
-        if (pageIndex === 1) {
-          if (this.topPriorityId) {
-            const isTopPriorityId = (id) => id === this.topPriorityId;
-            const topPriority = list.find((x) => isTopPriorityId(x.id));
-            const listExcludeTopPriority = list.filter(
-              (x) => !isTopPriorityId(x.id)
-            );
-            this.source.push(topPriority);
-            this.source.push(...listExcludeTopPriority);
-            return;
-          }
-        }
-        this.source.push(...list);
-      }
-    },
-    loadMore({ pageSize, pageIndex } = { pageSize: 10, pageIndex: 1 }) {
-      this.loading = true;
-      const payload = {
-        pageIndex,
-        pageSize,
-        planetId: this.planetId,
-      };
-      this.$store
-        .dispatch("audiovisual/fetch", payload)
-        .then((list) => this.loadMoreVideo(list, pageIndex))
-        .then(() => (this.loading = false))
-        .catch((_) => (this.loading = false));
-    },
-    navigate(data) {
-      const isHashMode = this.$router.mode === "hash";
-      let link = `${location.origin}/`;
-      if (isHashMode) {
-        link += "#/";
-      }
-      link += `${this.planetId}/audiovisual/${data.id}`;
-      const { officialAccountId } = this.$store.getters["serverEnv/env"];
-      checkAppExist(
-        () => {
-          openFullH5Webview(
-            link,
-            data.representativePlanet.name,
-            officialAccountId
+      if (Array.isArray(list) && list.length > 0) {
+        const isFirstPage = pageIndex === 1;
+        if (isFirstPage && this.topPriorityId) {
+          const isTopPriority = (id) => id === this.topPriorityId;
+          const topPriorityItem = list.find((x) => isTopPriority(x.id));
+          const listExcludeTopPriorityItem = list.filter(
+            (x) => !isTopPriority(x.id)
           );
-        },
-        () => {
-          window.open(link, "_blank");
+          this.source.push(topPriorityItem);
+          this.source.push(...listExcludeTopPriorityItem);
+        } else {
+          this.source.push(...list);
         }
+      }
+    },
+    async loadMore({ pageSize, pageIndex } = { pageSize: 10, pageIndex: 1 }) {
+      this.loading = true;
+      if (this.planetId >= 0) {
+        const payload = {
+          pageIndex,
+          pageSize,
+          planetId: this.planetId,
+        };
+        const list = await this.$store.dispatch("audiovisual/fetch", payload);
+        this.loadMoreVideo(list, pageIndex);
+        const ids = list.map((x) => x.id);
+        if (this.vertical) {
+          await trackEvent(
+            impression_video_page.id,
+            impression_video_page.category,
+            impression_video_page.action,
+            impression_video_page.formatPayload(ids)
+          );
+        } else {
+          await trackEvent(
+            impression_landing_page.id,
+            impression_landing_page.category,
+            impression_landing_page.action,
+            impression_landing_page.formatPayload(
+              ids,
+              BLOCK_TYPE.VIDEO,
+              "",
+              this.planetName
+            )
+          );
+        }
+        this.loading = false;
+      }
+    },
+    async navigate(data) {
+      await trackEvent(
+        click_video.id,
+        click_video.category,
+        click_video.action,
+        click_video.formatPayload(data.id, data.index)
+      );
+      const origin = getHashModeOrigin(this.$router);
+      const link = `${origin}/${this.planetId}/audiovisual/${data.id}`;
+      if (await checkAppExistAsync()) {
+        await openFullH5WebviewAsync(
+          link,
+          data.representativePlanet.name,
+          this.serverEnv.officialAccountId
+        );
+      } else {
+        window.open(link, "_blank");
+      }
+    },
+    async startPlayingAudiovisual(data) {
+      await trackEvent(
+        click_video_play.id,
+        click_video_play.category,
+        click_video_play.action,
+        click_video_play.formatPayload(data.id)
+      );
+    },
+    async horizontalOnScrollEnd() {
+      await trackEvent(
+        swipe_banner.id,
+        swipe_banner.category,
+        swipe_banner.action,
+        swipe_banner.formatPayload(
+          this.currentLastItem.id,
+          this.currentLastItem.index
+        )
       );
     },
   },
@@ -161,7 +251,10 @@ export default {
 .no-more-content {
   width: 100%;
   background-color: #262626;
-  color: white;
+  color: #ffffff;
   text-align: center;
+}
+.b-audiovisual-block_masonry {
+  background-color: #262626;
 }
 </style>

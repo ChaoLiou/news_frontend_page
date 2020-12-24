@@ -4,11 +4,11 @@ if (DEVELOPMENT) {
 } else {
   config = require("../nuxt.config.js").default;
 }
-import { get, post } from "../assets/js/fetchAPI";
+import { get } from "../assets/js/fetchAPI";
 import {
   hideVConsole,
-  getVendorStageDetailUrl,
-  enableVConsole
+  getSupplierDetailUrl,
+  showVConsole
 } from "../assets/js/utils";
 import {
   includeScriptSources,
@@ -29,18 +29,21 @@ import {
   generateInsideSharingParams,
   generateOutsideSharingParamsPromise
 } from "./sharing";
+import {} from "../assets/js/beango";
 import {
+  initBGO,
+  checkAppExistAsync,
+  openFullH5WebviewAsync,
+  getOpenidAccessTokenAsync,
+  getMeProfileAsync,
   sendMessageV2,
   sendDataToApps,
-  initBGO,
-  getOpenidAccessToken,
-  checkAppExist,
-  getMeProfile,
-  openFullH5Webview,
   redirectUriByDefaultBrowser
-} from "../assets/js/beanfun";
+} from "../assets/js/beango/index.async.mock";
+import { trackEvent } from "../assets/js/tracking";
+import { initTracker } from "./init-tracker";
 import { getOSType, getTimeZone } from "../assets/js/tracking/utils";
-import { planet_click_news } from "../assets/js/tracking/events";
+import { click_news, view_news_page } from "../assets/js/tracking/events";
 import { state as initBeanfunState } from "../store/stateRepo/beanfun";
 import { state as initEventState } from "../store/stateRepo/event";
 let _beanfunState = initBeanfunState();
@@ -50,7 +53,7 @@ const _queryStringMap = parseQueryString();
 const {
   BASE_URL = {},
   TRACKING_EVENT = {},
-  VENDOR_STAGE = {},
+  SUPPLIER = {},
   RECOMMENDATION_ENABLED = { news: true, product: true },
   AD = {}
 } = config.env;
@@ -64,7 +67,7 @@ let _serverEnv = {
 
 const longTouch = {
   interval: 0,
-  duration: 3,
+  duration: 2,
   counter: 0
 };
 
@@ -114,12 +117,14 @@ function vconsoleOnload() {
   hideVConsole();
 }
 
-function serverEnvReady() {
+async function serverEnvReady() {
   init();
   const { officialAccountId, token, clientId } = _serverEnv;
-  checkAppExist(() => {
+  if (await checkAppExistAsync()) {
     initBGO(officialAccountId, token);
-    getMeProfile(profile => {
+    const profile = await getMeProfileAsync();
+    if (profile) {
+      console.log({ profile });
       _beanfunState = {
         ..._beanfunState,
         profile: {
@@ -136,24 +141,29 @@ function serverEnvReady() {
           region: country
         }
       };
-    });
-    getOpenidAccessToken(clientId, "", accessTokenResult => {
-      _beanfunState = {
-        ..._beanfunState,
-        accessToken: accessTokenResult
-      };
-      get(
-        `openid/token/verification?token=${accessTokenResult.access_token}`,
-        BASE_URL.backendApi
-      ).then(verification => {
+    }
+    const accessTokenResult = await getOpenidAccessTokenAsync(clientId, "");
+    if (accessTokenResult) {
+      console.log({ accessTokenResult });
+      const apiRelative = `openid/token/verification?token=${accessTokenResult.access_token}`;
+      const verification = await get(apiRelative, BASE_URL.backendApi);
+      if (verification) {
         console.log({ verification });
         _beanfunState = {
           ..._beanfunState,
           verification
         };
-      });
-    });
-  });
+        const { open_id = SUPPLIER.openId } = verification;
+        await initTracker({
+          openId: open_id,
+          tVer: TRACKING_EVENT.trackingVer,
+          beanfunTrackerServerUrl: `${BASE_URL.trackingApi}/tracking`,
+          oaid: officialAccountId,
+          officialAccountAccessToken: token
+        });
+      }
+    }
+  }
 }
 
 function init() {
@@ -199,7 +209,7 @@ function initRecommendAdBlock(news) {
       `<b-recommend-ad-block ` +
       `recommendation-api-prefix="${BASE_URL.recommendationApi}" ` +
       `:recommendation-enabled="${RECOMMENDATION_ENABLED.product}" ` +
-      `news-title="${news.title}" ` +
+      `keyword="${news.title}" ` +
       `:title-text="titleText" ` +
       `@navigate="navigate" />`,
     components: {
@@ -211,16 +221,13 @@ function initRecommendAdBlock(news) {
       };
     },
     methods: {
-      navigate(data) {
+      async navigate(data) {
         console.log({ data });
-        checkAppExist(
-          () => {
-            openFullH5Webview(data.link, "", AD.officialAccountId);
-          },
-          () => {
-            window.open(data.link, "_blank");
-          }
-        );
+        if (await checkAppExistAsync()) {
+          openFullH5WebviewAsync(data.link, "", AD.officialAccountId);
+        } else {
+          window.open(data.link, "_blank");
+        }
       }
     }
   });
@@ -244,80 +251,90 @@ function initRecommendNewsBlock() {
       "b-recommend-news-block": BRecommendNewsBlock
     },
     methods: {
-      navigate({ data, session_id, action_index }) {
-        trackEvent({
-          session_id,
-          action_index,
-          event_id: planet_click_news.id,
-          payload: planet_click_news.generatePayload({
-            planet_name: data.representativePlanet.name,
-            category: data.categories.map(x => x.name),
-            url: data.link,
-            title: data.title,
-            news_id: data.id
+      async navigate(data) {
+        await trackEvent(
+          click_news.id,
+          click_news.category,
+          click_news.action,
+          click_news.formatPayload({
+            planetName: data.representativePlanet.name,
+            categoryName: data.categories.map(x => x.name),
+            detailPageLink: data.link,
+            newsTitle: data.title,
+            newsId: data.id,
+            newsIndex: data.index
           })
-        });
-        let link = `${data.link}?session_id=${session_id}&action_index=${action_index}`;
-        link = VENDOR_STAGE.enabled
-          ? `${location.origin}/${getVendorStageDetailUrl(
+        );
+        let link = data.link;
+        link = SUPPLIER.enabled
+          ? `${location.origin}/${getSupplierDetailUrl(
               location.pathname,
-              VENDOR_STAGE.detailUrls
+              SUPPLIER.detailUrls
             )}`
           : link;
         link += `?planetId=${data.representativePlanet.id}`;
-        checkAppExist(
-          () => {
-            openFullH5Webview(
-              link,
-              data.representativePlanet.name,
-              _serverEnv.officialAccountId
-            );
-          },
-          () => {
-            window.open(link, "_blank");
-          }
+        if (await checkAppExistAsync()) {
+          await openFullH5WebviewAsync(
+            link,
+            data.representativePlanet.name,
+            _serverEnv.officialAccountId
+          );
+        } else {
+          window.open(link, "_blank");
+        }
+      }
+    }
+  });
+}
+
+function bindScroll(news) {
+  const stages = [
+    {
+      rate: 25,
+      done: false
+    },
+    {
+      rate: 50,
+      done: false
+    },
+    {
+      rate: 75,
+      done: false
+    },
+    {
+      rate: 100,
+      done: false
+    }
+  ];
+  const headerDOM = document.querySelector(".header");
+  const detailDOM = document.querySelector(".detail");
+  const scrollableDistance =
+    headerDOM.offsetHeight + detailDOM.offsetHeight - window.screen.height;
+  const startScrollingX = 0;
+  window.addEventListener("scroll", event => {
+    const scrolledDistance = pageYOffset - startScrollingX;
+    const scrolledDistanceRate = (scrolledDistance * 100) / scrollableDistance;
+    const undoneStages = stages.filter(x => !x.done);
+    if (undoneStages.length > 0) {
+      const stage = undoneStages[0];
+      if (scrolledDistanceRate > stage.rate) {
+        stage.done = true;
+        Promise.resolve(
+          trackEvent(
+            view_news_page.id,
+            view_news_page.category,
+            view_news_page.action,
+            view_news_page.formatPayload(news.id, stage.rate)
+          )
         );
       }
     }
   });
 }
 
-function trackEvent({ session_id, action_index, event_id, payload }) {
-  const open_id = _beanfunState.verification.open_id;
-  if (open_id) {
-    _eventState = {
-      ..._eventState,
-      data: {
-        ..._eventState.data,
-        dtm: Date.now().toString(),
-        event_id,
-        payload,
-        openid: open_id,
-        session_id,
-        action_index
-      }
-    };
-    console.log({ env: _eventState.env });
-    console.log({ info: _eventState.info });
-    console.log({ data: _eventState.data });
-    const body = {
-      ..._eventState.env,
-      ..._eventState.info,
-      ..._eventState.data
-    };
-    post("tracking", body, BASE_URL.trackingApi).then(result =>
-      console.log({ result })
-    );
-  } else {
-    console.log(
-      `open_id is not found in verification: ${JSON.stringify(
-        _beanfunState.verification
-      )}`
-    );
-  }
-}
-
 function bindEvents(news) {
+  bindScroll(news);
+
   document
     .querySelectorAll(".detail__content a.link__open-by-default-browser")
     .forEach(aDOM => {
@@ -333,7 +350,7 @@ function bindEvents(news) {
   titleDOM.addEventListener("touchstart", () => {
     longTouch.interval = setInterval(() => {
       if (longTouch.counter >= longTouch.duration) {
-        enableVConsole();
+        showVConsole();
         stopDetectingLongTouch();
       } else {
         longTouch.counter++;

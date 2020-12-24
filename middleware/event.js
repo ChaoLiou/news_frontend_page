@@ -1,10 +1,14 @@
 import { getOSType, getTimeZone } from "@/assets/js/tracking/utils";
-import { getMeProfile, checkAppExist } from "@/assets/js/beanfun";
+import {
+  getMeProfileAsync,
+  checkAppExistAsync
+} from "@/assets/js/beango/index.async";
 import { generateUUID } from "@/assets/js/utils";
+import { initTracker, addBeanfunTracker } from "@/assets/js/tracking";
 
 const name = "event";
 
-export default function({ store }) {
+export default async function({ store, env }) {
   store.dispatch(`${name}/fetchInfo`, {
     os_type: getOSType(),
     tz: getTimeZone()
@@ -12,14 +16,33 @@ export default function({ store }) {
   store.dispatch(`${name}/fetchData`, {
     session_id: generateUUID()
   });
-  checkAppExist(() => {
-    getMeProfile(profile => {
-      store.dispatch("beanfun/fetchProfile", profile);
-      const { language, country } = store.getters["beanfun/profile"];
-      store.dispatch(`${name}/fetchInfo`, {
-        lang: language,
-        region: country
-      });
+  if (await checkAppExistAsync()) {
+    const profile = getMeProfileAsync();
+    store.dispatch("beanfun/fetchProfile", profile);
+    const { language, country } = store.getters["beanfun/profile"];
+    store.dispatch(`${name}/fetchInfo`, {
+      lang: language,
+      region: country
     });
-  });
+  }
+  const { t_ver } = store.getters["event/env"];
+  const { open_id } = await store.getters["beanfun/verification"];
+  await initTracker(
+    "null",
+    open_id || env.SUPPLIER.openId,
+    t_ver,
+    process.env.TRACKER_DEBUG_MODE
+  );
+
+  const { officialAccountId, token } = await store.getters["serverEnv/env"];
+  const trackingGroup = "planet";
+  const beanfunTrackerServerUrl = `${env.BASE_URL.trackingApi}/tracking`;
+  const oaid = officialAccountId;
+  const officialAccountAccessToken = token;
+  addBeanfunTracker(
+    trackingGroup,
+    beanfunTrackerServerUrl,
+    oaid,
+    officialAccountAccessToken
+  );
 }
