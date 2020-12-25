@@ -1,4 +1,4 @@
-import { forceReloadPage } from "@/assets/js/beanfun";
+import { forceReloadPage } from "@/assets/js/beango";
 import expectedVersion from "@/static/version.json";
 import { get } from "@/assets/js/fetchAPI";
 
