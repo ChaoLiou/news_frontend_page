@@ -339,7 +339,7 @@ function bindEvents(news) {
     .querySelectorAll(".detail__content a.link__open-by-default-browser")
     .forEach(aDOM => {
       const url = aDOM.href;
-      aDOM.href = "#";
+      aDOM.href = "javascript:;";
       aDOM.addEventListener("click", () => {
         redirectUriByDefaultBrowser(url);
       });
