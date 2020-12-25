@@ -61,7 +61,7 @@ export const renderToolMenu = (insideSharingText, outsideSharingText) => {
 export const renderSource = source => {
   if (source.logoImage) {
     const sourceImgDOM = document.querySelector(".header__source-img");
-    sourceImgDOM.style.backgroundImage = `url("/${source.logoImage}"), url("/news_detail_img_default.png")`;
+    sourceImgDOM.style.backgroundImage = `url("/${source.logoImage}")`;
   }
   const sourceTitleDOM = document.querySelector(".header__source-title");
   sourceTitleDOM.textContent = source.name;

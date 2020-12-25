@@ -10,7 +10,6 @@
       <b-masonry-grid
         v-if="vertical"
         :source="source"
-        :loading="loading"
         :column="1"
         :auto-height="false"
         ref="bMasonryScroll"
