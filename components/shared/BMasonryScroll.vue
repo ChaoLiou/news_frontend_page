@@ -121,7 +121,6 @@ export default {
       itemWidth: 0,
       itemTops: [],
       itemLefts: [],
-      groups: [],
       pageIndex: 1,
       pageSize: 10,
       arranged: false,
@@ -150,9 +149,6 @@ export default {
           "px",
       };
     },
-  },
-  mounted() {
-    this.init(this.source);
   },
   methods: {
     init(source) {
@@ -194,29 +190,26 @@ export default {
     },
     heightChanged(index, height) {
       this.$set(this.itemHeights, index, height);
-      if (this.itemHeights.length === this.source.length) {
-        this.arrangeSource();
-      }
     },
     arrangeSource() {
       this.itemWidth = (this.$el.offsetWidth - this.gap) / this.column;
-      this.groups = Array.from({ length: this.column }, (v, i) => ({
+      const groups = Array.from({ length: this.column }, (v, i) => ({
         index: i,
         maxHeight: 0,
         left: i * (this.itemWidth + this.gap),
       }));
       this.itemHeights.forEach((height, index) => {
         if (index < this.column) {
-          const group = this.groups[index];
+          const group = groups[index];
           this.$set(this.itemTops, index, 0);
           this.$set(this.itemLefts, index, group.left);
-          this.$set(this.groups, index, {
+          this.$set(groups, index, {
             ...group,
             maxHeight: height + this.gap,
           });
         } else {
-          let targetGroup = this.groups[0];
-          this.groups.forEach((group) => {
+          let targetGroup = groups[0];
+          groups.forEach((group) => {
             if (!group.index) return;
             if (group.maxHeight < targetGroup.maxHeight) {
               targetGroup = group;
@@ -228,7 +221,7 @@ export default {
           };
           this.$set(this.itemTops, index, targetGroup.maxHeight);
           this.$set(this.itemLefts, index, targetGroup.left);
-          this.$set(this.groups, targetGroup.index, updatedGroup);
+          this.$set(groups, targetGroup.index, updatedGroup);
         }
       });
       this.arranged = true;
@@ -248,6 +241,19 @@ export default {
           pageSize: this.pageSize,
           pageIndex: ++this.pageIndex,
         });
+      }
+    },
+  },
+  watch: {
+    source: {
+      immediate: true,
+      handler(value) {
+        this.init(value);
+      },
+    },
+    itemHeights(value) {
+      if (value.length === this.source.length) {
+        this.arrangeSource();
       }
     },
   },

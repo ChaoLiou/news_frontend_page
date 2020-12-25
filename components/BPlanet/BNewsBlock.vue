@@ -230,6 +230,7 @@ export default {
     },
     async toggleTag(targetIndex) {
       if (!this.loading && this.selectedTag.index !== targetIndex) {
+        this.source = [];
         this.tags = this.tags.map((t, i) => ({
           ...t,
           selected: targetIndex === i,
