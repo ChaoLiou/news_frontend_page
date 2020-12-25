@@ -6,12 +6,10 @@
       :style="frameStyle"
       @click="initYTPlayer"
     >
-      <div
+      <b-play-icon
         v-if="!playerEnabled"
         class="b-audiovisual-player__play-icon b-audiovisual-player__play-icon_center"
-      >
-        <div></div>
-      </div>
+      />
       <div :id="id"></div>
     </div>
     <div class="b-audiovisual-player__menu">
@@ -40,7 +38,7 @@
           }"
           @click="menuToggle = !menuToggle"
         >
-          <img src="/icons/arrow_down.svg" alt="arrow_down" />
+          <b-arrow-icon />
         </div>
         <div class="b-audiovisual-player__countdown">
           <span v-if="longTouch.counter">
@@ -76,10 +74,12 @@ import { formatNumber } from "./../../../assets/js/formatter";
 import { replaceNewLineToBr } from "./../../../assets/js/utils";
 import { createElement } from "./../../../news_detail_page/render";
 import VueTypes from "vue-types";
+import BArrowIcon from "./../../../components/shared/icons/BArrowIcon";
 /**
  * 影音播放器
  */
 export default {
+  components: { BArrowIcon },
   props: {
     data: VueTypes.shape({
       id: VueTypes.string, // 影音 Id
@@ -254,6 +254,7 @@ export default {
   line-height: 18.2px;
 }
 .b-audiovisual-player__menu-icon {
+  cursor: pointer;
   width: 26px;
   height: 24px;
   color: #ffffff;
@@ -304,7 +305,6 @@ export default {
   z-index: 2;
 }
 .b-audiovisual-player__play-icon > div {
-  background-image: url("/icons/btn_play.svg");
   width: 50px;
   height: 50px;
 }

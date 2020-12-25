@@ -14,5 +14,5 @@ module.exports = {
   usageMode: "expand",
   exampleMode: "expand",
   displayOrigins: true,
-  assetsDir: path.join(__dirname, "static")
+  styleguideDir: "./static/styleguide"
 };

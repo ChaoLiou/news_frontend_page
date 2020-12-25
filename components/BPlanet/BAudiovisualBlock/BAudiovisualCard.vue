@@ -9,11 +9,9 @@
         class="b-audiovisual-card__thumbnail-img"
         :style="thumbnailImgStyle"
       ></div>
-      <div
+      <b-play-icon
         class="b-audiovisual-card__play-icon b-audiovisual-card__play-icon_center"
-      >
-        <div></div>
-      </div>
+      />
       <div class="b-audiovisual-card__info">
         <div class="b-audiovisual-card__views">{{ views }}</div>
         <div class="b-audiovisual-card__title">{{ data.title }}</div>
@@ -26,10 +24,14 @@
 <script>
 import { formatNumber } from "./../../../assets/js/formatter";
 import VueTypes from "vue-types";
+import BPlayIcon from "./../../shared/icons/BPlayIcon";
 /**
  * 影音卡片
  */
 export default {
+  components: {
+    BPlayIcon,
+  },
   props: {
     data: VueTypes.shape({
       id: VueTypes.string, // 影音 Id
@@ -154,7 +156,6 @@ export default {
   z-index: 2;
 }
 .b-audiovisual-card__play-icon > div {
-  background-image: url("/icons/btn_play.svg");
   width: 50px;
   height: 50px;
 }
