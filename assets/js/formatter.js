@@ -51,7 +51,7 @@ export const formatVideo = x => {
   const categories = x.NewsSubCategory ? x.NewsSubCategory : [];
   const planets = categories
     .map(c => c.NewsMainBanner)
-    .map(p => ({ id: p.id }));
+    .map(p => ({ id: p.id, name: p.name }));
   const thumbnails =
     x.Images && x.Images.length > 0
       ? JSON.parse(x.Images[0].src_thumbnails)

@@ -43,6 +43,7 @@ export default {
       planets: VueTypes.arrayOf(
         VueTypes.shape({
           id: VueTypes.number, // 影音所屬星球 - 星球 Id
+          name: VueTypes.string, // 影音所屬星球 - 星球名稱
         })
       ),
       representativePlanet: VueTypes.shape({
