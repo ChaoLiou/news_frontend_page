@@ -29,6 +29,7 @@ export default Object.assign(config, {
     VIDEO_IMAGE: {
       size: ["default", "medium", "high", "standard", "maxres"][3]
     },
+    NO_ALLOW_COUNTRY_AREA: "HK",
     AD: {
       officialAccountId: "690c8cba53934c138e997f7685e98412_oa"
     },

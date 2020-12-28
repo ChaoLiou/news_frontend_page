@@ -2,7 +2,7 @@ import {
   getMeProfileAsync,
   getTrackingSessionDataAsync,
   checkAppExistAsync
-} from "../assets/js/beango/index.async.mock";
+} from "../assets/js/beango/index.async";
 import {
   trackEvent as trackEventToBeanfun,
   combineBody as combineBeanfunBody

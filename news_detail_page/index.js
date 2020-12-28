@@ -39,7 +39,7 @@ import {
   sendMessageV2,
   sendDataToApps,
   redirectUriByDefaultBrowser
-} from "../assets/js/beango/index.async.mock";
+} from "../assets/js/beango/index.async";
 import { trackEvent } from "../assets/js/tracking";
 import { initTracker } from "./init-tracker";
 import { getOSType, getTimeZone } from "../assets/js/tracking/utils";
@@ -224,7 +224,7 @@ function initRecommendAdBlock(news) {
       async navigate(data) {
         console.log({ data });
         if (await checkAppExistAsync()) {
-          openFullH5WebviewAsync(data.link, "", AD.officialAccountId);
+          await openFullH5WebviewAsync(data.link, "", AD.officialAccountId);
         } else {
           window.open(data.link, "_blank");
         }

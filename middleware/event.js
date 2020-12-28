@@ -17,7 +17,7 @@ export default async function({ store, env }) {
     session_id: generateUUID()
   });
   if (await checkAppExistAsync()) {
-    const profile = getMeProfileAsync();
+    const profile = await getMeProfileAsync();
     store.dispatch("beanfun/fetchProfile", profile);
     const { language, country } = store.getters["beanfun/profile"];
     store.dispatch(`${name}/fetchInfo`, {

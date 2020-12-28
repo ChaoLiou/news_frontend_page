@@ -30,7 +30,7 @@ export default {
       selectedTab: undefined,
     };
   },
-  middleware: ["planet"],
+  middleware: ["planet", "appCache"],
   async mounted() {
     await trackEvent(
       view_ladning_page.id,

@@ -16,6 +16,7 @@ export default Object.assign(config, {
     TRACKING_EVENT: {
       trackingVer: process.env.TRACKING_VER || "0.07"
     },
+    NO_ALLOW_COUNTRY_AREA: process.env.NO_ALLOW_COUNTRY_AREA || "HK",
     BUILD: {
       builtAt: new Date().toLocaleString()
     },
