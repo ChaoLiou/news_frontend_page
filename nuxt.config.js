@@ -3,9 +3,9 @@ import config from "./nuxt.config.base";
 export default Object.assign(config, {
   env: {
     BASE_URL: {
-      backendApi: process.env.BACKEND_API || "https://753f40f86863.ngrok.io/v1",
+      backendApi: process.env.BACKEND_API || "https://576ef25991bf.ngrok.io/v1",
       trackingApi:
-        process.env.TRACKING_API || "https://fb1b2bcc52bd.ngrok.io/v1",
+        process.env.TRACKING_API || "https://f725075ecf24.ngrok.io/v1",
       recommendationApi:
         process.env.RECOMMENDATION_API || "https://stg-news-api.beanfun.com/v1"
     },

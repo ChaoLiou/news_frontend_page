@@ -120,7 +120,11 @@ export default {
       loading: true,
       tagsLoading: true,
       SUPPLIER,
-      theTagOfAll: { title: "全部", id: -1, selected: true },
+      theTagOfAll: {
+        title: RECOMMENDATION_ENABLED.news ? "專屬你的" : "全部",
+        id: -1,
+        selected: true,
+      },
       longTouch: {
         interval: 0,
         duration: 2,

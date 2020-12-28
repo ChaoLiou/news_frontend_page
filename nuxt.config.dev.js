@@ -3,13 +3,14 @@ import config from "./nuxt.config.base";
 export default Object.assign(config, {
   env: {
     BASE_URL: {
-      backendApi: "https://stg-news-api.beanfun.com/v1",
-      trackingApi: "https://stg-news-api.beanfun.com/v1",
+      backendApi: "https://576ef25991bf.ngrok.io/v1",
+      trackingApi: "https://f725075ecf24.ngrok.io/v1",
       recommendationApi: "https://stg-news-api.beanfun.com/v1"
     },
     RECOMMENDATION_ENABLED: {
       news: true,
-      product: true
+      product: true,
+      style: true
     },
     TRACKING_EVENT: {
       trackingVer: "0.07"
@@ -20,9 +21,8 @@ export default Object.assign(config, {
     SUPPLIER: {
       enabled: true,
       detailUrls: [
-        "articles/tw/1/1329628436708200448/detail.html",
-        "articles/tw/1/1333315799703621632/detail.html",
-        "articles/tw/1/1329628439400943616/detail.html"
+        "articles/tw/1/1342491504970567680/detail.html",
+        "articles/tw/1/1342375722760540160/detail.html"
       ],
       openId: "1010004000027002425"
     },

@@ -1,7 +1,10 @@
 <template>
   <div
     class="b-news-card"
-    :class="{ 'b-news-card_recommendation': data.recommendation }"
+    :class="{
+      'b-news-card_recommendation':
+        recommendationStyleEnabled && data.recommendation,
+    }"
     @click="navigate"
   >
     <div class="b-news-card__body">
@@ -33,6 +36,7 @@
 
 <script>
 import VueTypes from "vue-types";
+const RECOMMENDATION_ENABLED = process.env.RECOMMENDATION_ENABLED;
 const IMAGE_STATUS_TYPE = {
   LOADING: 1,
   LOADED: 2,
@@ -86,6 +90,7 @@ export default {
     return {
       imgStatus: IMAGE_STATUS_TYPE.LOADING,
       imgLoadingError: false,
+      recommendationStyleEnabled: RECOMMENDATION_ENABLED.style,
     };
   },
   computed: {
