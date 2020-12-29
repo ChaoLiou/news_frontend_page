@@ -82,8 +82,8 @@ import BNewsTag from "./BNewsBlock/BNewsTag";
 import BHorizontalScroll from "./../shared/BHorizontalScroll";
 import BMasonryScroll from "./../shared/BMasonryScroll";
 import { trackEvent } from "./../../assets/js/tracking";
-const SUPPLIER = process.env.SUPPLIER || { enabled: false };
-const RECOMMENDATION_ENABLED = process.env.RECOMMENDATION_ENABLED;
+const SUPPLIER = process.env.SUPPLIER || {};
+const RECOMMENDATION_ENABLED = process.env.RECOMMENDATION_ENABLED || {};
 /**
  * 新聞區塊
  */

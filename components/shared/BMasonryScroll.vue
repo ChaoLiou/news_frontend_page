@@ -156,6 +156,7 @@ export default {
         source.forEach((item, index) => {
           this.heightChanged(index, item.height);
         });
+        this.arrangeSource(source[0].width);
       }
     },
     getHeight(index) {
@@ -191,8 +192,10 @@ export default {
     heightChanged(index, height) {
       this.$set(this.itemHeights, index, height);
     },
-    arrangeSource() {
-      this.itemWidth = (this.$el.offsetWidth - this.gap) / this.column;
+    arrangeSource(width) {
+      this.itemWidth = width
+        ? width
+        : (this.$el.offsetWidth - this.gap) / this.column;
       const groups = Array.from({ length: this.column }, (v, i) => ({
         index: i,
         maxHeight: 0,

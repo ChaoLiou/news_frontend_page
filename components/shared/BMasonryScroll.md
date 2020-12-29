@@ -55,18 +55,21 @@
         }
       },
       generateItems() {
+        const width = 190;
         return this.colors.map((color, index) => {
           const randomHeight = 200 + Math.random(Date.now) * 100;
           return index === this.colors.length - 1
             ? {
                 color1st: color,
                 color2nd: this.colors[0],
-                height: randomHeight
+                height: randomHeight,
+                width
               }
             : {
                 color1st: color,
                 color2nd: this.colors[index + 1],
-                height: randomHeight
+                height: randomHeight,
+                width
               };
         });
       },
@@ -129,18 +132,21 @@
         }
       },
       generateItems() {
+        const width = 190;
         return this.colors.map((color, index) => {
           const randomHeight = 200 + Math.random(Date.now) * 100;
           return index === this.colors.length - 1
             ? {
                 color1st: color,
                 color2nd: this.colors[0],
-                height: randomHeight
+                height: randomHeight,
+                width
               }
             : {
                 color1st: color,
                 color2nd: this.colors[index + 1],
-                height: randomHeight
+                height: randomHeight,
+                width
               };
         });
       },

@@ -44,14 +44,14 @@
 
 ```html
 <template>
-  <div ref="container" style="height:300px;overflow:scroll">
-    <div
-      style="width:fit-content;"
-      :style="{ height: showedUp ? '0px': '1000px', margin: showedUp ? 'auto' : '100px auto' }"
-    >
-      {{showedUp ? message : '請往下捲...'}}
+  <div ref="container">
+    <div style="width:fit-content;">
+      請往下捲...{{showedUp ? message : ''}}
     </div>
-    <b-audiovisual-card :data="data" @show-up="showUp" />
+    <div style="height:300px;overflow:scroll">
+      <div style="height:1000px"></div>
+      <b-audiovisual-card :data="data" @show-up="showUp" />
+    </div>
   </div>
 </template>
 <script>
