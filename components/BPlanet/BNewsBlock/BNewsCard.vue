@@ -36,7 +36,6 @@
 
 <script>
 import VueTypes from "vue-types";
-const RECOMMENDATION_ENABLED = process.env.RECOMMENDATION_ENABLED;
 const IMAGE_STATUS_TYPE = {
   LOADING: 1,
   LOADED: 2,
@@ -85,12 +84,19 @@ export default {
       type: String,
       default: "100px",
     },
+    /**
+     * 對推薦項目下樣式
+     */
+    recommendationStyled: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       imgStatus: IMAGE_STATUS_TYPE.LOADING,
       imgLoadingError: false,
-      recommendationStyleEnabled: RECOMMENDATION_ENABLED.style,
+      recommendationStyleEnabled: this.recommendationStyled,
     };
   },
   computed: {

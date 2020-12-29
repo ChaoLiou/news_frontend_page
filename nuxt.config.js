@@ -11,7 +11,8 @@ export default Object.assign(config, {
     },
     RECOMMENDATION_ENABLED: {
       news: process.env.RECOMMENDATION_ENABLED_NEWS !== false,
-      product: process.env.RECOMMENDATION_ENABLED_PRODUCT !== false
+      product: process.env.RECOMMENDATION_ENABLED_PRODUCT !== false,
+      styled: process.env.RECOMMENDATION_ENABLED_STYLED !== false
     },
     TRACKING_EVENT: {
       trackingVer: process.env.TRACKING_VER || "0.07"

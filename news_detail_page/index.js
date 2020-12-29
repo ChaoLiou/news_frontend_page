@@ -242,6 +242,7 @@ function initRecommendNewsBlock() {
       `api-prefix="${BASE_URL.backendApi}" ` +
       `recommendation-api-prefix="${BASE_URL.recommendationApi}" ` +
       `:recommendation-enabled="${RECOMMENDATION_ENABLED.news}" ` +
+      `:recommendation-styled="${RECOMMENDATION_ENABLED.styled}" ` +
       `news-id="${_newsId}" ` +
       `planet-id="${_queryStringMap.planetId}" ` +
       `lang="${language}" ` +

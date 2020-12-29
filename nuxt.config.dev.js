@@ -10,7 +10,7 @@ export default Object.assign(config, {
     RECOMMENDATION_ENABLED: {
       news: true,
       product: true,
-      style: true
+      styled: true
     },
     TRACKING_EVENT: {
       trackingVer: "0.07"

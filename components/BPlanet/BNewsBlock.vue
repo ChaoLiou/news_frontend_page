@@ -53,7 +53,11 @@
         @load-more="loadMore"
       >
         <template #default="props">
-          <b-news-card :data="props.item" @navigate="navigate" />
+          <b-news-card
+            :data="props.item"
+            :recommendation-styled="recommendationStyled"
+            @navigate="navigate"
+          />
         </template>
         <template #nomore>沒有更多新聞了</template>
       </b-masonry-scroll>
@@ -130,6 +134,7 @@ export default {
         duration: 2,
         counter: 0,
       },
+      recommendationStyled: RECOMMENDATION_ENABLED.styled,
     };
   },
   computed: {
