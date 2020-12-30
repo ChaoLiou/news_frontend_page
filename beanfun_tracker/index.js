@@ -239,7 +239,9 @@ async function trackEvent(
         });
       }
     } catch (error) {
-      console.error(`[${_moduleName}] an error has occured: ${error}`);
+      console.error(
+        `[${_moduleName}] an error has occured: ${JSON.stringify(error)}`
+      );
     }
   } else {
     console.error(

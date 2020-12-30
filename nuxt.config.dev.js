@@ -24,7 +24,7 @@ export default Object.assign(config, {
         "articles/tw/1/1342491504970567680/detail.html",
         "articles/tw/1/1342375722760540160/detail.html"
       ],
-      openId: "1010004000027002425"
+      openId: ""
     },
     VIDEO_IMAGE: {
       size: ["default", "medium", "high", "standard", "maxres"][3]
