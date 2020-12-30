@@ -10,11 +10,8 @@ import {
   getSupplierDetailUrl,
   showVConsole
 } from "../assets/js/utils";
-import {
-  includeScriptSources,
-  parseNewsIdWithinUrl,
-  parseQueryString
-} from "./utils";
+import { includeScriptSources, parseNewsIdWithinUrl } from "./utils";
+import { getQueryStringObject } from "../assets/js/utils";
 import { formatNews } from "../assets/js/formatter";
 import {
   renderToolMenu,
@@ -49,7 +46,7 @@ import { state as initEventState } from "../store/stateRepo/event";
 let _beanfunState = initBeanfunState();
 let _eventState = initEventState();
 const _newsId = parseNewsIdWithinUrl();
-const _queryStringMap = parseQueryString();
+const _queryStringMap = getQueryStringObject();
 const {
   BASE_URL = {},
   TRACKING_EVENT = {},

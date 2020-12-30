@@ -8,7 +8,7 @@ export const generateUUID = () => {
   return uuid;
 };
 
-export const getQueryString = () => {
+export const getQueryStringObject = () => {
   const result = {};
   location.search
     .substr(1)
