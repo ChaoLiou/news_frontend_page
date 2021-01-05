@@ -92,6 +92,8 @@ npm run generate
 
 ## style/
 
+- 由於遵照 [Component-scoped styles in Single File Components](https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/Vue_styling#Adding_scoped_styles), 專案中元件的樣式都寫在 \*.vue 的 `<style>` 裡面, 另外專案中 HTML Element Class 的命名規範是遵照 [BEM](http://getbem.com/naming/).
+
 ### all.css
 
 - 這裡是全域 css, 如:
