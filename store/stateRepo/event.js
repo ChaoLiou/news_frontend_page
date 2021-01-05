@@ -1,4 +1,5 @@
 export const state = () => ({
+  initalized: false,
   env: {
     app_ver: "",
     app_build: 0,
@@ -29,5 +30,8 @@ export const mutations = {
   },
   fetchData(state, data) {
     state.data = { ...state.data, ...data };
+  },
+  initalize(state) {
+    state.initalized = true;
   }
 };

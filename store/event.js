@@ -3,6 +3,9 @@ import { dispatchWrapper, commitWrapper } from "@/assets/js/vuex-utils";
 const name = "event";
 
 export const getters = {
+  initalized: (state, getters, rootState, rootGetters) => {
+    return rootState.stateRepo[name].initalized;
+  },
   env: (state, getters, rootState, rootGetters) => {
     return rootState.stateRepo[name].env;
   },
@@ -22,6 +25,13 @@ export const getters = {
 };
 
 export const actions = {
+  async initalize({ commit }) {
+    try {
+      commitWrapper(commit, `stateRepo/${name}/initalize`);
+    } catch (error) {
+      console.error(error);
+    }
+  },
   async fetchEnv({ commit }, data) {
     try {
       commitWrapper(commit, `stateRepo/${name}/fetchEnv`, data);
