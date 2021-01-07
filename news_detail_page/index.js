@@ -5,11 +5,7 @@ if (DEVELOPMENT) {
   config = require("../nuxt.config.js").default;
 }
 import { get } from "../assets/js/fetchAPI";
-import {
-  hideVConsole,
-  getSupplierDetailUrl,
-  showVConsole
-} from "../assets/js/utils";
+import { getSupplierDetailUrl, showVConsole } from "../assets/js/utils";
 import { includeScriptSources, parseNewsIdWithinUrl } from "./utils";
 import { getQueryStringObject } from "../assets/js/utils";
 import { formatNews } from "../assets/js/formatter";
@@ -111,7 +107,6 @@ function beanfun_vueOnload() {
 
 function vconsoleOnload() {
   new VConsole();
-  hideVConsole();
 }
 
 async function serverEnvReady() {

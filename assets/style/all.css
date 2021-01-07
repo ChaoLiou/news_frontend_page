@@ -21,8 +21,11 @@ li {
 figure {
   margin: 0px;
 }
-#__vconsole.hidden {
+#__vconsole {
   display: none;
+}
+#__vconsole.showing {
+  display: block;
 }
 @media screen and (max-width: 1023px) {
   ::-webkit-scrollbar {

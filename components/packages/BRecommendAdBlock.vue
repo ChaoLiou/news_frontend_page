@@ -1,5 +1,8 @@
 <template>
-  <div class="b-recommend-ad-block" v-show="recommendationEnabled">
+  <div
+    class="b-recommend-ad-block"
+    v-show="recommendationEnabled && source.length > 0"
+  >
     <div class="b-recommend-ad-block__title" v-if="titleText">
       {{ titleText }}
     </div>

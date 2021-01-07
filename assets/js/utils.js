@@ -20,21 +20,10 @@ export const getQueryStringObject = () => {
   return result;
 };
 
-export const hideVConsole = () => {
-  const id = setInterval(() => {
-    const vConsoleDOM = document.querySelector("#__vconsole");
-    if (vConsoleDOM) {
-      vConsoleDOM.classList.add("hidden");
-      console.log("[Hide vConsole] vConsole is hidden");
-      clearInterval(id);
-    }
-  }, 100);
-};
-
 export const showVConsole = () => {
   const vConsoleDOM = document.querySelector("#__vconsole");
   if (vConsoleDOM) {
-    vConsoleDOM.classList.remove("hidden");
+    vConsoleDOM.classList.add("showing");
   }
 };
 
