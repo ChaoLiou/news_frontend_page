@@ -18,6 +18,7 @@ export const formatNews = x => {
     externalLink: x.src_url,
     publishTimeUnix: x.src_publish_time_unix,
     updateTimeUnix: x.src_update_time_unix,
+    description: x.description,
     recommendation: false
   };
 };

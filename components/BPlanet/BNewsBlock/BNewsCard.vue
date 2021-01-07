@@ -67,6 +67,7 @@ export default {
           name: VueTypes.string, // 新聞所屬分類 - 分類名稱
         })
       ),
+      description: VueTypes.string, // 新聞內容
       recommendation: VueTypes.bool, // 是否為推薦新聞
       index: VueTypes.integer, // 新聞 index
     }),
