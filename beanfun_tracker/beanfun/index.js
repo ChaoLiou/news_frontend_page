@@ -31,7 +31,7 @@ export const combineBody = async (
     network_type,
     app_build
   },
-  { app_version, platform, os_version, language, countrycode }
+  { app_version, platform, os_version, language, country }
 ) => {
   return {
     openId,
@@ -50,7 +50,7 @@ export const combineBody = async (
     app_ver: app_version,
     app_build: app_build,
     lang: language,
-    region: countrycode,
+    region: country,
     tz: getTimeZone(),
     latitude: null,
     longitude: null,

@@ -33,7 +33,7 @@ export const getMeProfileAsync = (debugMode = process.env.APP_DEBUG_MODE) => {
       app_version: "2.0.5",
       chat_id: "4c63e2996808a715babe42f5dbe83d35aea125ac",
       country: "TW",
-      countrycode: "TW",
+      countrycode: "886",
       emailVerified: true,
       lang: "language",
       language: "zh",

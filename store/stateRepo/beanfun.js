@@ -22,7 +22,7 @@ export const state = () => ({
     nickname: "",
     photo: "",
     photo_encode: "",
-    countrycode: "TW",
+    country: "TW",
     language: "zh_TW",
     phoneVerified: false,
     emailVerified: false,

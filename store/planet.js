@@ -14,10 +14,10 @@ export const getters = {
 export const actions = {
   async fetch({ dispatch, commit, rootGetters }) {
     try {
-      const { language, countrycode } = rootGetters["beanfun/profile"];
+      const { language, country } = rootGetters["beanfun/profile"];
       const payload = {
         lang: language,
-        country: countrycode
+        country
       };
       const res = await dispatchWrapper(dispatch, `api/${name}/fetch`, payload);
       const list = res.data;

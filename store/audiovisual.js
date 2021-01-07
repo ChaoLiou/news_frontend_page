@@ -15,12 +15,12 @@ export const actions = {
       if (!rootGetters["token/ts"]) {
         dispatchWrapper(dispatch, "token/update", Date.now());
       }
-      const { language, countrycode } = rootGetters["beanfun/profile"];
+      const { language, country } = rootGetters["beanfun/profile"];
       const payload = {
         ...data,
         ts: rootGetters["token/ts"],
         lang: language,
-        country: countrycode
+        country
       };
       const res = await dispatchWrapper(dispatch, `api/${name}/fetch`, payload);
       const list = res.data.map(formatVideo);
