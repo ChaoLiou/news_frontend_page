@@ -53,15 +53,13 @@ export const formatVideo = x => {
   const planets = categories
     .map(c => c.NewsMainBanner)
     .map(p => ({ id: p.id, name: p.name }));
-  const thumbnails =
-    x.Images && x.Images.length > 0
-      ? JSON.parse(x.Images[0].src_thumbnails)
-      : {};
+  const imageUrl =
+    x.Images && x.Images.length > 0 ? x.Images[0].src_url : undefined;
   const representativePlanet = planets.length > 0 ? planets[0] : {};
   return {
     id: x.id,
     youtubeId: x.youtube_data.ID,
-    img: thumbnails[process.env.VIDEO_IMAGE.size],
+    img: imageUrl,
     title: x.src_title,
     planets,
     representativePlanet: { name: representativePlanet.name },
