@@ -59,7 +59,7 @@ export const formatVideo = x => {
   return {
     id: x.id,
     youtubeId: x.youtube_data.ID,
-    img: imageUrl,
+    img: { url: imageUrl, height: 9, width: 16 },
     title: x.src_title,
     planets,
     representativePlanet: { name: representativePlanet.name },
