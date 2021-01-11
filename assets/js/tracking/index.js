@@ -11,7 +11,7 @@ export const initTracker = async (
   trackingVersion,
   logEnabled
 ) => {
-  if (BTracker) {
+  if (typeof BTracker !== "undefined" && BTracker) {
     await BTracker.initTracker(userId, openId, trackingVersion, logEnabled);
   } else {
     console.error(
@@ -27,7 +27,7 @@ export const initTracker = async (
  * @param {*} verifyKey [String] ⽤來確認 event 是否合法的 token
  */
 export const addSnowplowTracker = (trackingGroup, serverUrl, verifyKey) => {
-  if (BTracker) {
+  if (typeof BTracker !== "undefined" && BTracker) {
     BTracker.addSnowplowTracker(trackingGroup, serverUrl, verifyKey);
   } else {
     console.error(
@@ -49,7 +49,7 @@ export const addBeanfunTracker = (
   oaid,
   officialAccountAccessToken
 ) => {
-  if (BTracker) {
+  if (typeof BTracker !== "undefined" && BTracker) {
     BTracker.addBeanfunTracker(
       trackingGroup,
       serverUrl,
@@ -69,7 +69,7 @@ export const addBeanfunTracker = (
  * @param {*} trackingId [String] GA 提供的 Tracking ID，通常為 UA 開頭的⼀組字串
  */
 export const addGATracker = (trackingGroup, trackingId) => {
-  if (BTracker) {
+  if (typeof BTracker !== "undefined" && BTracker) {
     BTracker.addGATracker(trackingGroup, trackingId);
   } else {
     console.error(
@@ -92,16 +92,16 @@ export const trackEvent = async (
   eventCategory,
   eventAction,
   payload,
-  trackerType = BTracker.TYPE.ALL,
+  trackerType,
   trackingGroup = "planet"
 ) => {
-  if (BTracker) {
+  if (typeof BTracker !== "undefined" && BTracker) {
     await BTracker.trackEvent(
       eventId,
       eventCategory,
       eventAction,
       payload,
-      trackerType,
+      trackerType ? trackerType : BTracker.TYPE.ALL,
       trackingGroup
     );
   } else {
