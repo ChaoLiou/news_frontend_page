@@ -80,7 +80,7 @@ export default {
          */
         this.$emit("switch-tab", item);
         this.selectedTab = item;
-        this.$router.history.push({
+        this.$router.history.replace({
           name: this.name,
           hash: `#${item[this.identifierKey]}`,
         });
