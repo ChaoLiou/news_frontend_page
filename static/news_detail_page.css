@@ -50,7 +50,6 @@ figure {
   height: 100%;
   grid-column: 1/2;
   grid-row: 2/-1;
-  background-color: #c5c5c5;
 }
 .header__source-title {
   grid-row: 2/3;
