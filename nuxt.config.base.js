@@ -44,6 +44,10 @@ export default {
       {
         src: "/beanfun_tracker/sdk/beanfun_tracker-0.01.min.js",
         group: "tracker"
+      },
+      {
+        src: "/polyfill/intersection-observer.js",
+        group: "beanfun_vue"
       }
     ]
   },
