@@ -1,5 +1,9 @@
 <template>
-  <div class="b-masonry-scroll" :style="style">
+  <div
+    class="b-masonry-grid"
+    :class="{ 'b-masonry-grid_source-none': source.length === 0 }"
+    :style="style"
+  >
     <b-masonry-proxy
       v-for="(item, index) in source"
       :key="index"
@@ -19,16 +23,21 @@
     </b-masonry-proxy>
     <template v-if="loading">
       <div
-        class="b-masonry-scroll__placeholder"
-        :style="{
-          gridRowEnd: index % 2 === 0 ? 'span 11' : 'span 10',
-          ...placeholderStyle,
-        }"
-        v-for="index in 7"
-        :key="`placeholder-${index}`"
-      ></div>
+        class="b-masonry-grid__placeholder placeholder"
+        :style="defaultPlaceholderStyle"
+      >
+        <div
+          class="placeholder__item"
+          :style="{
+            gridRowEnd: index % 2 === 0 ? 'span 11' : 'span 10',
+            ...placeholderStyle,
+          }"
+          v-for="index in placeholderAmount"
+          :key="`placeholder-${index}`"
+        ></div>
+      </div>
     </template>
-    <div class="b-masonry-scroll__no-more" v-else>
+    <div class="b-masonry-grid__no-more" v-else-if="source.length > 0">
       <!--
           @slot 當沒有更多項目時顯示
         -->
@@ -86,6 +95,15 @@ export default {
         return {};
       },
     },
+    /**
+     * placeholder 的數量
+     */
+    placeholderAmount: {
+      type: Number,
+      default() {
+        return 7;
+      },
+    },
   },
   data() {
     return {
@@ -103,6 +121,11 @@ export default {
       );
     },
     style() {
+      return {
+        gridTemplateColumns: `repeat(${this.column}, minmax(150px, 1fr))`,
+      };
+    },
+    defaultPlaceholderStyle() {
       return {
         gridTemplateColumns: `repeat(${this.column}, minmax(150px, 1fr))`,
         gridAutoRows: this.autoHeight || this.loading ? "10px" : undefined,
@@ -175,22 +198,33 @@ export default {
 </script>
 
 <style scoped>
-.b-masonry-scroll {
+.b-masonry-grid {
   display: grid;
 }
-.b-masonry-scroll__placeholder {
-  animation-duration: 1.5s;
+.b-masonry-grid__placeholder {
+  display: grid;
+  row-gap: 5px;
+}
+.placeholder__item,
+.b-masonry-grid_source-none {
+  animation-duration: 2s;
   animation-fill-mode: forwards;
   animation-iteration-count: infinite;
   animation-name: placeload;
   animation-timing-function: linear;
-  background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
-  background-size: 1200px 104px;
+  background-size: 2000px 100px;
   position: relative;
 }
-.b-masonry-scroll__no-more {
+.placeholder__item {
+  background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+}
+.b-masonry-grid_source-none {
+  background: linear-gradient(to right, #262626 8%, #363636 28%, #262626 43%);
+}
+.b-masonry-grid__no-more {
   grid-column: 1/-1;
   justify-self: center;
+  align-self: end;
   color: #00000081;
 }
 @keyframes placeload {

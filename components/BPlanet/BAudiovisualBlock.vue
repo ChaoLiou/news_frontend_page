@@ -10,15 +10,9 @@
       <b-masonry-grid
         v-if="vertical"
         :source="source"
-        :loading="loading"
         :column="1"
         :auto-height="false"
         ref="bMasonryScroll"
-        :placeholderStyle="{
-          background:
-            'linear-gradient(to right, #262626 8%, #363636 28%, #262626 43%)',
-          height: '200px',
-        }"
         @load-more="loadMore"
       >
         <template #default="props">
@@ -256,5 +250,8 @@ export default {
 }
 .b-audiovisual-block_masonry {
   background-color: #262626;
+}
+.b-masonry-grid {
+  min-height: 100vh;
 }
 </style>
