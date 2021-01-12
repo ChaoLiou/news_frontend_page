@@ -256,11 +256,18 @@ function initRecommendNewsBlock() {
     },
     methods: {
       async navigate(data) {
+        const categories = data.categories.map(x => x.name);
+        const representativeCategory =
+          categories.length > 0 ? categories[0] : "";
         await trackEvent(
           click_news.id,
           click_news.category,
           click_news.action,
           click_news.formatPayload(
+            data.representativePlanet.name,
+            representativeCategory,
+            data.link,
+            data.title,
             data.id,
             data.index,
             data.source.site.id,

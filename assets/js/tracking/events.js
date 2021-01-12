@@ -63,14 +63,35 @@ export const click_news_category = {
 export const click_news = {
   id: 803,
   /**
-   * @param {String} newsId 新聞 Id
+   *
+   * @param {string} planetName 星球名稱
+   * @param {string} categoryName 分類名稱
+   * @param {string} detailPageLink 詳細頁網址
+   * @param {string} newsTitle 新聞標題
+   * @param {string} newsId 新聞 Id
+   * @param {number} newsIndex 新聞 Index
    * @param {Number} newsIndex 新聞 Index
    * @param {Number} siteId 站台 Id
    * @param {String} siteName 站台名稱
    * @param {Number} rssId RSS Id
    * @param {String} rssName RSS 名稱
    */
-  formatPayload: (newsId, newsIndex, siteId, siteName, rssId, rssName) => ({
+  formatPayload: (
+    planetName,
+    categoryName,
+    detailPageLink,
+    newsTitle,
+    newsId,
+    newsIndex,
+    siteId,
+    siteName,
+    rssId,
+    rssName
+  ) => ({
+    pg_name: planetName,
+    category: categoryName,
+    url: detailPageLink,
+    title: newsTitle,
     uuid: newsId,
     pos: newsIndex,
     content_provider_id: siteId,
