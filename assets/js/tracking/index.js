@@ -11,13 +11,8 @@ export const initTracker = async (
   trackingVersion,
   logEnabled
 ) => {
-  if (typeof BTracker !== "undefined" && BTracker) {
-    await BTracker.initTracker(userId, openId, trackingVersion, logEnabled);
-  } else {
-    console.error(
-      `[tracking/index] you need to include '/beanfun_tracker/sdk/beanfun_tracker-0.01.min.js'`
-    );
-  }
+  const bTracker = getBTrackerObj();
+  await bTracker.initTracker(userId, openId, trackingVersion, logEnabled);
 };
 
 /**
@@ -27,13 +22,8 @@ export const initTracker = async (
  * @param {*} verifyKey [String] ⽤來確認 event 是否合法的 token
  */
 export const addSnowplowTracker = (trackingGroup, serverUrl, verifyKey) => {
-  if (typeof BTracker !== "undefined" && BTracker) {
-    BTracker.addSnowplowTracker(trackingGroup, serverUrl, verifyKey);
-  } else {
-    console.error(
-      `[tracking/index] you need to include '/beanfun_tracker/sdk/beanfun_tracker-0.01.min.js'`
-    );
-  }
+  const bTracker = getBTrackerObj();
+  bTracker.addSnowplowTracker(trackingGroup, serverUrl, verifyKey);
 };
 
 /**
@@ -49,18 +39,13 @@ export const addBeanfunTracker = (
   oaid,
   officialAccountAccessToken
 ) => {
-  if (typeof BTracker !== "undefined" && BTracker) {
-    BTracker.addBeanfunTracker(
-      trackingGroup,
-      serverUrl,
-      oaid,
-      officialAccountAccessToken
-    );
-  } else {
-    console.error(
-      `[tracking/index] you need to include '/beanfun_tracker/sdk/beanfun_tracker-0.01.min.js'`
-    );
-  }
+  const bTracker = getBTrackerObj();
+  bTracker.addBeanfunTracker(
+    trackingGroup,
+    serverUrl,
+    oaid,
+    officialAccountAccessToken
+  );
 };
 
 /**
@@ -69,13 +54,8 @@ export const addBeanfunTracker = (
  * @param {*} trackingId [String] GA 提供的 Tracking ID，通常為 UA 開頭的⼀組字串
  */
 export const addGATracker = (trackingGroup, trackingId) => {
-  if (typeof BTracker !== "undefined" && BTracker) {
-    BTracker.addGATracker(trackingGroup, trackingId);
-  } else {
-    console.error(
-      `[tracking/index] you need to include '/beanfun_tracker/sdk/beanfun_tracker-0.01.min.js'`
-    );
-  }
+  const bTracker = getBTrackerObj();
+  bTracker.addGATracker(trackingGroup, trackingId);
 };
 
 /**
@@ -95,15 +75,22 @@ export const trackEvent = async (
   trackerType,
   trackingGroup = "planet"
 ) => {
+  const bTracker = getBTrackerObj();
+  await bTracker.trackEvent(
+    eventId,
+    eventCategory,
+    eventAction,
+    payload,
+    trackerType ? trackerType : BTracker.TYPE.ALL,
+    trackingGroup
+  );
+};
+
+const getBTrackerObj = () => {
   if (typeof BTracker !== "undefined" && BTracker) {
-    await BTracker.trackEvent(
-      eventId,
-      eventCategory,
-      eventAction,
-      payload,
-      trackerType ? trackerType : BTracker.TYPE.ALL,
-      trackingGroup
-    );
+    return BTracker;
+  } else if (window.BTracker) {
+    return window.BTracker;
   } else {
     console.error(
       `[tracking/index] you need to include '/beanfun_tracker/sdk/beanfun_tracker-0.01.min.js'`
