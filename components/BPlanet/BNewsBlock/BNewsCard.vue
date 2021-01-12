@@ -28,7 +28,7 @@
       </div>
       <div class="b-news-card__info">
         <div class="b-news-card__title">{{ data.title }}</div>
-        <div class="b-news-card__source">{{ data.source.name }}</div>
+        <div class="b-news-card__source">{{ rss.name }}</div>
       </div>
     </div>
   </div>
@@ -55,8 +55,15 @@ export default {
       externalLink: VueTypes.string, // 新聞外部連結
       img: VueTypes.string, // 新聞代表圖片網址
       source: VueTypes.shape({
-        name: VueTypes.string, // 新聞來源 - 名稱
-        logoImage: VueTypes.string, // 新聞來源 - logo 圖片網址
+        rss: VueTypes.shape({
+          id: VueTypes.number, // 新聞來源 - RSS Id
+          name: VueTypes.string, // 新聞來源 - RSS 名稱
+          logoImage: VueTypes.string, // 新聞來源 - RSS logo 圖片網址
+        }),
+        site: VueTypes.shape({
+          id: VueTypes.number, // 新聞來源 - 站台 Id
+          name: VueTypes.string, // 新聞來源 - 站台名稱
+        }),
       }),
       representativePlanet: VueTypes.shape({
         name: VueTypes.string, // 新聞所屬星球中第一個星球 - 名稱
@@ -101,6 +108,9 @@ export default {
     };
   },
   computed: {
+    rss() {
+      return this.data.source ? this.data.source.rss : {};
+    },
     imgLoading() {
       return this.imgStatus === IMAGE_STATUS_TYPE.LOADING;
     },

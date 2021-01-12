@@ -53,10 +53,10 @@
         <div v-if="data.source" class="b-audiovisual-player__source">
           <div
             class="b-audiovisual-player__source-img"
-            :style="{ backgroundImage: `url(${data.source.img})` }"
+            :style="{ backgroundImage: `url(${site.img})` }"
           ></div>
           <div class="b-audiovisual-player__source-title">
-            {{ data.source.title }}
+            {{ site.name }}
           </div>
         </div>
         <div
@@ -103,8 +103,15 @@ export default {
         height: VueTypes.number, // 影音預覽圖 - 高
       }),
       source: VueTypes.shape({
-        title: VueTypes.string, // 影音來源 - 標題
-        img: VueTypes.string, // 影音來源 - 圖片
+        rss: VueTypes.shape({
+          id: VueTypes.number, // 影音來源 - RSS Id
+          name: VueTypes.string, // 影音來源 - RSS 名稱
+        }),
+        site: VueTypes.shape({
+          id: VueTypes.number, // 影音來源 - 站台 Id
+          name: VueTypes.string, // 影音來源 - 站台名稱
+          img: VueTypes.string, // 影音來源 - 圖片
+        }),
       }),
       index: VueTypes.integer, // 影音 index
     }),
@@ -123,6 +130,9 @@ export default {
     };
   },
   computed: {
+    site() {
+      return this.data.source ? this.data.source.site : {};
+    },
     sourceExists() {
       return !!this.data.youtubeId;
     },

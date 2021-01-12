@@ -157,25 +157,28 @@ export default {
         };
         const list = await this.$store.dispatch("audiovisual/fetch", payload);
         this.loadMoreVideo(list, pageIndex);
-        const ids = list.map((x) => x.id);
+        const videos = list.map((x) => ({
+          id: x.id,
+          siteId: x.source.site.id,
+          siteName: x.source.site.name,
+          rssId: x.source.rss.id,
+          rssName: x.source.rss.name,
+          blockType: BLOCK_TYPE.VIDEO,
+          planetName: this.planetName,
+        }));
         if (this.vertical) {
           await trackEvent(
             impression_video_page.id,
             impression_video_page.category,
             impression_video_page.action,
-            impression_video_page.formatPayload(ids)
+            impression_video_page.formatPayload(videos)
           );
         } else {
           await trackEvent(
             impression_landing_page.id,
             impression_landing_page.category,
             impression_landing_page.action,
-            impression_landing_page.formatPayload(
-              ids,
-              BLOCK_TYPE.VIDEO,
-              "",
-              this.planetName
-            )
+            impression_landing_page.formatPayload(videos)
           );
         }
         this.loading = false;
@@ -186,7 +189,14 @@ export default {
         click_video.id,
         click_video.category,
         click_video.action,
-        click_video.formatPayload(data.id, data.index)
+        click_video.formatPayload(
+          data.id,
+          data.index,
+          data.source.site.id,
+          data.source.site.name,
+          data.source.rss.id,
+          data.source.rss.name
+        )
       );
       const origin = getHashModeOrigin(this.$router);
       const link = `${origin}/${this.planetId}/audiovisual/${data.id}`;
@@ -205,19 +215,17 @@ export default {
         click_video_play.id,
         click_video_play.category,
         click_video_play.action,
-        click_video_play.formatPayload(data.id)
+        click_video_play.formatPayload(
+          data.id,
+          data.source.site.id,
+          data.source.site.name,
+          data.source.rss.id,
+          data.source.rss.name
+        )
       );
     },
     async horizontalOnScrollEnd() {
-      await trackEvent(
-        swipe_banner.id,
-        swipe_banner.category,
-        swipe_banner.action,
-        swipe_banner.formatPayload(
-          this.currentLastItem.id,
-          this.currentLastItem.index
-        )
-      );
+      // [deprecated] track swipe_banner
     },
   },
   watch: {

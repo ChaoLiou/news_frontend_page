@@ -59,12 +59,15 @@ export const renderToolMenu = (insideSharingText, outsideSharingText) => {
 };
 
 export const renderSource = source => {
-  if (source.logoImage) {
-    const sourceImgDOM = document.querySelector(".header__source-img");
-    sourceImgDOM.style.backgroundImage = `url("/${source.logoImage}")`;
+  if (source) {
+    const rss = source.rss;
+    if (rss.logoImage) {
+      const sourceImgDOM = document.querySelector(".header__source-img");
+      sourceImgDOM.style.backgroundImage = `url("/${rss.logoImage}")`;
+    }
+    const sourceTitleDOM = document.querySelector(".header__source-title");
+    sourceTitleDOM.textContent = rss.name;
   }
-  const sourceTitleDOM = document.querySelector(".header__source-title");
-  sourceTitleDOM.textContent = source.name;
 };
 
 export const renderDateTimeInfo = (published, updated) => {

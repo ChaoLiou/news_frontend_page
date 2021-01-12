@@ -54,7 +54,7 @@ export default {
         click_tab.id,
         click_tab.category,
         click_tab.action,
-        click_tab.formatPayload({ planetName: planet.name })
+        click_tab.formatPayload(planet.name)
       );
     },
   },

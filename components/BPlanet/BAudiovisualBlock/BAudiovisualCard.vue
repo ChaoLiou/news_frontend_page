@@ -15,7 +15,7 @@
       <div class="b-audiovisual-card__info">
         <div class="b-audiovisual-card__views">{{ views }}</div>
         <div class="b-audiovisual-card__title">{{ data.title }}</div>
-        <div class="b-audiovisual-card__source">{{ data.source.title }}</div>
+        <div class="b-audiovisual-card__source">{{ site.name }}</div>
       </div>
     </div>
   </div>
@@ -55,8 +55,15 @@ export default {
         height: VueTypes.number, // 影音預覽圖 - 高
       }),
       source: VueTypes.shape({
-        title: VueTypes.string, // 影音來源 - 標題
-        img: VueTypes.string, // 影音來源 - 圖片
+        rss: VueTypes.shape({
+          id: VueTypes.number, // 影音來源 - RSS Id
+          name: VueTypes.string, // 影音來源 - RSS 名稱
+        }),
+        site: VueTypes.shape({
+          id: VueTypes.number, // 影音來源 - 站台 Id
+          name: VueTypes.string, // 影音來源 - 站台名稱
+          img: VueTypes.string, // 影音來源 - 圖片
+        }),
       }),
       index: VueTypes.integer, // 影音 index
     }),
@@ -81,6 +88,9 @@ export default {
     };
   },
   computed: {
+    site() {
+      return this.data.source ? this.data.source.site : {};
+    },
     planetId() {
       return this.data.planets.length > 0 ? this.data.planets[0].id : undefined;
     },

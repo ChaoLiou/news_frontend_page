@@ -8,9 +8,10 @@ export const initTracker = async ({
   tVer,
   beanfunTrackerServerUrl,
   oaid,
-  officialAccountAccessToken
+  officialAccountAccessToken,
+  logEnabled
 }) => {
-  await _initTracker("null", openId, tVer, true);
+  await _initTracker("null", openId, tVer, logEnabled);
   addBeanfunTracker(
     "planet",
     beanfunTrackerServerUrl,

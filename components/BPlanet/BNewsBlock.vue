@@ -178,18 +178,17 @@ export default {
       this.longTouch.counter = 0;
     },
     async navigate(data) {
-      const categoryNames = data.categories.map((x) => x.name);
       await trackEvent(
         click_news.id,
         click_news.category,
         click_news.action,
         click_news.formatPayload(
-          data.representativePlanet.name,
-          categoryNames,
-          data.link,
-          data.title,
           data.id,
-          data.index
+          data.index,
+          data.source.site.id,
+          data.source.site.name,
+          data.source.rss.id,
+          data.source.rss.name
         )
       );
       let link = data.link;
@@ -248,10 +247,7 @@ export default {
           click_news_category.id,
           click_news_category.category,
           click_news_category.action,
-          click_news_category.formatPayload({
-            categoryName: this.selectedTag.title,
-            categoryIndex: targetIndex,
-          })
+          click_news_category.formatPayload(this.selectedTag.title, targetIndex)
         );
         await this.init();
       }
@@ -281,17 +277,21 @@ export default {
         const list = await this.$store.dispatch("news/fetch", payload);
         this.loadMoreNews(list, pageIndex);
 
-        const ids = list.map((x) => x.id);
+        const newsList = list.map((x) => ({
+          id: x.id,
+          siteId: x.source.site.id,
+          siteName: x.source.site.name,
+          rssId: x.source.rss.id,
+          rssName: x.source.rss.name,
+          blockType: BLOCK_TYPE.NEWS,
+          planetName: this.planetName,
+          categoryName: this.selectedTag.title,
+        }));
         await trackEvent(
           impression_landing_page.id,
           impression_landing_page.category,
           impression_landing_page.action,
-          impression_landing_page.formatPayload(
-            ids,
-            BLOCK_TYPE.NEWS,
-            this.selectedTag.title,
-            this.planetName
-          )
+          impression_landing_page.formatPayload(newsList)
         );
         this.loading = false;
       }

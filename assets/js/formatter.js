@@ -3,14 +3,22 @@ export const formatNews = x => {
   const planets = categories
     .map(c => c.NewsMainBanner)
     .map(p => ({ name: p.name, id: p.id }));
+  const site = x.src_site ? x.src_site : {};
   const rss = x.NewsSourceFetch ? x.NewsSourceFetch : {};
   return {
     id: x.id,
     img: x.Images && x.Images.length > 0 ? x.Images[0].file_path : undefined,
     title: x.src_title,
     source: {
-      name: rss.name,
-      logoImage: rss.icon_image_path
+      rss: {
+        id: rss.id,
+        name: rss.name,
+        logoImage: rss.icon_image_path
+      },
+      site: {
+        id: site.id,
+        name: site.name
+      }
     },
     categories: categories.map(c => ({ name: c.name })),
     representativePlanet: planets.length > 0 ? planets[0] : {},
@@ -56,6 +64,8 @@ export const formatVideo = x => {
   const imageUrl =
     x.Images && x.Images.length > 0 ? x.Images[0].src_url : undefined;
   const representativePlanet = planets.length > 0 ? planets[0] : {};
+  const site = x.src_site ? x.src_site : {};
+  const rss = x.NewsSourceFetch ? x.NewsSourceFetch : {};
   return {
     id: x.id,
     youtubeId: x.youtube_data.ID,
@@ -67,8 +77,15 @@ export const formatVideo = x => {
       ? new Date(x.src_start_ymdt_unix)
       : undefined,
     source: {
-      img: x.src_site.SiteIconURL,
-      title: x.src_site.name
+      rss: {
+        id: rss.id,
+        name: rss.name
+      },
+      site: {
+        id: site.id,
+        name: site.name,
+        img: site.SiteIconURL
+      }
     },
     views: x.youtube_data.ViewCount,
     description: x.youtube_data.Description

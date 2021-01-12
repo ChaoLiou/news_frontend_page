@@ -10,13 +10,21 @@ export const formatNews = x => {
       return { name, id: p.id };
     });
   const rss = x.news_source_fetch ? x.news_source_fetch : {};
+  const site = x.news_source_site ? x.news_source_site : {};
   return {
     id: x.id,
     img: x.images && x.images.length > 0 ? x.images[0].file_path : undefined,
     title: x.src_title,
     source: {
-      name: rss.name,
-      logoImage: rss.fetch_icon_url
+      rss: {
+        id: rss.id,
+        name: rss.name,
+        logoImage: rss.fetch_icon_url
+      },
+      site: {
+        id: site.id,
+        name: site.name
+      }
     },
     categories: categories.map(c => ({ name: c.name })),
     representativePlanet: planets.length > 0 ? planets[0] : {},

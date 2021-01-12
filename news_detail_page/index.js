@@ -36,7 +36,11 @@ import {
 import { trackEvent } from "../assets/js/tracking";
 import { initTracker } from "./init-tracker";
 import { getOSType, getTimeZone } from "../assets/js/tracking/utils";
-import { click_news, view_news_page } from "../assets/js/tracking/events";
+import {
+  click_news,
+  view_news_page,
+  read_news_article
+} from "../assets/js/tracking/events";
 import { state as initBeanfunState } from "../store/stateRepo/beanfun";
 import { state as initEventState } from "../store/stateRepo/event";
 let _beanfunState = initBeanfunState();
@@ -48,7 +52,8 @@ const {
   TRACKING_EVENT = {},
   SUPPLIER = {},
   RECOMMENDATION_ENABLED = { news: true, product: true },
-  AD = {}
+  AD = {},
+  TRACKER_DEBUG_MODE = false
 } = config.env;
 let _serverEnv = {
   officialAccountId: "",
@@ -73,23 +78,25 @@ function stopDetectingLongTouch() {
 }
 
 window.vconsoleOnload = vconsoleOnload;
-window.beanfun_vueOnload = beanfun_vueOnload;
+window.beanfun_vue_trackerOnload = beanfun_vue_trackerOnload;
 
 const scripts = [
   ...config.head.script.filter(x => !!x.group),
   { src: "https://cdn.jsdelivr.net/npm/vue/dist/vue.js", group: "beanfun_vue" },
   {
     src: "/packages/b-recommend-news-block/index.umd.min.js",
-    group: "beanfun_vue"
+    group: "beanfun_vue_tracker"
   },
   {
     src: "/packages/b-recommend-ad-block/index.umd.min.js",
-    group: "beanfun_vue"
+    group: "beanfun_vue_tracker"
   }
 ];
 includeScriptSources(scripts);
 
-function beanfun_vueOnload() {
+function beanfun_vue_trackerOnload() {
+  // beanfun, vue and tracker are all loaded.
+
   get("variable", BASE_URL.backendApi)
     .then(
       json =>
@@ -102,6 +109,7 @@ function beanfun_vueOnload() {
         })
     )
     .then(serverEnvReady)
+    .then(requestNewsDetail)
     .then(initRecommendNewsBlock);
 }
 
@@ -151,7 +159,8 @@ async function serverEnvReady() {
           tVer: TRACKING_EVENT.trackingVer,
           beanfunTrackerServerUrl: `${BASE_URL.trackingApi}/tracking`,
           oaid: officialAccountId,
-          officialAccountAccessToken: token
+          officialAccountAccessToken: token,
+          logEnabled: TRACKER_DEBUG_MODE
         });
       }
     }
@@ -175,7 +184,9 @@ function init() {
   };
 
   renderToolMenu("轉傳", "分享");
+}
 
+function requestNewsDetail() {
   get(`news?id=${_newsId}`, BASE_URL.backendApi).then(json =>
     Array.isArray(json.data) && json.data.length > 0
       ? initWithNews(formatNews(json.data[0]))
@@ -249,14 +260,14 @@ function initRecommendNewsBlock() {
           click_news.id,
           click_news.category,
           click_news.action,
-          click_news.formatPayload({
-            planetName: data.representativePlanet.name,
-            categoryName: data.categories.map(x => x.name),
-            detailPageLink: data.link,
-            newsTitle: data.title,
-            newsId: data.id,
-            newsIndex: data.index
-          })
+          click_news.formatPayload(
+            data.id,
+            data.index,
+            data.source.site.id,
+            data.source.site.name,
+            data.source.rss.id,
+            data.source.rss.name
+          )
         );
         let link = data.link;
         link = SUPPLIER.enabled
@@ -304,7 +315,7 @@ function bindScroll(news) {
   const scrollableDistance =
     headerDOM.offsetHeight + detailDOM.offsetHeight - window.screen.height;
   const startScrollingX = 0;
-  window.addEventListener("scroll", event => {
+  window.addEventListener("scroll", () => {
     const scrolledDistance = pageYOffset - startScrollingX;
     const scrolledDistanceRate = (scrolledDistance * 100) / scrollableDistance;
     const undoneStages = stages.filter(x => !x.done);
@@ -314,10 +325,17 @@ function bindScroll(news) {
         stage.done = true;
         Promise.resolve(
           trackEvent(
-            view_news_page.id,
-            view_news_page.category,
-            view_news_page.action,
-            view_news_page.formatPayload(news.id, stage.rate)
+            read_news_article.id,
+            read_news_article.category,
+            read_news_article.action,
+            read_news_article.formatPayload(
+              news.id,
+              news.source.site.id,
+              news.source.site.name,
+              news.source.rss.id,
+              news.source.rss.name,
+              stage.rate
+            )
           )
         );
       }
@@ -397,4 +415,19 @@ function bindEvents(news) {
       }
     });
   });
+
+  Promise.resolve(
+    trackEvent(
+      view_news_page.id,
+      view_news_page.category,
+      view_news_page.action,
+      view_news_page.formatPayload(
+        news.id,
+        news.source.site.id,
+        news.source.site.name,
+        news.source.rss.id,
+        news.source.rss.name
+      )
+    )
+  );
 }

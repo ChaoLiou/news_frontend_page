@@ -34,7 +34,7 @@ export default {
         src:
           // "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beango_stg.min.js",
           "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beanfun.min.js",
-        group: "beanfun_vue"
+        group: "beanfun_vue_tracker"
       },
       {
         src:
@@ -43,11 +43,11 @@ export default {
       },
       {
         src: "/beanfun_tracker/sdk/beanfun_tracker-0.01.min.js",
-        group: "tracker"
+        group: "beanfun_vue_tracker"
       },
       {
         src: "/polyfill/intersection-observer.js",
-        group: "beanfun_vue"
+        group: "beanfun_vue_tracker"
       }
     ]
   },

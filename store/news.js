@@ -41,7 +41,9 @@ export const actions = {
         country
       };
       const res = await dispatchWrapper(dispatch, `api/${name}/fetch`, payload);
-      list.push(...res.data.map(formatNews));
+      if (res && Array.isArray(res.data)) {
+        list.push(...res.data.map(formatNews));
+      }
 
       commitWrapper(commit, `stateRepo/${name}/fetch`, list);
       return list;
