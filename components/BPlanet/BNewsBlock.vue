@@ -179,15 +179,13 @@ export default {
     },
     async navigate(data) {
       const categoryNames = data.categories.map((x) => x.name);
-      const representativeCategory =
-        categoryNames.length > 0 ? categoryNames[0] : "";
       await trackEvent(
         click_news.id,
         click_news.category,
         click_news.action,
         click_news.formatPayload(
           data.representativePlanet.name,
-          representativeCategory,
+          categoryNames,
           data.link,
           data.title,
           data.id,
