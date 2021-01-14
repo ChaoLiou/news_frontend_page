@@ -22,7 +22,8 @@ export default Object.assign(config, {
       enabled: true,
       detailUrls: [
         "articles/tw/1/1342491504970567680/detail.html",
-        "articles/tw/1/1342375722760540160/detail.html"
+        "articles/tw/1/1342375722760540160/detail.html",
+        "articles/tw/41/1348948166656921600/detail.html"
       ],
       openId: ""
     },
