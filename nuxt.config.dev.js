@@ -4,7 +4,7 @@ export default Object.assign(config, {
   env: {
     BASE_URL: {
       backendApi: "https://576ef25991bf.ngrok.io/v1",
-      trackingApi: "https://f725075ecf24.ngrok.io/v1",
+      trackingApi: "http://d00c3a8a716a.ngrok.io/v1",
       recommendationApi: "https://stg-news-api.beanfun.com/v1"
     },
     RECOMMENDATION_ENABLED: {
