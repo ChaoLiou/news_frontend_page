@@ -135,6 +135,13 @@ iframe[src^="https://www.youtube.com/embed/"] {
 .content > div {
   width: inherit !important;
 }
+.detail__content * {
+  margin: 0px !important;
+  font-size: 15px !important;
+  line-height: 24px !important;
+  font-weight: 400 !important;
+  color: #333333 !important;
+}
 .tool-menu {
   width: inherit;
   position: fixed;
