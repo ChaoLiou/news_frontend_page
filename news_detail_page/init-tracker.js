@@ -1,6 +1,7 @@
 import {
   initTracker as _initTracker,
-  addBeanfunTracker
+  addBeanfunTracker,
+  addGATracker
 } from "../assets/js/tracking";
 
 export const initTracker = async ({
@@ -9,6 +10,7 @@ export const initTracker = async ({
   beanfunTrackerServerUrl,
   oaid,
   officialAccountAccessToken,
+  gaId,
   logEnabled
 }) => {
   await _initTracker("null", openId, tVer, logEnabled);
@@ -18,4 +20,5 @@ export const initTracker = async ({
     oaid,
     officialAccountAccessToken
   );
+  addGATracker("planet", gaId);
 };

@@ -90,6 +90,10 @@ const scripts = [
   {
     src: "/packages/b-recommend-ad-block/index.umd.min.js",
     group: "beanfun_vue_tracker"
+  },
+  {
+    src: `https://www.googletagmanager.com/gtag/js?id=${TRACKING_EVENT.gaId}`,
+    group: "beanfun_vue_tracker"
   }
 ];
 includeScriptSources(scripts);
@@ -160,6 +164,7 @@ async function serverEnvReady() {
           beanfunTrackerServerUrl: `${BASE_URL.trackingApi}/tracking`,
           oaid: officialAccountId,
           officialAccountAccessToken: token,
+          gaId: TRACKING_EVENT.gaId,
           logEnabled: TRACKER_DEBUG_MODE
         });
       }
@@ -350,6 +355,14 @@ function bindScroll(news) {
 
 function bindEvents(news) {
   bindScroll(news);
+
+  document.querySelectorAll(".detail__content iframe").forEach(iframeDOM => {
+    const width = iframeDOM.getAttribute("beanfun-width");
+    const height = iframeDOM.getAttribute("beanfun-height");
+    if (width && height) {
+      iframeDOM.style.height = `calc(${iframeDOM.offsetWidth}px * ${height} / ${width})`;
+    }
+  });
 
   document
     .querySelectorAll(".detail__content a.link__open-by-default-browser")

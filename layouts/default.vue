@@ -4,7 +4,18 @@
   </div>
 </template>
 <script>
-export default {};
+const gaId = process.env.TRACKING_EVENT.gaId;
+export default {
+  head() {
+    return {
+      script: [
+        {
+          src: "https://www.googletagmanager.com/gtag/js?id=" + gaId,
+        },
+      ],
+    };
+  },
+};
 </script>
 <style scoped>
 </style>

@@ -17,7 +17,7 @@ export const trackEvent = async (serverUrl, body) => {
   }
 };
 
-export const combineBody = async (
+export const combineBody = (
   { openId, userId, trackingVersion },
   eventId,
   payload,

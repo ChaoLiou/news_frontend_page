@@ -4,7 +4,11 @@ import {
   checkAppExistAsync
 } from "@/assets/js/beango/index.async";
 import { generateUUID } from "@/assets/js/utils";
-import { initTracker, addBeanfunTracker } from "@/assets/js/tracking";
+import {
+  initTracker,
+  addBeanfunTracker,
+  addGATracker
+} from "@/assets/js/tracking";
 
 const name = "event";
 
@@ -47,6 +51,8 @@ export default async function({ store, env }) {
       oaid,
       officialAccountAccessToken
     );
+
+    addGATracker(trackingGroup, env.TRACKING_EVENT.gaId);
 
     store.dispatch(`${name}/initalize`);
   }

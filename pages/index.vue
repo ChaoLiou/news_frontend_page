@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { view_ladning_page, click_tab } from "@/assets/js/tracking/events";
+import { view_landing_page, click_tab } from "@/assets/js/tracking/events";
 import { trackEvent } from "@/assets/js/tracking";
 
 export default {
@@ -33,10 +33,10 @@ export default {
   middleware: ["planet", "appCache"],
   async mounted() {
     await trackEvent(
-      view_ladning_page.id,
-      view_ladning_page.category,
-      view_ladning_page.action,
-      view_ladning_page.formatPayload(this.selectedTab.name)
+      view_landing_page.id,
+      view_landing_page.category,
+      view_landing_page.action,
+      view_landing_page.formatPayload(this.selectedTab.name)
     );
   },
   computed: {

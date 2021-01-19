@@ -1,7 +1,7 @@
 /**
  * 星球畫面出現
  */
-export const view_ladning_page = {
+export const view_landing_page = {
   id: 800,
   /**
    *
@@ -11,7 +11,7 @@ export const view_ladning_page = {
     pg_name: planetName
   }),
   category: "planet",
-  action: "view_ladning_page"
+  action: "view_landing_page"
 };
 /**
  * 星球首頁內容曝光

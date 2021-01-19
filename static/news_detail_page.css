@@ -128,7 +128,6 @@ iframe[src^="https://www.instagram.com/"] {
   height: 650px;
 }
 iframe[src^="https://www.youtube.com/embed/"] {
-  height: calc(100vw * 9 / 16);
   border: 0px;
 }
 .detail__content > div,

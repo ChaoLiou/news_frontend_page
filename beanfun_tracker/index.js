@@ -11,7 +11,10 @@ import {
   trackEvent as trackEventToSnowplow,
   combineBody as combineSnowplowBody
 } from "./snowplow/index";
-import { trackEvent as trackEventToGA } from "./ga/index";
+import {
+  trackEvent as trackEventToGA,
+  combineBody as combineGABody
+} from "./ga/index";
 
 /**
  * =========================================
@@ -151,6 +154,14 @@ function addGATracker(trackingGroup, trackingId) {
       trackingGroup,
       trackingId
     });
+    if (!window.gtag) {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function() {
+        dataLayer.push(arguments);
+      };
+    }
+    window.gtag("js", new Date());
+    window.gtag("config", trackingId);
   } else {
     console.error(
       `[${_moduleName}] please call ${_moduleName}.initTracker(userId, openId, trackingVersion, logEnabled) for initialization`
@@ -214,7 +225,7 @@ async function trackEvent(
       }
       if (isBeanfun) {
         const trackers = _trackers.beanfun.filter(trackingGroupPredicate);
-        let body = await combineBeanfunBody(
+        let body = combineBeanfunBody(
           _backpack,
           eventId,
           payloadJSONStr,
@@ -234,8 +245,14 @@ async function trackEvent(
       }
       if (isGA) {
         const trackers = _trackers.ga.filter(trackingGroupPredicate);
-        const results = trackers.map(async () => {
-          trackEventToGA();
+        let body = combineGABody(
+          _backpack,
+          payload,
+          eventCategory,
+          eventAction
+        );
+        const results = trackers.map(async trackingId => {
+          trackEventToGA(trackingId, body);
         });
       }
     } catch (error) {
