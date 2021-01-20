@@ -11,10 +11,10 @@ export const getters = {
 export const actions = {
   async fetch({ dispatch, commit, rootGetters }, planetId) {
     try {
-      const { language, country } = rootGetters["beanfun/profile"];
+      const { lang, country } = rootGetters["beanfun/profile"];
       const payload = {
         planetId,
-        lang: language,
+        lang,
         country
       };
       const res = await dispatchWrapper(dispatch, `api/${name}/fetch`, payload);

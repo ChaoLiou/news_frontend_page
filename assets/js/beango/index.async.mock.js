@@ -35,7 +35,7 @@ export const getMeProfileAsync = (debugMode = process.env.APP_DEBUG_MODE) => {
       country: "TW",
       countrycode: "886",
       emailVerified: true,
-      lang: "language",
+      lang: "zh_TW",
       language: "zh",
       level: 10,
       nickname: "Chaol",

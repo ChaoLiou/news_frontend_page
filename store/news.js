@@ -33,11 +33,11 @@ export const actions = {
       if (!rootGetters["token/ts"]) {
         dispatchWrapper(dispatch, "token/update", Date.now());
       }
-      const { language, country } = rootGetters["beanfun/profile"];
+      const { lang, country } = rootGetters["beanfun/profile"];
       const payload = {
         ...data,
         ts: rootGetters["token/ts"],
-        lang: language,
+        lang,
         country
       };
       const res = await dispatchWrapper(dispatch, `api/${name}/fetch`, payload);

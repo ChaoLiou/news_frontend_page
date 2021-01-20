@@ -25,9 +25,9 @@ export default async function({ store, env }) {
     if (await checkAppExistAsync()) {
       const profile = await getMeProfileAsync();
       store.dispatch("beanfun/fetchProfile", profile);
-      const { language, country } = store.getters["beanfun/profile"];
+      const { lang, country } = store.getters["beanfun/profile"];
       store.dispatch(`${name}/fetchInfo`, {
-        lang: language,
+        lang,
         region: country
       });
     }
