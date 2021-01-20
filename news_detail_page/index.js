@@ -128,20 +128,16 @@ async function serverEnvReady() {
     initBGO(officialAccountId, token);
     const profile = await getMeProfileAsync();
     if (profile) {
-      console.log({ profile });
       _beanfunState = {
         ..._beanfunState,
-        profile: {
-          ...profile,
-          language: profile.language.includes("_") ? profile.language : "zh_TW"
-        }
+        profile
       };
-      const { language, country } = profile;
+      const { lang, country } = profile;
       _eventState = {
         ..._eventState,
         info: {
           ..._eventState.info,
-          lang: language,
+          lang,
           region: country
         }
       };
@@ -242,7 +238,7 @@ function initRecommendAdBlock(news) {
 }
 
 function initRecommendNewsBlock() {
-  const { language, country } = _beanfunState.profile;
+  const { lang, country } = _beanfunState.profile;
   new Vue({
     el: ".masonry-scroll",
     template:
@@ -253,7 +249,7 @@ function initRecommendNewsBlock() {
       `:recommendation-styled="${RECOMMENDATION_ENABLED.styled}" ` +
       `news-id="${_newsId}" ` +
       `planet-id="${_queryStringMap.planetId}" ` +
-      `lang="${language}" ` +
+      `lang="${lang}" ` +
       `country="${country}" ` +
       `@navigate="navigate" />`,
     components: {

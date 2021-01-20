@@ -31,7 +31,7 @@ export const combineBody = (
     network_type,
     app_build
   },
-  { app_version, platform, os_version, language, country }
+  { app_version, platform, os_version, lang, country }
 ) => {
   return {
     openId,
@@ -49,7 +49,7 @@ export const combineBody = (
     carrier: null,
     app_ver: app_version,
     app_build: app_build,
-    lang: language,
+    lang,
     region: country,
     tz: getTimeZone(),
     latitude: null,
