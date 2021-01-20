@@ -15,7 +15,7 @@ export const actions = {
     try {
       let list = [];
       if (data.recommendation) {
-        const { open_id } = await rootGetters["beanfun/verification"];
+        const { open_id } = rootGetters["beanfun/verification"];
         const res = await dispatchWrapper(
           dispatch,
           `api/${name}/fetchRecommendation`,

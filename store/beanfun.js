@@ -11,24 +11,7 @@ export const getters = {
     return rootState.stateRepo[name].accessToken;
   },
   verification: (state, getters, rootState, rootGetters) => {
-    return new Promise((resolve, reject) => {
-      checkAppExistAsync()
-        .then(() => {
-          let retry = 0;
-          const interval = setInterval(() => {
-            const verification = rootState.stateRepo[name].verification;
-            if (verification.open_id || retry >= 10) {
-              clearInterval(interval);
-              resolve(rootState.stateRepo[name].verification);
-            } else {
-              retry++;
-            }
-          }, 500);
-        })
-        .catch(err => {
-          resolve(rootState.stateRepo[name].verification);
-        });
-    });
+    return rootState.stateRepo[name].verification;
   },
   profile: (state, getters, rootState, rootGetters) => {
     return rootState.stateRepo[name].profile;

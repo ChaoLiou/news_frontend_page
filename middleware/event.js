@@ -32,7 +32,7 @@ export default async function({ store, env }) {
       });
     }
     const { t_ver } = store.getters["event/env"];
-    const { open_id } = await store.getters["beanfun/verification"];
+    const { open_id } = store.getters["beanfun/verification"];
     await initTracker(
       "null",
       open_id || env.SUPPLIER.openId,

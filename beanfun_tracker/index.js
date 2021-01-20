@@ -76,7 +76,7 @@ async function initTracker(userId, openId, trackingVersion, logEnabled) {
     return true;
   } else {
     console.error(`[${_moduleName}] please ensure beango sdk included`);
-    return fasle;
+    return false;
   }
 }
 

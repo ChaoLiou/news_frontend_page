@@ -58,7 +58,7 @@ export const actions = {
     { event_id, payload }
   ) {
     try {
-      const { open_id } = await rootGetters["beanfun/verification"];
+      const { open_id } = rootGetters["beanfun/verification"];
       const { action_index } = getters.data;
       commitWrapper(commit, `stateRepo/${name}/fetchData`, {
         dtm: Date.now().toString(),
