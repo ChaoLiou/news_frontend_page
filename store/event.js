@@ -25,28 +25,28 @@ export const getters = {
 };
 
 export const actions = {
-  async initalize({ commit }) {
+  initalize({ commit }) {
     try {
       commitWrapper(commit, `stateRepo/${name}/initalize`);
     } catch (error) {
       console.error(error);
     }
   },
-  async fetchEnv({ commit }, data) {
+  fetchEnv({ commit }, data) {
     try {
       commitWrapper(commit, `stateRepo/${name}/fetchEnv`, data);
     } catch (error) {
       console.error(error);
     }
   },
-  async fetchInfo({ commit }, data) {
+  fetchInfo({ commit }, data) {
     try {
       commitWrapper(commit, `stateRepo/${name}/fetchInfo`, data);
     } catch (error) {
       console.error(error);
     }
   },
-  async fetchData({ commit }, data) {
+  fetchData({ commit }, data) {
     try {
       commitWrapper(commit, `stateRepo/${name}/fetchData`, data);
     } catch (error) {

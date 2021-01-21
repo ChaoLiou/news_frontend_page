@@ -38,9 +38,8 @@ export const actions = {
   },
   async fetch({ dispatch, commit, getters }, env) {
     try {
-      const { officialAccountId, token, clientId } = env;
+      const { clientId } = env;
       if (await checkAppExistAsync()) {
-        initBGO(officialAccountId, token);
         const accessToken = await getOpenidAccessTokenAsync(clientId, "");
         if (accessToken) {
           commitWrapper(

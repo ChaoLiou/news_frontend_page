@@ -9,11 +9,10 @@ export const getters = {
 };
 
 export const actions = {
-  async fetch({ dispatch, commit, getters }) {
+  async fetch({ dispatch, commit }) {
     try {
       const serverEnv = await dispatchWrapper(dispatch, `api/${name}/fetch`);
       commitWrapper(commit, `stateRepo/${name}/fetch`, serverEnv);
-      await dispatchWrapper(dispatch, `beanfun/fetch`, getters.env);
     } catch (error) {
       console.error(error);
     }

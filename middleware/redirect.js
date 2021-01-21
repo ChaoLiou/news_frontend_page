@@ -1,6 +1,7 @@
 import {
   getMeProfileAsync,
-  checkAppExistAsync
+  checkAppExistAsync,
+  initBGO
 } from "@/assets/js/beango/index.async";
 import { logWatchWrapper } from "@/assets/js/utils";
 
@@ -19,6 +20,8 @@ export default logWatchWrapper(fileName, async function({
   route
 }) {
   if (await checkAppExistAsync()) {
+    const { officialAccountId, token } = store.getters["serverEnv/env"];
+    initBGO(officialAccountId, token);
     const profile = await getMeProfileAsync();
     store.dispatch("beanfun/fetchProfile", profile);
     const { country } = store.getters["beanfun/profile"];
