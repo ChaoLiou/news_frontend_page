@@ -46,3 +46,19 @@ export const getHashModeOrigin = $router => {
     return `${location.origin}/#`;
   }
 };
+
+export const logWatchWrapper = (keyName, fn) => {
+  return async function(...params) {
+    try {
+      const startTime = Date.now();
+      await fn(...params);
+      const endTime = Date.now();
+      console.log(`[watch] ${keyName} costs ${endTime - startTime} ms`);
+    } catch (error) {
+      const functionName = fn.name || "anonymous";
+      console.error(
+        `[utils/logWatchWrapper] ${keyName}, '${functionName}' function occurs error: ${error}`
+      );
+    }
+  };
+};

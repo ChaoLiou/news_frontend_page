@@ -2,13 +2,22 @@ import {
   getMeProfileAsync,
   checkAppExistAsync
 } from "@/assets/js/beango/index.async";
+import { logWatchWrapper } from "@/assets/js/utils";
+
+const fileName = "middleware/redirect.js";
+
 /**
  * noallow contry/area & not at /noallow => redirect /noallow
  * allow contry/area & not at /noallow => nothing
  * noallow contry/area & at /noallow &  => nothing
  * allow contry/area & at /noallow => redirect /index
  */
-export default async function({ store, redirect, env, route }) {
+export default logWatchWrapper(fileName, async function({
+  store,
+  redirect,
+  env,
+  route
+}) {
   if (await checkAppExistAsync()) {
     const profile = await getMeProfileAsync();
     store.dispatch("beanfun/fetchProfile", profile);
@@ -29,4 +38,4 @@ export default async function({ store, redirect, env, route }) {
       }
     }
   }
-}
+});

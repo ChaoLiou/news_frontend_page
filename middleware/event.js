@@ -1,5 +1,5 @@
 import { getOSType, getTimeZone } from "@/assets/js/tracking/utils";
-import { generateUUID } from "@/assets/js/utils";
+import { generateUUID, logWatchWrapper } from "@/assets/js/utils";
 import {
   initTracker,
   addBeanfunTracker,
@@ -7,8 +7,9 @@ import {
 } from "@/assets/js/tracking";
 
 const name = "event";
+const fileName = "middleware/event.js";
 
-export default async function({ store, env }) {
+export default logWatchWrapper(fileName, async function({ store, env }) {
   const initalized = store.getters[`${name}/initalized`];
   if (!initalized) {
     store.dispatch(`${name}/fetchInfo`, {
@@ -48,4 +49,4 @@ export default async function({ store, env }) {
 
     store.dispatch(`${name}/initalize`);
   }
-}
+});

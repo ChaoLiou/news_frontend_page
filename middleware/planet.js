@@ -1,8 +1,11 @@
-const name = "planet";
+import { logWatchWrapper } from "@/assets/js/utils";
 
-export default function({ store }) {
+const name = "planet";
+const fileName = "middleware/planet.js";
+
+export default logWatchWrapper(fileName, async function({ store }) {
   const list = store.getters[`${name}/list`];
   if (!list || list.length === 0) {
-    return store.dispatch(`${name}/fetch`);
+    return await store.dispatch(`${name}/fetch`);
   }
-}
+});
