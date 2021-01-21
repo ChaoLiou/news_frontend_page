@@ -30,21 +30,21 @@ export const getMeProfileAsync = (debugMode = process.env.APP_DEBUG_MODE) => {
   }
   return new Promise((resolve, reject) => {
     const data = {
-      app_version: "2.0.5",
-      chat_id: "4c63e2996808a715babe42f5dbe83d35aea125ac",
       country: "TW",
-      countrycode: "886",
-      emailVerified: true,
-      lang: "language",
-      language: "zh",
+      app_version: "2.0.13",
       level: 10,
-      nickname: "Chaol",
-      os_version: "11",
       phoneVerified: true,
-      phone_model: "Pixel 3",
-      photo: "",
       photo_encode: "",
-      platform: "Android"
+      countrycode: "TW",
+      os_version: "11",
+      photo: "",
+      language: "zh",
+      platform: "Android",
+      chat_id: "4aed279d64f1aedf94714e238d1f2ec1956b4581",
+      phone_model: "Pixel 3",
+      emailVerified: true,
+      nickname: "Chaol",
+      lang: "language"
     };
     if (debugMode) {
       console.log({ getMeProfile: data });

@@ -80,6 +80,6 @@ export default {
   build: {},
   router: {
     mode: "hash",
-    middleware: ["init", "serverEnv", "event", "redirect"]
+    middleware: ["init", "serverEnv", "redirect"]
   }
 };

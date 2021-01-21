@@ -22,6 +22,8 @@
 <script>
 import { view_landing_page, click_tab } from "@/assets/js/tracking/events";
 import { trackEvent } from "@/assets/js/tracking";
+import eventMiddleware from "@/middleware/event";
+import planetMiddleware from "@/middleware/planet";
 
 export default {
   data() {
@@ -30,7 +32,15 @@ export default {
       selectedTab: undefined,
     };
   },
-  middleware: ["planet", "appCache"],
+  middleware: ["appCache"],
+  async asyncData(context) {
+    try {
+      await eventMiddleware(context);
+      await planetMiddleware(context);
+    } catch (err) {
+      console.log({ indexAsyncData: err });
+    }
+  },
   async mounted() {
     await trackEvent(
       view_landing_page.id,

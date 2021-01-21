@@ -1,8 +1,4 @@
 import { getOSType, getTimeZone } from "@/assets/js/tracking/utils";
-import {
-  getMeProfileAsync,
-  checkAppExistAsync
-} from "@/assets/js/beango/index.async";
 import { generateUUID } from "@/assets/js/utils";
 import {
   initTracker,
@@ -22,15 +18,11 @@ export default async function({ store, env }) {
     store.dispatch(`${name}/fetchData`, {
       session_id: generateUUID()
     });
-    if (await checkAppExistAsync()) {
-      const profile = await getMeProfileAsync();
-      store.dispatch("beanfun/fetchProfile", profile);
-      const { language, country } = store.getters["beanfun/profile"];
-      store.dispatch(`${name}/fetchInfo`, {
-        lang: language,
-        region: country
-      });
-    }
+    const { language, country } = store.getters["beanfun/profile"];
+    store.dispatch(`${name}/fetchInfo`, {
+      lang: language,
+      region: country
+    });
     const { t_ver } = store.getters["event/env"];
     const { open_id } = store.getters["beanfun/verification"];
     await initTracker(
