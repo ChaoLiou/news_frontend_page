@@ -35,7 +35,7 @@ export default {
   props: {
     data: VueTypes.shape({
       id: VueTypes.string, // 影音 Id
-      youtubeId: VueTypes.string, // Youtube Id
+      videoId: VueTypes.string, // 原站台的 Video Id
       title: VueTypes.string, // 影音標題
       datetime: VueTypes.instanceOf(Date), // 影音上傳時間
       views: VueTypes.string, // 影音觀看數

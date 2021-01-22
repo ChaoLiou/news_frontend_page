@@ -83,7 +83,7 @@ export default {
   props: {
     data: VueTypes.shape({
       id: VueTypes.string, // 影音 Id
-      youtubeId: VueTypes.string, // Youtube Id
+      videoId: VueTypes.string, // 原站台的 Video Id
       title: VueTypes.string, // 影音標題
       datetime: VueTypes.instanceOf(Date), // 影音上傳時間
       views: VueTypes.string, // 影音觀看數
@@ -134,7 +134,7 @@ export default {
       return this.data.source ? this.data.source.site : {};
     },
     sourceExists() {
-      return !!this.data.youtubeId;
+      return !!this.data.videoId;
     },
     title() {
       return this.sourceExists ? this.data.title : "影片被下架";
@@ -143,7 +143,7 @@ export default {
       return `iframe-${this.data.id}`;
     },
     frameSrc() {
-      return `http://www.youtube.com/embed/${this.data.youtubeId}`;
+      return `http://www.youtube.com/embed/${this.data.videoId}`;
     },
     datetime() {
       return transformMilliseconds(this.data.datetime);
@@ -190,7 +190,7 @@ export default {
   methods: {
     initYTPlayer() {
       this.player = new YT.Player(this.id, {
-        videoId: this.data.youtubeId,
+        videoId: this.data.videoId,
         events: {
           onReady: this.onPlayerReady,
           onStateChange: this.onPlayerStateChange,

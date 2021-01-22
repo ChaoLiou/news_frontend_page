@@ -1,3 +1,5 @@
+import { parsingId as parsingYoutubeId } from "@/assets/js/videoParser/youtube.js";
+
 export const formatNews = x => {
   const categories = x.NewsSubCategory ? x.NewsSubCategory : [];
   const planets = categories
@@ -66,9 +68,10 @@ export const formatVideo = x => {
   const representativePlanet = planets.length > 0 ? planets[0] : {};
   const site = x.src_site ? x.src_site : {};
   const rss = x.NewsSourceFetch ? x.NewsSourceFetch : {};
+  const sourceIdParser = getSourceIdParser();
   return {
     id: x.id,
-    youtubeId: x.youtube_data.ID,
+    videoId: sourceIdParser?.(x.src_url),
     img: { url: imageUrl, height: 9, width: 16 },
     title: x.src_title,
     planets,
@@ -87,7 +90,17 @@ export const formatVideo = x => {
         img: site.SiteIconURL
       }
     },
-    views: x.youtube_data.ViewCount,
-    description: x.youtube_data.Description
+    views: x.view_count,
+    description: x.src_description
   };
 };
+
+function getSourceIdParser(sourceType = "youtube") {
+  switch (sourceType) {
+    case "youtube":
+      return parsingYoutubeId;
+
+    default:
+      break;
+  }
+}
