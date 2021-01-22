@@ -47,9 +47,17 @@ export const mutations = {
     state.verification = verification || state.verification;
   },
   fetchProfile(state, profile) {
-    state.profile = profile || state.profile;
+    const lang = correctProfileLang(profile.lang);
+    state.profile = { ...profile, lang } || state.profile;
   },
   fetchLocation(state, location) {
     state.location = location || state.location;
   }
 };
+
+function correctProfileLang(lang) {
+  const expectedLangs = ["zh_TW", "zh_HK", "en_US"];
+  const isExpected = expectedLangs.includes(lang);
+  const defaultLang = "zh_TW";
+  return isExpected ? lang : defaultLang;
+}
