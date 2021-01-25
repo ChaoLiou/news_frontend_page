@@ -139,7 +139,8 @@ export default {
 .b-tab-view__tab > *:first-child {
   font-size: 1.2em;
   font-weight: bold;
-  padding: 7.5px 0px;
+  padding-top: 7.5px;
+  padding-bottom: 7.5px;
   margin: 0px 10px;
   white-space: nowrap;
 }

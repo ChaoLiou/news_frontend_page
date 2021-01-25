@@ -6,7 +6,20 @@
       @switch-tab="switchPlanet"
     >
       <template #tab="props">
-        <div>{{ props.item.name }}</div>
+        <div
+          class="planet-tab-title"
+          :class="{
+            'planet-tab-title_marked': isMarked(props.item),
+          }"
+        >
+          <div>
+            {{ props.item.name }}
+          </div>
+          <b-n-icon
+            v-if="isMarked(props.item)"
+            class="planet-tab-title__n-icon"
+          />
+        </div>
       </template>
       <template #tab-item="props">
         <b-planet
@@ -24,8 +37,13 @@ import { view_landing_page, click_tab } from "@/assets/js/tracking/events";
 import { trackEvent } from "@/assets/js/tracking";
 import eventMiddleware from "@/middleware/event";
 import planetMiddleware from "@/middleware/planet";
+import BNIcon from "@/components/shared/icons/BNIcon";
+import { MarkedType } from "@/assets/js/constants.js";
 
 export default {
+  components: {
+    BNIcon,
+  },
   data() {
     return {
       newsBlockToolBarStickyTop: 0,
@@ -55,6 +73,9 @@ export default {
     },
   },
   methods: {
+    isMarked(item) {
+      return item.activity_flag === MarkedType.Marked;
+    },
     tabViewReady({ tabBarDOM, selectedTab }) {
       this.newsBlockToolBarStickyTop = tabBarDOM.offsetHeight - 1;
       this.selectedTab = selectedTab;
@@ -72,4 +93,13 @@ export default {
 </script>
 
 <style scoped>
+.planet-tab-title.planet-tab-title_marked {
+  position: relative;
+  padding-right: 8px;
+}
+.planet-tab-title_marked > .planet-tab-title__n-icon {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
 </style>
