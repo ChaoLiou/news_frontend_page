@@ -1,4 +1,4 @@
-import { parsingId as parsingYoutubeId } from "@/assets/js/videoParser/youtube.js";
+import { parsingId as parsingYoutubeId } from "./videoParser/youtube";
 
 export const formatNews = x => {
   const categories = x.NewsSubCategory ? x.NewsSubCategory : [];
@@ -71,7 +71,7 @@ export const formatVideo = x => {
   const sourceIdParser = getSourceIdParser();
   return {
     id: x.id,
-    videoId: sourceIdParser?.(x.src_url),
+    videoId: sourceIdParser(x.src_url),
     img: { url: imageUrl, height: 9, width: 16 },
     title: x.src_title,
     planets,
