@@ -12,6 +12,10 @@
       <b-play-icon
         class="b-audiovisual-card__play-icon b-audiovisual-card__play-icon_center"
       />
+      <div v-if="data.marked" class="b-audiovisual-card__marker marker">
+        <b-flame-icon class="marker__icon" />
+        <div class="marker__text">熱門</div>
+      </div>
       <div class="b-audiovisual-card__info">
         <div class="b-audiovisual-card__views">{{ views }}</div>
         <div class="b-audiovisual-card__title">{{ data.title }}</div>
@@ -165,6 +169,29 @@ export default {
   width: fit-content;
   height: fit-content;
   z-index: 2;
+}
+.b-audiovisual-card__marker {
+  display: flex;
+  flex-direction: row;
+  width: 56px;
+  height: 25px;
+  top: 24px;
+  left: 0px;
+  position: absolute;
+  z-index: 3;
+  background-color: #ff9500;
+  color: white;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.marker__icon {
+  padding: 5.13px 0px 6.13px 7.2px;
+}
+.marker__text {
+  color: white;
+  font-size: 13px;
+  line-height: 18.2px;
+  padding: 3px 6px 3px 2.2px;
 }
 .b-audiovisual-card__play-icon > div {
   width: 50px;

@@ -15,7 +15,7 @@
           <div>
             {{ props.item.name }}
           </div>
-          <b-n-icon
+          <b-dot-icon
             v-if="isMarked(props.item)"
             class="planet-tab-title__n-icon"
           />

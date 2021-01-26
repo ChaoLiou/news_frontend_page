@@ -91,7 +91,8 @@ export const formatVideo = x => {
       }
     },
     views: x.view_count,
-    description: x.src_description
+    description: x.src_description,
+    marked: !!x.index
   };
 };
 
