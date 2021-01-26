@@ -114,6 +114,7 @@ export default {
         }),
       }),
       index: VueTypes.integer, // 影音 index
+      marked: VueTypes.bool, // 影音 已標記
     }),
   },
   data() {
@@ -149,10 +150,12 @@ export default {
       return transformMilliseconds(this.data.datetime);
     },
     views() {
-      const formattedViews = formatNumber(this.data.views, {
-        digit: 4,
-        unit: "萬",
-      });
+      const formattedViews = this.data.views
+        ? formatNumber(this.data.views, {
+            digit: 4,
+            unit: "萬",
+          })
+        : 0;
       return `觀看次數：${formattedViews}次`;
     },
     description() {

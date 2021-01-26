@@ -70,6 +70,7 @@ export default {
         }),
       }),
       index: VueTypes.integer, // 影音 index
+      marked: VueTypes.bool, // 影音 已標記
     }),
     /**
      * 影音卡片 - 寬(css width)
@@ -99,7 +100,7 @@ export default {
       return this.data.planets.length > 0 ? this.data.planets[0].id : undefined;
     },
     views() {
-      return `${formatNumber(this.data.views)}次觀看`;
+      return `${this.data.views ? formatNumber(this.data.views) : 0}次觀看`;
     },
     thumbnailImgStyle() {
       return {

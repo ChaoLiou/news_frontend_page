@@ -1,3 +1,4 @@
+import { Type } from "./constants";
 import { parsingId as parsingYoutubeId } from "./videoParser/youtube";
 
 export const formatNews = x => {
@@ -92,7 +93,7 @@ export const formatVideo = x => {
     },
     views: x.view_count,
     description: x.src_description,
-    marked: !!x.index
+    marked: x.article_type_id === Type.ManuallyTopUp
   };
 };
 
