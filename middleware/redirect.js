@@ -8,10 +8,10 @@ import { logWatchWrapper } from "@/assets/js/utils";
 const fileName = "middleware/redirect.js";
 
 /**
- * noallow contry/area & not at /noallow => redirect /noallow
- * allow contry/area & not at /noallow => nothing
- * noallow contry/area & at /noallow &  => nothing
- * allow contry/area & at /noallow => redirect /index
+ * if contry is not allowed and not at `/noallow` page, then redirect to `/noallow` page
+ * if contry is allowed and not at `/noallow` page, then skip
+ * if country is not allowed and at `/noallow` page, then skip
+ * if country is allowed and at `/noallow` page, then redirect to `/index` page
  */
 export default logWatchWrapper(fileName, async function({
   store,
@@ -19,26 +19,48 @@ export default logWatchWrapper(fileName, async function({
   env,
   route
 }) {
+  const getCountryFromAppFn = logWatchWrapper(
+    "middleware/redirect.js:getCountryFromApp",
+    getCountryFromApp
+  );
+  const getCountryFromIpServiceFn = logWatchWrapper(
+    "middleware/redirect.js:getCountryFromIpService",
+    getCountryFromIpService
+  );
+  const countryFromApp = await getCountryFromAppFn(store);
+  const countryFromIpService = await getCountryFromIpServiceFn(store);
+
+  const countriesNotAllowed = getCountriesNotAllowed(env);
+  const isNotAllowed = countriesNotAllowed.some(cna =>
+    [countryFromApp, countryFromIpService].includes(cna)
+  );
+
+  const atNoAllowPage = route.name === "noallow";
+  if (isNotAllowed && atNoAllowPage) {
+    return redirect("/");
+  } else if (isNotAllowed && !atNoAllowPage) {
+    return redirect("/noallow");
+  }
+});
+
+async function getCountryFromApp(store) {
   if (await checkAppExistAsync()) {
     const { officialAccountId, token } = store.getters["serverEnv/env"];
     initBGO(officialAccountId, token);
     const profile = await getMeProfileAsync();
     store.dispatch("beanfun/fetchProfile", profile);
-    const { country } = store.getters["beanfun/profile"];
-    const noAllowCountryOrAreaStr = env.NO_ALLOW_COUNTRY_AREA;
-    if (noAllowCountryOrAreaStr) {
-      const noAllowCountryOrAreas = noAllowCountryOrAreaStr
-        .split(",")
-        .map(x => x.toUpperCase());
-      if (noAllowCountryOrAreas.includes(country.toUpperCase())) {
-        if (route.name !== "noallow") {
-          return redirect("/noallow");
-        }
-      } else {
-        if (route.name === "noallow") {
-          return redirect("/");
-        }
-      }
-    }
+    return store.getters["beanfun/profile"];
   }
-});
+}
+
+async function getCountryFromIpService(store) {
+  await store.dispatch("country/fetch");
+  return store.getters["country/info"];
+}
+
+function getCountriesNotAllowed(env) {
+  const countriesNotAllowedEnv = env.NO_ALLOW_COUNTRY_AREA;
+  return countriesNotAllowedEnv
+    ? countriesNotAllowedEnv.split(",").map(x => x.toUpperCase())
+    : [];
+}
