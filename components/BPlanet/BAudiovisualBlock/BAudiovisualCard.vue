@@ -173,8 +173,6 @@ export default {
 .b-audiovisual-card__marker {
   display: flex;
   flex-direction: row;
-  width: 56px;
-  height: 25px;
   top: 24px;
   left: 0px;
   position: absolute;
@@ -185,13 +183,12 @@ export default {
   border-bottom-right-radius: 6px;
 }
 .marker__icon {
-  padding: 5.13px 0px 6.13px 7.2px;
+  padding: 6px 0px 6px 7px;
 }
 .marker__text {
   color: white;
   font-size: 13px;
-  line-height: 18.2px;
-  padding: 3px 6px 3px 2.2px;
+  padding: 5px 6px 5px 2px;
 }
 .b-audiovisual-card__play-icon > div {
   width: 50px;
