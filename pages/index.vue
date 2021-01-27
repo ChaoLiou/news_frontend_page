@@ -17,7 +17,7 @@
           </div>
           <b-dot-icon
             v-if="isMarked(props.item)"
-            class="planet-tab-title__n-icon"
+            class="planet-tab-title__dot-icon"
           />
         </div>
       </template>
@@ -95,11 +95,11 @@ export default {
 <style scoped>
 .planet-tab-title.planet-tab-title_marked {
   position: relative;
-  padding-right: 8px;
 }
-.planet-tab-title_marked > .planet-tab-title__n-icon {
+.planet-tab-title_marked > .planet-tab-title__dot-icon {
   position: absolute;
   right: 0px;
   top: 0px;
+  margin-right: -16px;
 }
 </style>
