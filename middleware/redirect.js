@@ -31,6 +31,8 @@ export default logWatchWrapper(fileName, async function({
   const countryFromIpService = await getCountryFromIpServiceFn(store);
 
   const countriesNotAllowed = getCountriesNotAllowed(env);
+  console.log({ countryFromApp, countryFromIpService, countriesNotAllowed });
+
   const isNotAllowed = countriesNotAllowed.some(cna =>
     [countryFromApp, countryFromIpService].includes(cna)
   );
@@ -55,7 +57,8 @@ async function getCountryFromApp(store) {
 
 async function getCountryFromIpService(store) {
   await store.dispatch("country/fetch");
-  return store.getters["country/info"];
+  const info = store.getters["country/info"];
+  return info.CountryCode;
 }
 
 function getCountriesNotAllowed(env) {

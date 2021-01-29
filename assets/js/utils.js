@@ -51,9 +51,10 @@ export const logWatchWrapper = (keyName, fn) => {
   return async function(...params) {
     try {
       const startTime = Date.now();
-      await fn(...params);
+      const result = await fn(...params);
       const endTime = Date.now();
       console.log(`[watch] ${keyName} costs ${endTime - startTime} ms`);
+      return result;
     } catch (error) {
       const functionName = fn.name || "anonymous";
       console.error(

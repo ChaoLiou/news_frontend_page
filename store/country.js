@@ -13,7 +13,7 @@ export const actions = {
     try {
       const res = await dispatchWrapper(dispatch, `api/${name}/fetch`);
       if (!res.code || !res.message) {
-        commitWrapper(commit, `stateRepo/${name}/info`, res);
+        commitWrapper(commit, `stateRepo/${name}/fetch`, res);
       }
     } catch (error) {
       console.error(error);
