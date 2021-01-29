@@ -343,9 +343,6 @@ export default {
 .b-news-block__tags .b-horizontal-scroll > *:not(:last-child) {
   margin-right: 16px;
 }
-.b-news-block__tags_disabled .b-horizontal-scroll > * {
-  opacity: 0.5;
-}
 .title_placeloader {
   width: 6em;
   height: 1.25em;

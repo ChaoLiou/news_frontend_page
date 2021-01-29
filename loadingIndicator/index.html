@@ -1,0 +1,365 @@
+<style>
+  html {
+    font-family: Microsoft JhengHei;
+    width: 100%;
+    height: 100%;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  body {
+    width: 100%;
+  }
+  body,
+  p {
+    margin: 0px;
+    font-size: 14px !important;
+  }
+  ul,
+  li {
+    padding: 0px;
+    list-style: none;
+  }
+  figure {
+    margin: 0px;
+  }
+  #__vconsole {
+    display: none;
+  }
+  #__vconsole.showing {
+    display: block;
+  }
+  @media screen and (max-width: 1023px) {
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  @media screen and (min-width: 1024px) {
+    html {
+      background-color: #181a1b !important;
+    }
+    body {
+      width: 600px;
+      background-color: #ffffff;
+    }
+  }
+  @keyframes placeload {
+    0% {
+      background-position: -468px 0;
+    }
+    100% {
+      background-position: 468px 0;
+    }
+  }
+  .b-planet > * {
+    margin-left: 12px;
+    padding-top: 12px;
+  }
+  .b-planet > *:not(:last-child) {
+    margin-bottom: 12px;
+  }
+  .b-planet > .b-news-block {
+    margin-right: 12px;
+  }
+  .planet-tab-title.planet-tab-title_marked {
+    position: relative;
+  }
+  .planet-tab-title_marked > .planet-tab-title__dot-icon {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    margin-right: -16px;
+  }
+  .planet-tab-title__placeholder > div {
+    width: 3em;
+    height: 1.2em;
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeload;
+    animation-timing-function: linear;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 1200px 104px;
+  }
+  .b-tab-view {
+    position: relative;
+  }
+  .b-tab-view__tab-bar {
+    display: grid;
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    position: sticky;
+    top: 0px;
+    left: 0px;
+    z-index: 99;
+    background-color: #ffffff;
+    grid-template-columns: repeat(3, max-content);
+  }
+  .b-tab-view__tab {
+    margin: 6.5px 15px;
+  }
+  .b-tab-view__tab:hover {
+    cursor: pointer;
+  }
+  .b-tab-view__tab > *:first-child {
+    font-size: 1.2em;
+    font-weight: bold;
+    padding-top: 7.5px;
+    padding-bottom: 7.5px;
+    margin: 0px 10px;
+    white-space: nowrap;
+  }
+  .b-tab-view__tab.b-tab-view__tab_selected > div {
+    border-bottom: 2px solid #26d07c;
+    color: #26d07c;
+  }
+  .b-audiovisual-block__title {
+    font-weight: bold;
+    margin-bottom: 4px;
+    font-size: 1.25em;
+    position: relative;
+    margin-bottom: 10px;
+  }
+  .b-horizontal-scroll > *:not(:last-child) {
+    margin-right: 16px;
+  }
+  .no-more-content {
+    width: 100%;
+    background-color: #262626;
+    color: #ffffff;
+    text-align: center;
+  }
+  .b-audiovisual-block_masonry {
+    background-color: #262626;
+  }
+  .b-masonry-grid {
+    min-height: 100vh;
+  }
+  .title_placeholder {
+    width: 6em;
+    height: 1.25em;
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeload;
+    animation-timing-function: linear;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 1200px 104px;
+  }
+  .b-news-block {
+    position: relative;
+  }
+  .b-news-block > div:not(:last-child) {
+    margin-bottom: 6px;
+  }
+  .b-news-block__title {
+    user-select: none;
+    font-weight: bold;
+    font-size: 17px;
+    line-height: 23.8px;
+    color: #393939;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1em;
+  }
+  .b-news-block__tags {
+    margin-right: -12px;
+    background-color: #ffffff;
+  }
+  .b-news-block__tags .b-horizontal-scroll {
+    align-items: center;
+  }
+  .b-news-block__tags .b-horizontal-scroll > *:not(:last-child) {
+    margin-right: 16px;
+  }
+  .b-news-block__tags_disabled {
+    top: 49px;
+    position: sticky;
+    left: 0px;
+    z-index: 99;
+  }
+  .b-news-block__tags_disabled .b-horizontal-scroll > * {
+    opacity: 0.5;
+  }
+  .title_placeloader {
+    width: 6em;
+    height: 1.25em;
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeload;
+    animation-timing-function: linear;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 1200px 104px;
+  }
+  .b-horizontal-scroll {
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    padding: 4px 0px;
+    position: relative;
+  }
+  .b-horizontal-scroll > * {
+    z-index: 1;
+    flex-shrink: 0;
+  }
+  .b-h-s__p-i {
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeload;
+    animation-timing-function: linear;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 1200px 104px;
+  }
+  .b-h-s__p-i_a {
+    height: 230px;
+    width: 320px;
+    margin-right: 16px;
+    border-radius: 20px;
+  }
+  .b-h-s__p-i_n {
+    height: 30px;
+    width: 50px;
+    margin-right: 16px;
+    border-radius: 10px;
+  }
+  .b-masonry-scroll {
+    position: relative;
+  }
+  .b-masonry-proxy {
+    position: absolute;
+  }
+  .b-masonry-proxy.first {
+    z-index: 2;
+  }
+  .b-masonry-scroll__placeholder {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10px;
+    width: 100%;
+    height: 860px;
+    top: 0px;
+  }
+  .b-masonry-scroll__placeholder,
+  .b-masonry-scroll__no-more {
+    position: absolute;
+    bottom: 0px;
+  }
+  .b-masonry-scroll__placeholder-group {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    row-gap: 10px;
+  }
+  .b-masonry-scroll__placeholder-group:nth-child(even) {
+    height: calc(100% + 80px);
+  }
+  .b-masonry-scroll__placeholder-item {
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeload;
+    animation-timing-function: linear;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 1200px 104px;
+    border-radius: 20px;
+  }
+  .b-masonry-scroll__no-more {
+    display: grid;
+    justify-content: center;
+    width: 100%;
+    color: #00000081;
+  }
+</style>
+
+<div class="index">
+  <div class="b-tab-view">
+    <div class="b-tab-view__tab-bar">
+      <div class="b-tab-view__tab b-tab-view__tab_selected">
+        <div class="planet-tab-title planet-tab-title__placeholder">
+          <div></div>
+          <!---->
+        </div>
+      </div>
+      <div class="b-tab-view__tab">
+        <div class="planet-tab-title planet-tab-title__placeholder">
+          <div></div>
+          <!---->
+        </div>
+      </div>
+      <div class="b-tab-view__tab">
+        <div class="planet-tab-title planet-tab-title__placeholder">
+          <div></div>
+          <!---->
+        </div>
+      </div>
+    </div>
+    <div class="b-tab-view__view">
+      <div>
+        <div class="b-planet">
+          <div class="b-audiovisual-block">
+            <div class="b-audiovisual-block__title title title_placeholder">
+              <div></div>
+            </div>
+            <div>
+              <div class="b-horizontal-scroll" style="max-width: 100%;">
+                <div class="b-h-s__p-i b-h-s__p-i_a"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_a"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_a"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_a"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_a"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_a"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_a"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_a"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_a"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_a"></div>
+              </div>
+            </div>
+          </div>
+          <div class="b-news-block">
+            <div class="b-news-block__title title title_placeloader">
+              <div></div>
+              <div class="b-news-block__countdown">
+                <!---->
+              </div>
+            </div>
+            <div class="b-news-block__tags b-news-block__tags_disabled">
+              <div class="b-horizontal-scroll" style="max-width: 100%;">
+                <div class="b-h-s__p-i b-h-s__p-i_n"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_n"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_n"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_n"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_n"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_n"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_n"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_n"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_n"></div>
+                <div class="b-h-s__p-i b-h-s__p-i_n"></div>
+              </div>
+            </div>
+            <div>
+              <div class="b-masonry-scroll" style="min-height: 100vh;">
+                <div class="b-masonry-scroll__placeholder">
+                  <div class="b-masonry-scroll__placeholder-group">
+                    <div class="b-masonry-scroll__placeholder-item"></div>
+                    <div class="b-masonry-scroll__placeholder-item"></div>
+                    <div class="b-masonry-scroll__placeholder-item"></div>
+                    <div class="b-masonry-scroll__placeholder-item"></div>
+                  </div>
+                  <div class="b-masonry-scroll__placeholder-group">
+                    <div class="b-masonry-scroll__placeholder-item"></div>
+                    <div class="b-masonry-scroll__placeholder-item"></div>
+                    <div class="b-masonry-scroll__placeholder-item"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

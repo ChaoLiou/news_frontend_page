@@ -81,5 +81,6 @@ export default {
   router: {
     mode: "hash",
     middleware: ["init", "redirect"]
-  }
+  },
+  loadingIndicator: "@/loadingIndicator/index.html"
 };
