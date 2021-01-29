@@ -10,7 +10,7 @@ export default Object.assign(config, {
         process.env.RECOMMENDATION_API || "https://stg-news-api.beanfun.com/v1"
     },
     BGO: {
-      officialAccountId: process.env.BGO_OFFICIAL_ACCOUNT_ID || "",
+      BgoOfficialAccountId: process.env.BGO_OFFICIAL_ACCOUNT_ID || "",
       token: process.env.BGO_TOKEN || "",
       secret: process.env.BGO_SECRET || "",
       clientId: process.env.BGO_CLIENT_ID || "",
@@ -38,7 +38,7 @@ export default Object.assign(config, {
       size: ["default", "medium", "high", "standard", "maxres"][3]
     },
     AD: {
-      officialAccountId: "690c8cba53934c138e997f7685e98412_oa"
+      AdOfficialAccountId: "690c8cba53934c138e997f7685e98412_oa"
     },
     APP_DEBUG_MODE: true,
     TRACKER_DEBUG_MODE: true

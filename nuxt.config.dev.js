@@ -8,7 +8,7 @@ export default Object.assign(config, {
       recommendationApi: "https://stg-news-api.beanfun.com/v1"
     },
     BGO: {
-      officialAccountId: "5e586fb595c54ca9a1fda284785094d6_oa",
+      BgoOfficialAccountId: "5e586fb595c54ca9a1fda284785094d6_oa",
       token: "c46ce549ba424590ab4e2cc7477359da_oat",
       secret: "b8374d28449e4ff1974c67ecd419e866_oas",
       clientId: "1A31B3F8-C08C-411C-8CC9-F9B24D638A61",
@@ -42,7 +42,7 @@ export default Object.assign(config, {
     },
     NO_ALLOW_COUNTRY_AREA: "HK",
     AD: {
-      officialAccountId: "690c8cba53934c138e997f7685e98412_oa"
+      AdOfficialAccountId: "690c8cba53934c138e997f7685e98412_oa"
     },
     APP_DEBUG_MODE: true,
     TRACKER_DEBUG_MODE: true

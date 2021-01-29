@@ -207,7 +207,7 @@ export default {
         await openFullH5WebviewAsync(
           link,
           data.representativePlanet.name,
-          this.serverEnv.officialAccountId
+          this.serverEnv.BgoOfficialAccountId
         );
       } else {
         window.open(link, "_blank");

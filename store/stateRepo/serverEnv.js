@@ -1,5 +1,8 @@
 export const state = () => ({
-  env: process.env.BGO
+  env: {
+    ...process.env.BGO,
+    officialAccountId: process.env.BGO.BgoOfficialAccountId
+  }
 });
 
 export const mutations = {
