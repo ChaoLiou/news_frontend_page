@@ -34,14 +34,12 @@ export default {
         src:
           // "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beango_stg.min.js",
           "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beanfun.min.js",
-        group: "beanfun_vue_tracker",
-        defer: true
+        group: "beanfun_vue_tracker"
       },
       {
         src:
           "https://beangochat.blob.core.windows.net/beango-static-prod/sdk/vconsole.min.js",
-        group: "vconsole",
-        defer: true
+        group: "vconsole"
       },
       {
         src: "/beanfun_tracker/sdk/beanfun_tracker-0.01.min.js",
@@ -82,6 +80,6 @@ export default {
   build: {},
   router: {
     mode: "hash",
-    middleware: ["redirect"]
+    middleware: ["init", "redirect"]
   }
 };
