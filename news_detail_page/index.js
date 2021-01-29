@@ -94,6 +94,11 @@ const scripts = [
   {
     src: `https://www.googletagmanager.com/gtag/js?id=${TRACKING_EVENT.gaId}`,
     group: "beanfun_vue_tracker"
+  },
+  {
+    src:
+      "https://beangochat.blob.core.windows.net/beango-static-prod/sdk/vconsole.min.js",
+    group: "vconsole"
   }
 ];
 includeScriptSources(scripts);
@@ -118,7 +123,9 @@ function beanfun_vue_trackerOnload() {
 }
 
 function vconsoleOnload() {
-  new VConsole();
+  if (location.href.includes("vconsole")) {
+    new VConsole();
+  }
 }
 
 async function serverEnvReady() {
@@ -228,7 +235,7 @@ function initRecommendAdBlock(news) {
       async navigate(data) {
         console.log({ data });
         if (await checkAppExistAsync()) {
-          await openFullH5WebviewAsync(data.link, "", AD.officialAccountId);
+          await openFullH5WebviewAsync(data.link, "", AD.AdOfficialAccountId);
         } else {
           window.open(data.link, "_blank");
         }

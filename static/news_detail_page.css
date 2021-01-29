@@ -274,15 +274,6 @@ iframe[src^="https://www.youtube.com/embed/"] {
   font-weight: bold;
   margin: 16px 0px;
 }
-#__vconsole {
-  display: none;
-}
-#__vconsole.showing {
-  display: block;
-}
-#__vconsole .vc-switch {
-  opacity: 0.3;
-}
 .detail__source-link > a {
   color: #767676;
   font-weight: 400;

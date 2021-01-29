@@ -58,6 +58,7 @@ export default {
   },
   middleware: ["appCache"],
   async mounted() {
+    console.log({ env: this.env });
     await eventMiddleware({ store: this.$store, env: this.env });
     await planetMiddleware({ store: this.$store });
   },

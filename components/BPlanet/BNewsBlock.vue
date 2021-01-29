@@ -201,7 +201,9 @@ export default {
       link = SUPPLIER.enabled
         ? `${location.origin}/${getSupplierDetailUrl(location.pathname)}`
         : link;
-      link += `?planetId=${data.representativePlanet.id}`;
+      link += `?planetId=${
+        data.representativePlanet.id
+      }&${location.search.substr(1)}`;
       if (await checkAppExistAsync()) {
         await openFullH5WebviewAsync(
           link,
@@ -209,7 +211,7 @@ export default {
           this.serverEnv.BgoOfficialAccountId
         );
       } else {
-        await window.open(link, "_blank");
+        window.open(link, "_blank");
       }
     },
     initTags() {

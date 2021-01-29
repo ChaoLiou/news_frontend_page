@@ -1,6 +1,11 @@
 <template>
   <div class="_planet-audiovisual-index">
-    <b-audiovisual-block :top-priority-id="id" :planetId="planetId" vertical />
+    <b-audiovisual-block
+      :top-priority-id="id"
+      :planetId="planetId"
+      vertical
+      :show-title-text="false"
+    />
   </div>
 </template>
 

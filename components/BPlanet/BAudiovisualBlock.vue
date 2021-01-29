@@ -4,6 +4,7 @@
     :class="{ 'b-audiovisual-block_masonry': vertical }"
   >
     <div
+      v-if="showTitleText"
       class="b-audiovisual-block__title title"
       :class="{ title_placeholder: !titleText }"
     >
@@ -112,6 +113,10 @@ export default {
     topPriorityId: {
       type: String,
       default: "",
+    },
+    showTitleText: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {

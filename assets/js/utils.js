@@ -21,9 +21,8 @@ export const getQueryStringObject = () => {
 };
 
 export const showVConsole = () => {
-  const vConsoleDOM = document.querySelector("#__vconsole");
-  if (vConsoleDOM) {
-    vConsoleDOM.classList.add("showing");
+  if (!location.search.includes("vconsole")) {
+    location.search = "vconsole";
   }
 };
 
@@ -43,7 +42,9 @@ export const replaceNewLineToBr = text => {
 export const getHashModeOrigin = $router => {
   const isHashMode = $router.mode === "hash";
   if (isHashMode) {
-    return `${location.origin}/#`;
+    return location.search
+      ? `${location.origin}${location.search}/#`
+      : `${location.origin}/#`;
   }
 };
 
