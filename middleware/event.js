@@ -40,12 +40,11 @@ function dispatchEventActions({ store, name }) {
 }
 
 async function initTrackerThenAddingTrackers({ store, env }) {
-  const { t_ver } = store.getters["event/env"];
   const { open_id } = store.getters["beanfun/verification"];
   await initTracker(
     "null",
     open_id || env.SUPPLIER.openId,
-    t_ver,
+    env.TRACKING_EVENT.trackingVer,
     process.env.TRACKER_DEBUG_MODE
   );
 

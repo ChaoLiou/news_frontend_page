@@ -1,7 +1,8 @@
 <template>
   <div class="b-news-block">
     <div
-      class="b-news-block__title"
+      class="b-news-block__title title"
+      :class="{ title_placeloader: !titleText }"
       ref="title"
       @touchstart="startDetectingLongTouch"
       @touchend="stopDetectingLongTouch"
@@ -106,7 +107,7 @@ export default {
      * 星球 Id
      */
     planetId: {
-      type: Number,
+      type: [Number, String],
       default: -1,
     },
     /**
@@ -344,5 +345,16 @@ export default {
 }
 .b-news-block__tags_disabled .b-horizontal-scroll > * {
   opacity: 0.5;
+}
+.title_placeloader {
+  width: 6em;
+  height: 1.25em;
+  animation-duration: 1.5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeload;
+  animation-timing-function: linear;
+  background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+  background-size: 1200px 104px;
 }
 </style>

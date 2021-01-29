@@ -1,5 +1,5 @@
 export const state = () => ({
-  env: undefined
+  env: process.env.BGO
 });
 
 export const mutations = {

@@ -9,6 +9,13 @@ export default Object.assign(config, {
       recommendationApi:
         process.env.RECOMMENDATION_API || "https://stg-news-api.beanfun.com/v1"
     },
+    BGO: {
+      officialAccountId: process.env.BGO_OFFICIAL_ACCOUNT_ID || "",
+      token: process.env.BGO_TOKEN || "",
+      secret: process.env.BGO_SECRET || "",
+      clientId: process.env.BGO_CLIENT_ID || "",
+      widgetId: process.env.BGO_WIDGET_ID || ""
+    },
     RECOMMENDATION_ENABLED: {
       news: process.env.RECOMMENDATION_ENABLED_NEWS !== false,
       product: process.env.RECOMMENDATION_ENABLED_PRODUCT !== false,

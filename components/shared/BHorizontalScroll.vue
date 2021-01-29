@@ -116,12 +116,4 @@ export default {
   background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
   background-size: 1200px 104px;
 }
-@keyframes placeload {
-  0% {
-    background-position: -468px 0;
-  }
-  100% {
-    background-position: 468px 0;
-  }
-}
 </style>

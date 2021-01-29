@@ -3,8 +3,11 @@
     class="b-audiovisual-block"
     :class="{ 'b-audiovisual-block_masonry': vertical }"
   >
-    <div v-if="!!titleText">
-      <div class="b-audiovisual-block__title">{{ titleText }}</div>
+    <div
+      class="b-audiovisual-block__title title"
+      :class="{ title_placeholder: !titleText }"
+    >
+      <div>{{ titleText }}</div>
     </div>
     <div>
       <b-masonry-grid
@@ -100,7 +103,7 @@ export default {
      * 星球 Id
      */
     planetId: {
-      type: Number,
+      type: [Number, String],
       default: -1,
     },
     /**
@@ -261,5 +264,16 @@ export default {
 }
 .b-masonry-grid {
   min-height: 100vh;
+}
+.title_placeholder {
+  width: 6em;
+  height: 1.25em;
+  animation-duration: 1.5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeload;
+  animation-timing-function: linear;
+  background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+  background-size: 1200px 104px;
 }
 </style>

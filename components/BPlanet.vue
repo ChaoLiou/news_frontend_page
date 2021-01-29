@@ -29,7 +29,7 @@ export default {
      * 星球 Id
      */
     planetId: {
-      type: Number,
+      type: [Number, String],
       default: -1,
     },
     /**
@@ -48,11 +48,9 @@ export default {
         : [
             {
               id: "audiovisual",
-              title: "影音區塊標題",
             },
             {
               id: "news",
-              title: "新聞區塊標題",
             },
           ];
     },

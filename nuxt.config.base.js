@@ -29,17 +29,19 @@ export default {
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     script: [
-      { src: "https://www.youtube.com/iframe_api" },
+      { src: "https://www.youtube.com/iframe_api", defer: true },
       {
         src:
           // "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beango_stg.min.js",
           "https://beangostg.blob.core.windows.net/beango-static-stg/sdk/beanfun.min.js",
-        group: "beanfun_vue_tracker"
+        group: "beanfun_vue_tracker",
+        defer: true
       },
       {
         src:
           "https://beangochat.blob.core.windows.net/beango-static-prod/sdk/vconsole.min.js",
-        group: "vconsole"
+        group: "vconsole",
+        defer: true
       },
       {
         src: "/beanfun_tracker/sdk/beanfun_tracker-0.01.min.js",
@@ -80,6 +82,6 @@ export default {
   build: {},
   router: {
     mode: "hash",
-    middleware: ["init", "serverEnv", "redirect"]
+    middleware: ["redirect"]
   }
 };

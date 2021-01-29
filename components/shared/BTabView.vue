@@ -45,7 +45,7 @@ export default {
     source: {
       type: Array,
       default() {
-        return [];
+        return [{ id: "tab_1" }, { id: "tab_2" }, { id: "tab_3" }];
       },
     },
     /**
@@ -89,6 +89,8 @@ export default {
     isSelected(item) {
       return (
         this.selectedTab &&
+        this.selectedTab[this.identifierKey] &&
+        item[this.identifierKey] &&
         this.selectedTab[this.identifierKey] === item[this.identifierKey]
       );
     },

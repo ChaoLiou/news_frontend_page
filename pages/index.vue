@@ -1,7 +1,7 @@
 <template>
   <div class="index">
     <b-tab-view
-      :source="planets"
+      :source="source"
       @ready="tabViewReady"
       @switch-tab="switchPlanet"
     >
@@ -10,6 +10,7 @@
           class="planet-tab-title"
           :class="{
             'planet-tab-title_marked': isMarked(props.item),
+            'planet-tab-title__placeholder': !props.item.name,
           }"
         >
           <div>
@@ -50,26 +51,28 @@ export default {
       selectedTab: undefined,
     };
   },
+  asyncData({ env }) {
+    return {
+      env,
+    };
+  },
   middleware: ["appCache"],
-  async asyncData(context) {
-    try {
-      await eventMiddleware(context);
-      await planetMiddleware(context);
-    } catch (err) {
-      console.log({ indexAsyncData: err });
-    }
+  beforeCreate() {
+    new VConsole();
   },
   async mounted() {
-    await trackEvent(
-      view_landing_page.id,
-      view_landing_page.category,
-      view_landing_page.action,
-      view_landing_page.formatPayload(this.selectedTab.name)
-    );
+    console.log({ env: this.env });
+    await eventMiddleware({ store: this.$store, env: this.env });
+    await planetMiddleware({ store: this.$store });
   },
   computed: {
     planets() {
       return this.$store.getters["planet/list"];
+    },
+    source() {
+      return Array.isArray(this.planets) && this.planets.length > 0
+        ? this.planets
+        : undefined;
     },
   },
   methods: {
@@ -89,6 +92,18 @@ export default {
       );
     },
   },
+  watch: {
+    async planets(value) {
+      if (Array.isArray(value) && value.length > 0) {
+        await trackEvent(
+          view_landing_page.id,
+          view_landing_page.category,
+          view_landing_page.action,
+          view_landing_page.formatPayload(value[0].name)
+        );
+      }
+    },
+  },
 };
 </script>
 
@@ -101,5 +116,16 @@ export default {
   right: 0px;
   top: 0px;
   margin-right: -16px;
+}
+.planet-tab-title__placeholder > div {
+  width: 3em;
+  height: 1.2em;
+  animation-duration: 1.5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeload;
+  animation-timing-function: linear;
+  background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+  background-size: 1200px 104px;
 }
 </style>

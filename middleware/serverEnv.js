@@ -1,3 +1,4 @@
+// [DEPRECATED] use env in nuxt.config.js instead
 import { logWatchWrapper } from "@/assets/js/utils";
 
 const name = "serverEnv";

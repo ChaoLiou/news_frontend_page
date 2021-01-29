@@ -307,12 +307,4 @@ export default {
   width: 100%;
   color: #00000081;
 }
-@keyframes placeload {
-  0% {
-    background-position: -468px 0;
-  }
-  100% {
-    background-position: 468px 0;
-  }
-}
 </style>
