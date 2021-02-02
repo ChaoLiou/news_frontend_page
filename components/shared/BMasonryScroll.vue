@@ -114,6 +114,14 @@ export default {
         return {};
       },
     },
+    pageSize: {
+      type: Number,
+      default: 10,
+    },
+    everyAmountLoading: {
+      type: Number,
+      default: 5,
+    },
   },
   data() {
     return {
@@ -122,7 +130,6 @@ export default {
       itemTops: [],
       itemLefts: [],
       pageIndex: 1,
-      pageSize: 10,
       arranged: false,
       placeholderHeight: 860,
       noMoreTextHeight: 30,
@@ -180,11 +187,11 @@ export default {
     },
     triggerable(index) {
       const index1Base = index + 1;
-      if (index1Base > this.pageSize) {
-        return index1Base % (this.pageSize / 2) === 0;
-      } else {
-        return index1Base === this.pageSize;
-      }
+      return (
+        index1Base > this.inactiveTotals &&
+        index1Base ===
+          this.pageSize * (this.pageIndex - 1) + this.everyAmountLoading
+      );
     },
     reset() {
       this.pageIndex = 1;
@@ -230,12 +237,7 @@ export default {
       this.arranged = true;
     },
     loadMore(index) {
-      const lastIndex = this.pageIndex * this.pageSize - 1;
-      const currentIndex =
-        index === this.pageSize - 1
-          ? index
-          : index - this.inactiveTotals + this.pageSize / 2;
-      if (this.arranged && currentIndex === lastIndex) {
+      if (this.arranged) {
         /**
          * 載入更多
          * @property {object} pageInfo `{ pageSize, pageIndex }`, pageSize: 一頁有幾筆, pageIndex: 目前第幾頁

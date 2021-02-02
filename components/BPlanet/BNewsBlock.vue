@@ -51,6 +51,7 @@
         :placeholder-style="{
           borderRadius: '20px',
         }"
+        :page-size="20"
         @load-more="loadMore"
       >
         <template #default="props">
@@ -268,7 +269,7 @@ export default {
         this.source.push(...list);
       }
     },
-    async loadMore({ pageSize, pageIndex } = { pageSize: 10, pageIndex: 1 }) {
+    async loadMore({ pageSize, pageIndex } = { pageSize: 20, pageIndex: 1 }) {
       this.loading = true;
       if (this.planetId >= 0 && this.selectedTag) {
         const payload = {
