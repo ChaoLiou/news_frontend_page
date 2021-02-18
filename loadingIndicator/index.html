@@ -1,4 +1,4 @@
-<style>
+<style id="loadingIndicatorStyle">
   html {
     font-family: Microsoft JhengHei;
     width: 100%;
@@ -363,3 +363,13 @@
     </div>
   </div>
 </div>
+
+<script>
+  (function() {
+    if (/^#\/#?\d?$/.test(location.hash)) {
+      /* true if hash is "#/", "#/#1". */
+    } else {
+      document.querySelector("#loadingIndicatorStyle").remove();
+    }
+  })();
+</script>
