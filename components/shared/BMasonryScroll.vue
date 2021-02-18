@@ -8,6 +8,8 @@
         'load-more-triggerable':
           triggerablePredicate(item) && triggerable(index),
       }"
+      :bf-index="index"
+      :bf-predicate="triggerablePredicate(item)"
       :load-more-triggerable="triggerablePredicate(item) && triggerable(index)"
       :style="{
         transform: getTranslateXY(index),
@@ -186,11 +188,10 @@ export default {
       return `translate(${x}px, ${y}px)`;
     },
     triggerable(index) {
-      const index1Base = index + 1;
+      const index1Base = index + 1 - this.inactiveTotals;
       return (
-        index1Base > this.inactiveTotals &&
         index1Base ===
-          this.pageSize * (this.pageIndex - 1) + this.everyAmountLoading
+        this.pageSize * (this.pageIndex - 1) + this.everyAmountLoading
       );
     },
     reset() {

@@ -3,8 +3,8 @@ import config from "./nuxt.config.base";
 export default Object.assign(config, {
   env: {
     BASE_URL: {
-      backendApi: "https://3c79b7629bc3.ngrok.io/v1",
-      trackingApi: "https://fe5977f3081d.ngrok.io/v1",
+      backendApi: "https://09d68911a667.ngrok.io/v1",
+      trackingApi: "https://d83fe1d42f6e.ngrok.io/v1",
       recommendationApi: "https://stg-news-api.beanfun.com/v1"
     },
     BGO: {
@@ -28,13 +28,7 @@ export default Object.assign(config, {
     },
     SUPPLIER: {
       enabled: true,
-      detailUrls: [
-        "articles/tw/1/1342491504970567680/detail.html",
-        "articles/tw/1/1342375722760540160/detail.html",
-        "articles/tw/41/1348948166656921600/detail.html",
-        "articles/tw/1/1350974027929227264/detail.html",
-        "articles/tw/5/1351412023329558528/detail.html"
-      ],
+      detailUrls: ["articles/tw/1/1358630822793449472/detail.html"],
       openId: ""
     },
     VIDEO_IMAGE: {
