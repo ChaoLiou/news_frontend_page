@@ -40,6 +40,7 @@ import eventMiddleware from "@/middleware/event";
 import planetMiddleware from "@/middleware/planet";
 import BNIcon from "@/components/shared/icons/BNIcon";
 import { MarkedType } from "@/assets/js/constants.js";
+import planetConfigs from "./../assets/json/planets.json";
 
 export default {
   components: {
@@ -69,7 +70,7 @@ export default {
     source() {
       return Array.isArray(this.planets) && this.planets.length > 0
         ? this.planets
-        : undefined;
+        : planetConfigs.sort((a, b) => a.seq - b.seq);
     },
   },
   methods: {

@@ -1,6 +1,7 @@
 [
   {
     "id": 1,
+    "name": "電玩星",
     "link": "/video-game",
     "blocks": [
       {
@@ -11,10 +12,12 @@
         "id": "news",
         "title": "不想錯過資訊"
       }
-    ]
+    ],
+    "seq": 3
   },
   {
     "id": 2,
+    "name": "放鬆星",
     "link": "/chill",
     "blocks": [
       {
@@ -25,10 +28,12 @@
         "id": "news",
         "title": "鬆鬆情報"
       }
-    ]
+    ],
+    "seq": 1
   },
   {
     "id": 3,
+    "name": "時事星",
     "link": "/current-news",
     "blocks": [
       {
@@ -39,6 +44,7 @@
         "id": "news",
         "title": "擴增腦情報"
       }
-    ]
+    ],
+    "seq": 2
   }
 ]
