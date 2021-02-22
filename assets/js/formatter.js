@@ -3,6 +3,7 @@ import { parsingId as parsingYoutubeId } from "./videoParser/youtube";
 
 export const formatNews = x => {
   const categories = x.NewsSubCategory ? x.NewsSubCategory : [];
+  const representativeCategory = categories.length > 0 ? categories[0] : {};
   const planets = categories
     .map(c => c.NewsMainBanner)
     .map(p => ({ name: p.name, id: p.id }));
@@ -23,6 +24,7 @@ export const formatNews = x => {
         name: site.name
       }
     },
+    representativeCategory: { name: representativeCategory.name },
     categories: categories.map(c => ({ name: c.name })),
     representativePlanet: planets.length > 0 ? planets[0] : {},
     link: x.article_path,
@@ -61,6 +63,7 @@ export const formatNumber = (x, shortenOptions) => {
 
 export const formatVideo = x => {
   const categories = x.NewsSubCategory ? x.NewsSubCategory : [];
+  const representativeCategory = categories.length > 0 ? categories[0] : {};
   const planets = categories
     .map(c => c.NewsMainBanner)
     .map(p => ({ id: p.id, name: p.name }));
@@ -91,6 +94,8 @@ export const formatVideo = x => {
         img: site.SiteIconURL
       }
     },
+    representativeCategory: { name: representativeCategory.name },
+    categories: categories.map(c => ({ name: c.name })),
     views: x.view_count,
     description: x.src_description,
     marked: x.article_type_id === Type.ManuallyTopUp

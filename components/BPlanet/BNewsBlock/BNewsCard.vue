@@ -69,6 +69,10 @@ export default {
         name: VueTypes.string, // 新聞所屬星球中第一個星球 - 名稱
         id: VueTypes.number, // 新聞所屬星球中第一個星球 - 星球 Id
       }),
+      representativeCategory: VueTypes.shape({
+        name: VueTypes.string, // 新聞所屬星球中第一個分類 - 名稱
+        id: VueTypes.number, // 新聞所屬星球中第一個分類 - 分類 Id
+      }),
       categories: VueTypes.arrayOf(
         VueTypes.shape({
           name: VueTypes.string, // 新聞所屬分類 - 分類名稱

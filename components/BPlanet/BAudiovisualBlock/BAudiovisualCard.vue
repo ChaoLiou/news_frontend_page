@@ -53,6 +53,15 @@ export default {
       representativePlanet: VueTypes.shape({
         name: VueTypes.string, // 影音所屬星球中的代表星球 - 星球名稱
       }),
+      representativeCategory: VueTypes.shape({
+        name: VueTypes.string, // 影音所屬星球中第一個分類 - 名稱
+        id: VueTypes.number, // 影音所屬星球中第一個分類 - 分類 Id
+      }),
+      categories: VueTypes.arrayOf(
+        VueTypes.shape({
+          name: VueTypes.string, // 影音所屬分類 - 分類名稱
+        })
+      ),
       img: VueTypes.shape({
         url: VueTypes.string, // 影音預覽圖 - 網址
         width: VueTypes.number, // 影音預覽圖 - 寬
