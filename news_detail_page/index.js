@@ -22,7 +22,6 @@ import {
   generateInsideSharingParams,
   generateOutsideSharingParamsPromise
 } from "./sharing";
-import {} from "../assets/js/beango";
 import {
   initBGO,
   checkAppExistAsync,
@@ -32,14 +31,17 @@ import {
   sendMessageV2,
   sendDataToApps,
   redirectUriByDefaultBrowser
-} from "../assets/js/beango/index.async";
+} from "../assets/js/beango/index.async.mock";
 import { trackEvent } from "../assets/js/tracking";
 import { initTracker } from "./init-tracker";
 import { getOSType, getTimeZone } from "../assets/js/tracking/utils";
 import {
   click_news,
   view_news_page,
-  read_news_article
+  read_news_article,
+  click_direct_external_link,
+  click_buttom_function_line,
+  SPECIAL_ACTION_NAME
 } from "../assets/js/tracking/events";
 import { state as initBeanfunState } from "../store/stateRepo/beanfun";
 import { state as initEventState } from "../store/stateRepo/event";
@@ -208,7 +210,7 @@ function initWithNews(news) {
   renderSource(news.source);
   renderDateTimeInfo(news.publishTimeUnix, news.updateTimeUnix);
   renderRecommendNewsTitle("你可能會喜歡");
-  renderSoureNewsLink("檢視原始文章", news.externalLink);
+  renderSoureNewsLink("檢視原始文章", news);
   bindEvents(news);
   initRecommendAdBlock(news);
 }
@@ -347,7 +349,10 @@ function bindScroll(news) {
               news.source.site.name,
               news.source.rss.id,
               news.source.rss.name,
-              stage.rate
+              stage.rate,
+              news.representativeCategory.name,
+              news.link,
+              news.title
             )
           )
         );
@@ -373,6 +378,25 @@ function bindEvents(news) {
       const url = aDOM.href;
       aDOM.href = "javascript:;";
       aDOM.addEventListener("click", () => {
+        Promise.resolve(
+          trackEvent(
+            click_direct_external_link.id,
+            click_direct_external_link.category,
+            click_direct_external_link.action,
+            click_direct_external_link.formatPayload(
+              news.id,
+              news.source.site.id,
+              news.source.site.name,
+              news.source.rss.id,
+              news.source.rss.name,
+              news.representativeCategory.name,
+              news.link,
+              news.title,
+              aDOM.innerText,
+              news.externalLink
+            )
+          )
+        );
         redirectUriByDefaultBrowser(url);
       });
     });
@@ -409,6 +433,24 @@ function bindEvents(news) {
   const deepLinkOutsideSharing = `beanfunapp://Q/h5page/${officialAccountId}?url=${encodedLink}&theme=1&title=${title}`;
   console.log({ widgetId, officialAccountId });
   insideSharingDOM.addEventListener("click", () => {
+    Promise.resolve(
+      trackEvent(
+        click_buttom_function_line.id,
+        click_buttom_function_line.category,
+        click_buttom_function_line.action,
+        click_buttom_function_line.formatPayload(
+          news.id,
+          news.source.site.id,
+          news.source.site.name,
+          news.source.rss.id,
+          news.source.rss.name,
+          news.representativeCategory.name,
+          news.link,
+          news.title,
+          SPECIAL_ACTION_NAME.share
+        )
+      )
+    );
     const { msg_body, select_opt } = generateInsideSharingParams({
       description,
       widgetId,
@@ -420,6 +462,24 @@ function bindEvents(news) {
   });
 
   outsideSharingDOM.addEventListener("click", () => {
+    Promise.resolve(
+      trackEvent(
+        click_buttom_function_line.id,
+        click_buttom_function_line.category,
+        click_buttom_function_line.action,
+        click_buttom_function_line.formatPayload(
+          news.id,
+          news.source.site.id,
+          news.source.site.name,
+          news.source.rss.id,
+          news.source.rss.name,
+          news.representativeCategory.name,
+          news.link,
+          news.title,
+          SPECIAL_ACTION_NAME.forward
+        )
+      )
+    );
     toggleToolMenuItemForLoading(".tool-menu__outside-sharing");
     generateOutsideSharingParamsPromise({
       title,
@@ -447,7 +507,10 @@ function bindEvents(news) {
         news.source.site.id,
         news.source.site.name,
         news.source.rss.id,
-        news.source.rss.name
+        news.source.rss.name,
+        news.representativeCategory.name,
+        news.link,
+        news.title
       )
     )
   );

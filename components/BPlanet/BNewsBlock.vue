@@ -256,7 +256,7 @@ export default {
           click_news_category.id,
           click_news_category.category,
           click_news_category.action,
-          click_news_category.formatPayload(this.selectedTag.title, targetIndex)
+          click_news_category.formatPayload(this.planetName, this.selectedTag.title, targetIndex)
         );
         await this.init();
       }
@@ -286,7 +286,7 @@ export default {
         const list = await this.$store.dispatch("news/fetch", payload);
         this.loadMoreNews(list, pageIndex);
 
-        const newsList = list.map((x) => ({
+        const newsList = list.map((x, index) => ({
           id: x.id,
           siteId: x.source.site.id,
           siteName: x.source.site.name,
@@ -295,6 +295,7 @@ export default {
           blockType: BLOCK_TYPE.NEWS,
           planetName: this.planetName,
           categoryName: this.selectedTag.title,
+          index
         }));
         await trackEvent(
           impression_landing_page.id,

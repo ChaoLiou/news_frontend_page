@@ -126,6 +126,11 @@ export default {
       currentLastItem: undefined,
     };
   },
+  computed:{
+    origin() {
+      return getHashModeOrigin(this.$router);
+    }
+  },
   methods: {
     showVConsole,
     init() {
@@ -165,7 +170,7 @@ export default {
         };
         const list = await this.$store.dispatch("audiovisual/fetch", payload);
         this.loadMoreVideo(list, pageIndex);
-        const videos = list.map((x) => ({
+        const videos = list.map((x, index) => ({
           id: x.id,
           siteId: x.source.site.id,
           siteName: x.source.site.name,
@@ -173,6 +178,11 @@ export default {
           rssName: x.source.rss.name,
           blockType: BLOCK_TYPE.VIDEO,
           planetName: this.planetName,
+          categoryName: x.representativeCategory.name,
+          videoLink: `${this.origin}/${this.planetId}/audiovisual/${x.id}`,
+          videoTitle: x.title,
+          planetName: this.planetName,
+          index
         }));
         if (this.vertical) {
           await trackEvent(
@@ -203,11 +213,14 @@ export default {
           data.source.site.id,
           data.source.site.name,
           data.source.rss.id,
-          data.source.rss.name
+          data.source.rss.name,
+          data.representativeCategory.name,
+          `${this.origin}/${this.planetId}/audiovisual/${data.id}`,
+          data.title,
+          this.planetName
         )
       );
-      const origin = getHashModeOrigin(this.$router);
-      const link = `${origin}/${this.planetId}/audiovisual/${data.id}`;
+      const link = `${this.origin}/${this.planetId}/audiovisual/${data.id}`;
       if (await checkAppExistAsync()) {
         await openFullH5WebviewAsync(
           link,
@@ -228,7 +241,12 @@ export default {
           data.source.site.id,
           data.source.site.name,
           data.source.rss.id,
-          data.source.rss.name
+          data.source.rss.name,
+          data.representativeCategory.name,
+          `${this.origin}/${this.planetId}/audiovisual/${data.id}`,
+          data.title,
+          this.planetName,
+          data.index
         )
       );
     },

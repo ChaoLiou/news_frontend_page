@@ -5,11 +5,13 @@ export const view_landing_page = {
   id: 800,
   /**
    *
-   * @param {String} planetName 星球名稱
+   * @param {string} planetName 星球名稱
    */
-  formatPayload: planetName => ({
-    pg_name: planetName
-  }),
+  formatPayload(planetName) {
+    return validate.call(this, {
+      pg_name: planetName
+    });
+  },
   category: "planet",
   action: "view_landing_page"
 };
@@ -20,23 +22,33 @@ export const impression_landing_page = {
   id: 801,
   /**
    *
-   * @param {Object[]} list 新聞/影音 Array, 物件包含以下 fields:
-   * @param {String} ids 新聞/影音 field - Id
-   * @param {String} blockType 新聞/影音 field - 區塊名稱, 使用 BLOCK_TYPE.XX 指定
-   * @param {String} categoryName 新聞/影音 field - 分類名稱
-   * @param {String} planetName 新聞/影音 field - 星球名稱
-   * @param {String} siteName 新聞/影音 field - 站台名稱
-   * @param {String} rsstName 新聞/影音 field - RSS 名稱
+   * @param {Array<object>} list 新聞/影音 Array, 物件包含以下 fields:
+   * @param {string} ids 新聞/影音 field - Id
+   * @param {string} blockType 新聞/影音 field - 區塊名稱, 使用 BLOCK_TYPE.XX 指定
+   * @param {string} categoryName 新聞/影音 field - 分類名稱
+   * @param {string} planetName 新聞/影音 field - 星球名稱
+   * @param {number} siteId 新聞/影音 field - 站台 Id
+   * @param {string} siteName 新聞/影音 field - 站台名稱
+   * @param {number} rssId 新聞/影音 field - RSS Id
+   * @param {string} rsstName 新聞/影音 field - RSS 名稱
+   * @param {number} index 新聞/影音 field - Index
    */
-  formatPayload: list =>
-    list.map(item => ({
-      uuid: item.id,
-      section: item.blockType,
-      category: item.categoryName,
-      pg_name: item.planetName,
-      content_provider: item.siteName,
-      source_fetch: item.rssName
-    })),
+  formatPayload(list) {
+    return validate.call(
+      this,
+      list.map(item => ({
+        uuid: item.id,
+        section: item.blockType,
+        category: item.categoryName,
+        pg_name: item.planetName,
+        content_provider_id: item.siteId,
+        content_provider: item.siteName,
+        source_fetch_id: item.rssId,
+        source_fetch: item.rssName,
+        pos: item.index
+      }))
+    );
+  },
   category: "planet",
   action: "impression_landing_page"
 };
@@ -47,13 +59,17 @@ export const click_news_category = {
   id: 802,
   /**
    *
-   * @param {String} categoryName 分類名稱
-   * @param {Number} categoryIndex 分類 Index
+   * @param {string} planetName 星球名稱
+   * @param {string} categoryName 分類名稱
+   * @param {number} categoryIndex 分類 Index
    */
-  formatPayload: (categoryName, categoryIndex) => ({
-    category: categoryName,
-    pos: categoryIndex
-  }),
+  formatPayload(planetName, categoryName, categoryIndex) {
+    return validate.call(this, {
+      pg_name: planetName,
+      category: categoryName,
+      pos: categoryIndex
+    });
+  },
   category: "planet",
   action: "click_news_category"
 };
@@ -70,13 +86,13 @@ export const click_news = {
    * @param {string} newsTitle 新聞標題
    * @param {string} newsId 新聞 Id
    * @param {number} newsIndex 新聞 Index
-   * @param {Number} newsIndex 新聞 Index
-   * @param {Number} siteId 站台 Id
-   * @param {String} siteName 站台名稱
-   * @param {Number} rssId RSS Id
-   * @param {String} rssName RSS 名稱
+   * @param {number} newsIndex 新聞 Index
+   * @param {number} siteId 站台 Id
+   * @param {string} siteName 站台名稱
+   * @param {number} rssId RSS Id
+   * @param {string} rssName RSS 名稱
    */
-  formatPayload: (
+  formatPayload(
     planetName,
     categoryName,
     detailPageLink,
@@ -87,18 +103,20 @@ export const click_news = {
     siteName,
     rssId,
     rssName
-  ) => ({
-    pg_name: planetName,
-    category: categoryName,
-    url: detailPageLink,
-    title: newsTitle,
-    uuid: newsId,
-    pos: newsIndex,
-    content_provider_id: siteId,
-    content_provider: siteName,
-    source_fetch_id: rssId,
-    source_fetch: rssName
-  }),
+  ) {
+    return validate.call(this, {
+      pg_name: planetName,
+      category: categoryName,
+      url: detailPageLink,
+      title: newsTitle,
+      uuid: newsId,
+      pos: newsIndex,
+      content_provider_id: siteId,
+      content_provider: siteName,
+      source_fetch_id: rssId,
+      source_fetch: rssName
+    });
+  },
   category: "planet",
   action: "click_news"
 };
@@ -109,11 +127,13 @@ export const click_tab = {
   id: 804,
   /**
    *
-   * @param {String} planetName 星球名稱
+   * @param {string} planetName 星球名稱
    */
-  formatPayload: planetName => ({
-    pg_tab: planetName
-  }),
+  formatPayload(planetName) {
+    return validate.call(this, {
+      pg_name: planetName
+    });
+  },
   category: "planet",
   action: "click_tab"
 };
@@ -124,19 +144,36 @@ export const view_news_page = {
   id: 805,
   /**
    *
-   * @param {String} newsId 新聞 Id
-   * @param {Number} siteId 站台 Id
-   * @param {String} siteName 站台名稱
-   * @param {Number} rssId RSS Id
-   * @param {String} rssName RSS 名稱
+   * @param {string} newsId 新聞 Id
+   * @param {number} siteId 站台 Id
+   * @param {string} siteName 站台名稱
+   * @param {number} rssId RSS Id
+   * @param {string} rssName RSS 名稱
+   * @param {string} categoryName 分類名稱
+   * @param {string} newsLink 新聞內頁網址
+   * @param {string} newsTitle 新聞標題
    */
-  formatPayload: (newsId, siteId, siteName, rssId, rssName) => ({
-    uuid: newsId,
-    content_provider_id: siteId,
-    content_provider: siteName,
-    source_fetch_id: rssId,
-    source_fetch: rssName
-  }),
+  formatPayload(
+    newsId,
+    siteId,
+    siteName,
+    rssId,
+    rssName,
+    categoryName,
+    newsLink,
+    newsTitle
+  ) {
+    return validate.call(this, {
+      uuid: newsId,
+      content_provider_id: siteId,
+      content_provider: siteName,
+      source_fetch_id: rssId,
+      source_fetch: rssName,
+      category: categoryName,
+      url: newsLink,
+      title: newsTitle
+    });
+  },
   category: "planet",
   action: "view_news_page"
 };
@@ -147,21 +184,33 @@ export const impression_video_page = {
   id: 806,
   /**
    *
-   * @param {Object[]} videos 影音 Array, 物件包含以下 fields:
-   * @param {String} id 影音 field - Id
-   * @param {Number} siteId 影音 field - 站台 Id
-   * @param {String} siteName 影音 field - 站台名稱
-   * @param {Number} rssId 影音 field - RSS Id
-   * @param {String} rssName 影音 field - RSS 名稱
+   * @param {Array<object>} videos 影音 Array, 物件包含以下 fields:
+   * @param {string} id 影音 field - Id
+   * @param {number} siteId 影音 field - 站台 Id
+   * @param {string} siteName 影音 field - 站台名稱
+   * @param {number} rssId 影音 field - RSS Id
+   * @param {string} rssName 影音 field - RSS 名稱
+   * @param {string} categoryName 影音 field - 分類名稱
+   * @param {string} videoLink 影音 field - 內頁網址
+   * @param {string} videoTitle 影音 field - 標題
+   * @param {string} planetName 影音 field - 星球名稱
    */
-  formatPayload: videos =>
-    videos.map(video => ({
-      uuid: video.id,
-      content_provider_id: video.siteId,
-      content_provider: video.siteName,
-      source_fetch_id: video.rssId,
-      source_fetch: video.rssName
-    })),
+  formatPayload(videos) {
+    return validate.call(
+      this,
+      videos.map(video => ({
+        uuid: video.id,
+        content_provider_id: video.siteId,
+        content_provider: video.siteName,
+        source_fetch_id: video.rssId,
+        source_fetch: video.rssName,
+        category: video.categoryName,
+        url: video.videoLink,
+        title: video.videoTitle,
+        pg_name: video.planetName
+      }))
+    );
+  },
   category: "planet",
   action: "impression_video_page"
 };
@@ -172,13 +221,15 @@ export const swipe_banner = {
   id: 807,
   /**
    *
-   * @param {String} videoId 影音 Id
-   * @param {Number} videoIndex 影音 Index
+   * @param {string} videoId 影音 Id
+   * @param {number} videoIndex 影音 Index
    */
-  formatPayload: (videoId, videoIndex) => ({
-    uuid: videoId,
-    pos: videoIndex
-  }),
+  formatPayload(videoId, videoIndex) {
+    return validate.call(this, {
+      uuid: videoId,
+      pos: videoIndex
+    });
+  },
   category: "planet",
   action: "swipe_banner"
 };
@@ -189,21 +240,42 @@ export const click_video = {
   id: 808,
   /**
    *
-   * @param {String} videoId 影音 Id
-   * @param {Number} videoIndex 影音 Index
-   * @param {Number} siteId 站台 Id
-   * @param {String} siteName 站台名稱
-   * @param {Number} rssId RSS Id
-   * @param {String} rssName RSS 名稱
+   * @param {string} videoId 影音 Id
+   * @param {number} videoIndex 影音 Index
+   * @param {number} siteId 站台 Id
+   * @param {string} siteName 站台名稱
+   * @param {number} rssId RSS Id
+   * @param {string} rssName RSS 名稱
+   * @param {string} categoryName 分類名稱
+   * @param {string} newsLink 內頁網址
+   * @param {string} newsTitle 標題
+   * @param {string} planetName 星球名稱
    */
-  formatPayload: (videoId, videoIndex, siteId, siteName, rssId, rssName) => ({
-    uuid: videoId,
-    pos: videoIndex,
-    content_provider_id: siteId,
-    content_provider: siteName,
-    source_fetch_id: rssId,
-    source_fetch: rssName
-  }),
+  formatPayload(
+    videoId,
+    videoIndex,
+    siteId,
+    siteName,
+    rssId,
+    rssName,
+    categoryName,
+    newsLink,
+    newsTitle,
+    planetName
+  ) {
+    return validate.call(this, {
+      uuid: videoId,
+      pos: videoIndex,
+      content_provider_id: siteId,
+      content_provider: siteName,
+      source_fetch_id: rssId,
+      source_fetch: rssName,
+      category: categoryName,
+      url: newsLink,
+      title: newsTitle,
+      pg_name: planetName
+    });
+  },
   category: "planet",
   action: "click_video"
 };
@@ -214,19 +286,42 @@ export const click_video_play = {
   id: 809,
   /**
    *
-   * @param {String} videoId 影音 Id
-   * @param {Number} siteId 站台 Id
-   * @param {String} siteName 站台名稱
-   * @param {Number} rssId RSS Id
-   * @param {String} rssName RSS 名稱
+   * @param {string} videoId 影音 Id
+   * @param {number} siteId 站台 Id
+   * @param {string} siteName 站台名稱
+   * @param {number} rssId RSS Id
+   * @param {string} rssName RSS 名稱
+   * @param {string} categoryName 分類名稱
+   * @param {string} newsLink 內頁網址
+   * @param {string} newsTitle 標題
+   * @param {string} planetName 星球名稱
+   * @param {number} index 影音 Index
    */
-  formatPayload: (videoId, siteId, siteName, rssId, rssName) => ({
-    uuid: videoId,
-    content_provider_id: siteId,
-    content_provider: siteName,
-    source_fetch_id: rssId,
-    source_fetch: rssName
-  }),
+  formatPayload(
+    videoId,
+    siteId,
+    siteName,
+    rssId,
+    rssName,
+    categoryName,
+    newsLink,
+    newsTitle,
+    planetName,
+    index
+  ) {
+    return validate.call(this, {
+      uuid: videoId,
+      content_provider_id: siteId,
+      content_provider: siteName,
+      source_fetch_id: rssId,
+      source_fetch: rssName,
+      category: categoryName,
+      url: newsLink,
+      title: newsTitle,
+      pg_name: planetName,
+      pos: index
+    });
+  },
   category: "planet",
   action: "click_video_play"
 };
@@ -237,28 +332,128 @@ export const read_news_article = {
   id: 810,
   /**
    *
-   * @param {String} newsId 新聞 Id
-   * @param {Number} siteId 站台 Id
-   * @param {String} siteName 站台名稱
-   * @param {Number} rssId RSS Id
-   * @param {String} rssName RSS 名稱
-   * @param {Number} scrollingPercentage 捲動百分比
+   * @param {string} newsId 新聞 Id
+   * @param {number} siteId 站台 Id
+   * @param {string} siteName 站台名稱
+   * @param {number} rssId RSS Id
+   * @param {string} rssName RSS 名稱
+   * @param {number} scrollingPercentage 捲動百分比
+   * @param {string} categoryName 分類名稱
+   * @param {string} newsLink 內頁網址
+   * @param {string} newsTitle 標題
    */
-  formatPayload: (
+  formatPayload(
     newsId,
     siteId,
     siteName,
     rssId,
     rssName,
-    scrollingPercentage
-  ) => ({
-    uuid: newsId,
-    content_provider_id: siteId,
-    content_provider: siteName,
-    source_fetch_id: rssId,
-    source_fetch: rssName,
-    percentage: `${scrollingPercentage}%`
-  }),
+    scrollingPercentage,
+    categoryName,
+    newsLink,
+    newsTitle
+  ) {
+    return validate.call(this, {
+      uuid: newsId,
+      content_provider_id: siteId,
+      content_provider: siteName,
+      source_fetch_id: rssId,
+      source_fetch: rssName,
+      percentage: `${scrollingPercentage}%`,
+      category: categoryName,
+      url: newsLink,
+      title: newsTitle
+    });
+  },
+  category: "planet",
+  action: "view_news_page"
+};
+/**
+ * 點擊導引到外部連結
+ */
+export const click_direct_external_link = {
+  id: 811,
+  /**
+   *
+   * @param {string} newsId 新聞 Id
+   * @param {number} siteId 站台 Id
+   * @param {string} siteName 站台名稱
+   * @param {number} rssId RSS Id
+   * @param {string} rssName RSS 名稱
+   * @param {string} categoryName 分類名稱
+   * @param {string} newsLink 內頁網址
+   * @param {string} newsTitle 標題
+   * @param {string} externalLinkName 外部網址名稱, 如果是檢視原始文章, 改填入 "view_original_article"
+   * @param {string} externalLink 外部網址
+   */
+  formatPayload(
+    newsId,
+    siteId,
+    siteName,
+    rssId,
+    rssName,
+    categoryName,
+    newsLink,
+    newsTitle,
+    externalLinkName,
+    externalLink
+  ) {
+    return validate.call(this, {
+      uuid: newsId,
+      content_provider_id: siteId,
+      content_provider: siteName,
+      source_fetch_id: rssId,
+      source_fetch: rssName,
+      category: categoryName,
+      url: newsLink,
+      title: newsTitle,
+      button_name: externalLinkName,
+      external_url: externalLink
+    });
+  },
+  category: "planet",
+  action: "view_news_page"
+};
+/**
+ * 點擊頁面底部功能鈕
+ */
+export const click_buttom_function_line = {
+  id: 812,
+  /**
+   *
+   * @param {string} newsId 新聞 Id
+   * @param {number} siteId 站台 Id
+   * @param {string} siteName 站台名稱
+   * @param {number} rssId RSS Id
+   * @param {string} rssName RSS 名稱
+   * @param {string} categoryName 分類名稱
+   * @param {string} newsLink 內頁網址
+   * @param {string} newsTitle 標題
+   * @param {string} actionName 行為名稱(如果是分享, 填入 "share"; 如果是轉傳, 填入 "forward")
+   */
+  formatPayload(
+    newsId,
+    siteId,
+    siteName,
+    rssId,
+    rssName,
+    categoryName,
+    newsLink,
+    newsTitle,
+    actionName
+  ) {
+    return validate.call(this, {
+      uuid: newsId,
+      content_provider_id: siteId,
+      content_provider: siteName,
+      source_fetch_id: rssId,
+      source_fetch: rssName,
+      category: categoryName,
+      url: newsLink,
+      title: newsTitle,
+      button_name: actionName
+    });
+  },
   category: "planet",
   action: "view_news_page"
 };
@@ -269,3 +464,39 @@ export const BLOCK_TYPE = {
   VIDEO: "影音",
   NEWS: "情報"
 };
+/**
+ * 特殊外開網址名稱
+ */
+export const SPECIAL_EXTERNAL_LINK_NAME = {
+  view_original_article: "view_original_article"
+};
+/**
+ * 特殊行為名稱
+ */
+export const SPECIAL_ACTION_NAME = {
+  share: "share",
+  forward: "forward"
+};
+/**
+ * validate that all the property values of payload are assigned.
+ * @param {object|Array<object>} payload
+ */
+function validate(payload) {
+  const failedValues = [null, undefined];
+  let success = false;
+  if (Array.isArray(payload)) {
+    success = payload.every(item =>
+      Object.keys(item).every(key => !failedValues.includes(item[key]))
+    );
+  } else {
+    success = Object.keys(payload).every(
+      key => !failedValues.includes(payload[key])
+    );
+  }
+  if (success) {
+    return payload;
+  } else {
+    const errorTitle = `events.js:${this.category}/${this.action}`;
+    console.error(`[${errorTitle}] ${JSON.stringify(payload, undefined, 2)}`);
+  }
+}

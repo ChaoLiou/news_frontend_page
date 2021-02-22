@@ -1,4 +1,9 @@
 import { transformMilliseconds } from "./formatter";
+import { trackEvent } from "../assets/js/tracking";
+import {
+  click_direct_external_link,
+  SPECIAL_EXTERNAL_LINK_NAME
+} from "../assets/js/tracking/events";
 
 export const createElement = (tagName, options = {}, childList = undefined) => {
   const DOM = document.createElement(tagName);
@@ -99,17 +104,38 @@ export const renderRecommendAdTitle = text => {
   recommendAdsArea.append(recommendAdsContainer);
 };
 
-export const renderSoureNewsLink = (text, link) => {
+export const renderSoureNewsLink = (text, news) => {
   const detailContainer = document.querySelector(".detail");
   const externalLinkIcon = createElement("div", {
     class: "detail__external-link-icon"
   });
-  const aLink = createElement("a", { href: link });
+  const aLink = createElement("a", { href: "javascript:;" });
   aLink.textContent = text;
   aLink.append(externalLinkIcon);
   detailContainer.append(
     createElement("div", { class: "detail__source-link" }, [aLink])
   );
+  aLink.addEventListener("click", () => {
+    Promise.resolve(
+      trackEvent(
+        click_direct_external_link.id,
+        click_direct_external_link.category,
+        click_direct_external_link.action,
+        click_direct_external_link.formatPayload(
+          news.id,
+          news.source.site.id,
+          news.source.site.name,
+          news.source.rss.id,
+          news.source.rss.name,
+          news.representativeCategory.name,
+          news.link,
+          news.title,
+          SPECIAL_EXTERNAL_LINK_NAME.view_original_article,
+          news.externalLink
+        )
+      )
+    );
+  });
 };
 
 export const toggleToolMenuItemForLoading = selector => {
