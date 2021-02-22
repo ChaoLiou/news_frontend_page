@@ -10,10 +10,17 @@
 </template>
 
 <script>
+import eventMiddleware from "@/middleware/event";
+
 export default {
   data() {
     return {
       source: [],
+    };
+  },
+  asyncData({ env }) {
+    return {
+      env,
     };
   },
   computed: {
@@ -23,6 +30,10 @@ export default {
     id() {
       return this.$route.params.id;
     },
+  },
+    async mounted() {
+    console.log({ env: this.env });
+    await eventMiddleware({ store: this.$store, env: this.env });
   },
 };
 </script>
