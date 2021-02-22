@@ -20,7 +20,7 @@ export default Object.assign(config, {
       styled: true
     },
     TRACKING_EVENT: {
-      trackingVer: "0.07",
+      trackingVer: "0.06",
       gaId: "G-Y5781NKN6D"
     },
     BUILD: {

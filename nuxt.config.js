@@ -22,7 +22,7 @@ export default Object.assign(config, {
       styled: process.env.RECOMMENDATION_ENABLED_STYLED !== false
     },
     TRACKING_EVENT: {
-      trackingVer: process.env.TRACKING_VER || "0.07",
+      trackingVer: process.env.TRACKING_VER || "0.06",
       gaId: process.env.TRACKING_EVENT_GA_ID || "G-Y5781NKN6D"
     },
     NO_ALLOW_COUNTRY_AREA: process.env.NO_ALLOW_COUNTRY_AREA || "HK",
