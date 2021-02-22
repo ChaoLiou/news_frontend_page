@@ -1,3 +1,9 @@
+import {
+  impression_landing_page,
+  impression_video_page,
+  swipe_banner
+} from "./../../assets/js/tracking/events";
+
 export const trackEvent = async (gaId, body) => {
   try {
     if (window.gtag) {
@@ -26,3 +32,9 @@ export const combineBody = (
     section: `${source_fetch_id}_${source_fetch}`
   };
 };
+
+export const skippedEvents = [
+  impression_landing_page,
+  impression_video_page,
+  swipe_banner
+];

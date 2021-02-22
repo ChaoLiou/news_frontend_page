@@ -31,7 +31,9 @@ export const combineBody = (
     network_type,
     app_build
   },
-  { app_version, platform, os_version, lang, country }
+  { app_version, platform, os_version, lang, country },
+  eventCategory,
+  eventAction
 ) => {
   return {
     openId,
@@ -59,6 +61,8 @@ export const combineBody = (
     t_ver: trackingVersion,
     event_id: eventId,
     division: "",
+    category: eventCategory,
+    action: eventAction,
     payload: payload
   };
 };

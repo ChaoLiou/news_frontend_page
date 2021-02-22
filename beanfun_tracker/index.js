@@ -13,7 +13,8 @@ import {
 } from "./snowplow/index";
 import {
   trackEvent as trackEventToGA,
-  combineBody as combineGABody
+  combineBody as combineGABody,
+  skippedEvents as skippedEventsByGA
 } from "./ga/index";
 
 /**
@@ -230,7 +231,9 @@ async function trackEvent(
           eventId,
           payloadJSONStr,
           trackingSessionData,
-          profile
+          profile,
+          eventCategory,
+          eventAction
         );
         const results = trackers.map(async ({ serverUrl, oaid }) => {
           body = {
@@ -243,7 +246,7 @@ async function trackEvent(
           }
         });
       }
-      if (isGA) {
+      if (isGA && skippedEventsByGA.every(e => e.id !== eventId)) {
         const trackers = _trackers.ga.filter(trackingGroupPredicate);
         let body = combineGABody(
           _backpack,
