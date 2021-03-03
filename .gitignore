@@ -89,7 +89,6 @@ sw.*
 # Vim swap files
 *.swp
 
-package-lock.json
 articles/
 static/packages
 static/news_detail_page.js
@@ -99,4 +98,4 @@ static/news_detail_page.js
 
 static/beanfun_tracker/sdk/
 static/version.json
-styleguide/
+static/styleguide/
