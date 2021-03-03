@@ -1,0 +1,163 @@
+{
+  "page": 1,
+  "page_size": 1,
+  "data": [
+    {
+      "uid": "6-5168762",
+      "src_id": "5168762",
+      "src_native_country": "TW",
+      "src_language": "zh",
+      "src_start_ymdt_unix": 1611280800000,
+      "src_end_ymdt_unix": 1642816800000,
+      "src_title": "影／單身陽光小鮮肉大改造　韓系變身「Big Bang」太陽",
+      "src_publish_time_unix": 1611280800000,
+      "src_update_time_unix": 1611280800000,
+      "src_url": "https://www.youtube.com/watch?v=CmzscH3ErUo",
+      "src_description": "▶ 詳情報導：https://bit.ly/3nYRTmv\n● 影片授權： @馬天佑 Mayao \n● 完整影片：https://youtu.be/iPlzzArVE-8\n------------------------------------------\n👍 酷瞧Instagram ：https://bit.ly/31cSUP2\n👍 酷瞧Facebook：https://bit.ly/3lXVCA9\n👍 酷瞧Youtube：https://bit.ly/2SWxwJx",
+      "created_time": 1611281249229,
+      "updated_time": 1611716600159,
+      "video_source_category_id": 1324390834581299200,
+      "source_site_id": 1,
+      "source_fetch_id": 6,
+      "source_article_id": 1352437697947373568,
+      "news_status_id": 2,
+      "review_status_id": 2,
+      "reviewer": "admin",
+      "article_type_id": 9999,
+      "view_count": "19",
+      "like_count": "0",
+      "dislike_count": "0",
+      "favorite_count": "0",
+      "comment_count": "0",
+      "index": 2,
+      "live_flag": "0",
+      "id": "1352437699209859072",
+      "src_site": {
+        "id": 1,
+        "name": "今日新聞",
+        "display_name_key": "NewsSourceSite.1.name",
+        "description": "NOWnews 新聞網站",
+        "contribution_relative_scale": 2,
+        "created_time": 1604578096157,
+        "updated_time": 1610969979323,
+        "NewsCountry": null,
+        "NewsSourceFetch": null,
+        "SiteIconURL": "https://stnewsstg001.z23.web.core.windows.net/articles/tw/1/news_detail_img_default.png"
+      },
+      "NewsSourceFetch": {
+        "id": 6,
+        "url": "https://feed.nownews.com/rss/c8803280-0c6f-11eb-9ec2-41199e7a000b",
+        "name": "NOWnews-影音",
+        "description": "NOWNews 影音RSS Description",
+        "site_id": 1,
+        "fetch_type_id": 3,
+        "fetch_freq": "5",
+        "history_fetch_start": -1,
+        "history_fetch_end": -1,
+        "created_time": 1604578096157,
+        "updated_time": 1605665042000,
+        "default_news_image_path": "articles/tw/1/news_detail_img_default.png",
+        "icon_image_path": "articles/tw/1/news_detail_img_default.png",
+        "NewsCountry": null,
+        "NewsSourceSite": {
+          "NewsCountry": null,
+          "NewsSourceFetch": null,
+          "SiteIconURL": ""
+        },
+        "NewsSourceFetchType": {}
+      },
+      "src_category": {
+        "id": 1324390834581299200,
+        "name": "新奇",
+        "site_id": 1,
+        "created_time": 1604594355615,
+        "updated_time": 1604594355615,
+        "NewsSourceSite": {
+          "NewsCountry": null,
+          "NewsSourceFetch": null,
+          "SiteIconURL": ""
+        },
+        "NewsSubCategory": [
+          {
+            "id": 12,
+            "name": "新奇",
+            "display_name_key": "NewsSubCategory.12.name",
+            "main_banner_id": 2,
+            "index": 4,
+            "description": "description",
+            "country_id": 25,
+            "enabled": true,
+            "created_time": 1600228207368,
+            "updated_time": 1604903224214,
+            "NewsMainBanner": {
+              "id": 2,
+              "name": "relax",
+              "display_title_key": "NewsMainBanner.2.title",
+              "display_subtitle_key": "NewsMainBanner.2.subtitle",
+              "index": 1,
+              "description": "放鬆星描述",
+              "enabled": true,
+              "created_time": 1604578096157,
+              "updated_time": 1613631059828,
+              "test_flag": "0",
+              "activity_flag": "0",
+              "NewsCountry": null,
+              "NewsSubCategory": null
+            }
+          }
+        ]
+      },
+      "Tags": [],
+      "Images": [
+        {
+          "id": 1352437699247607808,
+          "video_id": 1352437699209859072,
+          "src_url": "https://i.ytimg.com/vi/CmzscH3ErUo/sddefault.jpg",
+          "src_thumbnails": "{\"default\":{\"url\":\"https://i.ytimg.com/vi/CmzscH3ErUo/default.jpg\",\"width\":120,\"height\":90},\"medium\":{\"url\":\"https://i.ytimg.com/vi/CmzscH3ErUo/mqdefault.jpg\",\"width\":320,\"height\":180},\"high\":{\"url\":\"https://i.ytimg.com/vi/CmzscH3ErUo/hqdefault.jpg\",\"width\":480,\"height\":360},\"standard\":{\"url\":\"https://i.ytimg.com/vi/CmzscH3ErUo/sddefault.jpg\",\"width\":640,\"height\":480},\"maxres\":{\"url\":\"https://i.ytimg.com/vi/CmzscH3ErUo/maxresdefault.jpg\",\"width\":1280,\"height\":720}}",
+          "created_time": 1611281249353,
+          "updated_time": 1611281249353
+        }
+      ],
+      "youtube_data": {
+        "ID": "5168762",
+        "Description": "▶ 詳情報導：https://bit.ly/3nYRTmv\n● 影片授權： @馬天佑 Mayao \n● 完整影片：https://youtu.be/iPlzzArVE-8\n------------------------------------------\n👍 酷瞧Instagram ：https://bit.ly/31cSUP2\n👍 酷瞧Facebook：https://bit.ly/3lXVCA9\n👍 酷瞧Youtube：https://bit.ly/2SWxwJx",
+        "ViewCount": "19",
+        "LikeCount": "0",
+        "DislikeCount": "0",
+        "FavoriteCount": "0",
+        "CommentCount": "0",
+        "ImageURL": ""
+      },
+      "NewsSubCategory": [
+        {
+          "id": 12,
+          "name": "食記",
+          "display_name_key": "NewsSubCategory.12.name",
+          "main_banner_id": 2,
+          "index": 4,
+          "description": "description",
+          "country_id": 25,
+          "enabled": true,
+          "created_time": 1600228207368,
+          "updated_time": 1604903224214,
+          "NewsMainBanner": {
+            "id": 2,
+            "name": "放鬆星",
+            "display_title_key": "NewsMainBanner.2.title",
+            "display_subtitle_key": "NewsMainBanner.2.subtitle",
+            "index": 1,
+            "description": "放鬆星描述",
+            "enabled": true,
+            "created_time": 1604578096157,
+            "updated_time": 1613631059828,
+            "test_flag": "0",
+            "activity_flag": "0",
+            "NewsCountry": null,
+            "NewsSubCategory": null
+          }
+        }
+      ]
+    }
+  ],
+  "total_records": 0
+}

@@ -1,0 +1,131 @@
+{
+  "page": 1,
+  "page_size": 1,
+  "data": [
+    {
+      "src_title": "家有「3生肖人」躺著賺！下半年全家生財　笑到合不攏嘴",
+      "source_category_id": 4,
+      "source_site_id": 1,
+      "source_fetch_id": 1,
+      "news_status_id": 2,
+      "article_path": "https://stnewsstg001.z23.web.core.windows.net/",
+      "id": "1358604412007747584",
+      "description": "",
+      "src_category": {
+        "id": 4,
+        "name": "新奇",
+        "site_id": 1,
+        "created_time": 1604578096157,
+        "updated_time": 1605755790581,
+        "NewsSourceSite": {
+          "NewsCountry": null,
+          "NewsSourceFetch": null,
+          "SiteIconURL": ""
+        },
+        "NewsSubCategory": [
+          {
+            "id": 12,
+            "name": "新奇",
+            "display_name_key": "NewsSubCategory.12.name",
+            "main_banner_id": 2,
+            "index": 4,
+            "description": "description",
+            "country_id": 25,
+            "enabled": true,
+            "created_time": 1600228207368,
+            "updated_time": 1604903224214,
+            "NewsMainBanner": {
+              "id": 2,
+              "name": "relax",
+              "display_title_key": "NewsMainBanner.2.title",
+              "display_subtitle_key": "NewsMainBanner.2.subtitle",
+              "index": 1,
+              "description": "放鬆星描述",
+              "enabled": true,
+              "created_time": 1604578096157,
+              "updated_time": 1613631059828,
+              "test_flag": "0",
+              "activity_flag": "0",
+              "NewsCountry": null,
+              "NewsSubCategory": null
+            }
+          }
+        ]
+      },
+      "src_site": {
+        "id": 1,
+        "name": "今日新聞",
+        "display_name_key": "NewsSourceSite.1.name",
+        "description": "NOWnews 新聞網站",
+        "contribution_relative_scale": 2,
+        "created_time": 1604578096157,
+        "updated_time": 1610969979323,
+        "NewsCountry": null,
+        "NewsSourceFetch": null,
+        "SiteIconURL": "https://stnewsstg001.z23.web.core.windows.net/articles/tw/1/news_detail_img_default.png"
+      },
+      "NewsSourceFetch": {
+        "id": 1,
+        "url": "https://feed.nownews.com/rss/4b476070-89e0-11ea-ab6a-8d862377ce13",
+        "name": "NOWnews 一般",
+        "description": "NOWnews 政治、新奇、生活、運動、娛樂",
+        "site_id": 1,
+        "fetch_type_id": 1,
+        "fetch_freq": "5",
+        "history_fetch_start": -1,
+        "history_fetch_end": -1,
+        "created_time": 1604578096157,
+        "updated_time": 1605665042000,
+        "default_news_image_path": "articles/tw/1/news_detail_img_default.png",
+        "icon_image_path": "articles/tw/1/news_detail_img_default.png",
+        "NewsCountry": null,
+        "NewsSourceSite": {
+          "NewsCountry": null,
+          "NewsSourceFetch": null,
+          "SiteIconURL": ""
+        },
+        "NewsSourceFetchType": {}
+      },
+      "Tags": [],
+      "Images": [
+        {
+          "id": 1358604412351680512,
+          "file_path": "https://stnewsstg001.z23.web.core.windows.net/articles/tw/1/news_detail_img_default_s.png",
+          "article_id": 1358604412007747584,
+          "created_time": 1612751515856,
+          "updated_time": 1612751515856
+        }
+      ],
+      "NewsSubCategory": [
+        {
+          "id": 12,
+          "name": "食記",
+          "display_name_key": "NewsSubCategory.12.name",
+          "main_banner_id": 2,
+          "index": 4,
+          "description": "description",
+          "country_id": 25,
+          "enabled": true,
+          "created_time": 1600228207368,
+          "updated_time": 1604903224214,
+          "NewsMainBanner": {
+            "id": 2,
+            "name": "放鬆星",
+            "display_title_key": "NewsMainBanner.2.title",
+            "display_subtitle_key": "NewsMainBanner.2.subtitle",
+            "index": 1,
+            "description": "放鬆星描述",
+            "enabled": true,
+            "created_time": 1604578096157,
+            "updated_time": 1613631059828,
+            "test_flag": "0",
+            "activity_flag": "0",
+            "NewsCountry": null,
+            "NewsSubCategory": null
+          }
+        }
+      ]
+    }
+  ],
+  "total_records": 0
+}

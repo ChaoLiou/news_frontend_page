@@ -1,0 +1,275 @@
+[
+  {
+    "id": "1366996167291834368",
+    "uid": "1-5202125",
+    "src_id": "5202125",
+    "src_native_country": "TW",
+    "src_language": "zh",
+    "src_start_ymdt_unix": "1614751410000",
+    "src_end_ymdt_unix": "1646287410000",
+    "src_title": "黑嘉嘉外流片真相曝光　完整版「這一幕」讓粉絲大暴動",
+    "src_publish_time_unix": "1614751410000",
+    "src_update_time_unix": "1614751410000",
+    "src_author": "娛樂中心／綜合報導",
+    "src_url": "https://www.nownews.com/news/entertainment/5202125",
+    "source_category_id": "6",
+    "news_source_category": {
+      "id": "6",
+      "name": "娛樂",
+      "site_id": 1,
+      "news_source_site": {},
+      "news_sub_category": [
+        {
+          "id": 203,
+          "name": "明星",
+          "display_name_key": "NewsSubCategory.203.name",
+          "display_name": [
+            {
+              "key": "NewsSubCategory.203.name",
+              "value": "心靈肉鬆",
+              "lang_id": 1,
+              "lang_code": "zh_TW",
+              "news_language": {
+                "id": 1,
+                "name": "繁體中文台灣",
+                "code": "zh_TW"
+              }
+            },
+            {
+              "key": "NewsSubCategory.203.name",
+              "lang_id": 2,
+              "lang_code": "zh_HK",
+              "news_language": {
+                "id": 2,
+                "name": "繁體中文香港",
+                "code": "zh_HK"
+              }
+            },
+            {
+              "key": "NewsSubCategory.203.name",
+              "value": "心靈肉鬆",
+              "lang_id": 3,
+              "lang_code": "en_US",
+              "news_language": {
+                "id": 3,
+                "name": "English",
+                "code": "en_US"
+              }
+            }
+          ],
+          "main_banner_id": 2,
+          "news_main_banner": {
+            "id": 2,
+            "name": "relax",
+            "display_title_key": "NewsMainBanner.2.title",
+            "display_title": [
+              {
+                "key": "NewsMainBanner.2.title",
+                "value": "放鬆星",
+                "lang_id": 1,
+                "lang_code": "zh_TW",
+                "news_language": {
+                  "id": 1,
+                  "name": "繁體中文台灣",
+                  "code": "zh_TW"
+                }
+              },
+              {
+                "key": "NewsMainBanner.2.title",
+                "lang_id": 2,
+                "lang_code": "zh_HK",
+                "news_language": {
+                  "id": 2,
+                  "name": "繁體中文香港",
+                  "code": "zh_HK"
+                }
+              },
+              {
+                "key": "NewsMainBanner.2.title",
+                "value": "放鬆星",
+                "lang_id": 3,
+                "lang_code": "en_US",
+                "news_language": {
+                  "id": 3,
+                  "name": "English",
+                  "code": "en_US"
+                }
+              }
+            ],
+            "display_subtitle_key": "NewsMainBanner.2.subtitle",
+            "index": 1,
+            "description": "放鬆星描述",
+            "enabled": true
+          },
+          "index": 10,
+          "description": "description",
+          "country_id": 25,
+          "news_country": {},
+          "enabled": true
+        }
+      ]
+    },
+    "source_site_id": 1,
+    "news_source_site": {
+      "id": 1,
+      "name": "nownews",
+      "display_name_key": "NewsSourceSite.1.name",
+      "description": "NOWnews 新聞網站",
+      "contribution_relative_scale": 1
+    },
+    "source_fetch_id": 1,
+    "news_source_fetch": {
+      "id": 1,
+      "url": "https://feed.nownews.com/rss/410b8940-c1c3-11ea-ab72-2958b9d91fbb",
+      "name": "NOWnews",
+      "description": "NOWnews 政治、新奇、生活、運動、娛樂",
+      "site_id": 1,
+      "fetch_type_id": 1,
+      "fetch_freq": "5",
+      "news_source_fetch_type": {},
+      "news_default_img_url": "articles/tw/1/news_img_default_1.png",
+      "fetch_icon_url": "articles/tw/1/news_detail_img_default.png"
+    },
+    "status_id": 2,
+    "news_status": {
+      "id": 2,
+      "name": "published",
+      "description": "已上架"
+    },
+    "review_status_id": 2,
+    "news_review_status": {
+      "id": 2,
+      "name": "passed",
+      "description": "審查通過"
+    },
+    "article_path": "https://stg-news.beanfun.com/articles/tw/1/1366996167291834368/detail.html",
+    "reviewer": "sysauto",
+    "images": [
+      {
+        "id": 1366996170404007936,
+        "file_path": "https://stg-news.beanfun.com/articles/tw/1/1366996167291834368/1614751113446-ece79b1bed864c38972ccc6fa8d408ad-800x450_s.jpg",
+        "article_id": 1366996167291834368,
+        "src_title": "▲黑嘉嘉外流片謎底揭曉。（圖／資料照、黑嘉嘉臉書）",
+        "src_description": "▲黑嘉嘉外流片謎底揭曉。（圖／資料照、黑嘉嘉臉書）",
+        "src_url": "https://media.nownews.com/nn_media/thumbnail/2021/03/1614751113446-ece79b1bed864c38972ccc6fa8d408ad-800x450.jpg?unShow=false"
+      }
+    ],
+    "news_sub_category": [
+      {
+        "id": 203,
+        "name": "明星",
+        "display_name_key": "NewsSubCategory.203.name",
+        "display_name": [
+          {
+            "key": "NewsSubCategory.203.name",
+            "value": "心靈肉鬆",
+            "lang_id": 1,
+            "lang_code": "zh_TW",
+            "news_language": {
+              "id": 1,
+              "name": "繁體中文台灣",
+              "code": "zh_TW"
+            }
+          },
+          {
+            "key": "NewsSubCategory.203.name",
+            "lang_id": 2,
+            "lang_code": "zh_HK",
+            "news_language": {
+              "id": 2,
+              "name": "繁體中文香港",
+              "code": "zh_HK"
+            }
+          },
+          {
+            "key": "NewsSubCategory.203.name",
+            "value": "心靈肉鬆",
+            "lang_id": 3,
+            "lang_code": "en_US",
+            "news_language": {
+              "id": 3,
+              "name": "English",
+              "code": "en_US"
+            }
+          }
+        ],
+        "main_banner_id": 2,
+        "news_main_banner": {
+          "id": 2,
+          "name": "relax",
+          "display_title_key": "NewsMainBanner.2.title",
+          "display_title": [
+            {
+              "key": "NewsMainBanner.2.title",
+              "value": "放鬆星",
+              "lang_id": 1,
+              "lang_code": "zh_TW",
+              "news_language": {
+                "id": 1,
+                "name": "繁體中文台灣",
+                "code": "zh_TW"
+              }
+            },
+            {
+              "key": "NewsMainBanner.2.title",
+              "lang_id": 2,
+              "lang_code": "zh_HK",
+              "news_language": {
+                "id": 2,
+                "name": "繁體中文香港",
+                "code": "zh_HK"
+              }
+            },
+            {
+              "key": "NewsMainBanner.2.title",
+              "value": "放鬆星",
+              "lang_id": 3,
+              "lang_code": "en_US",
+              "news_language": {
+                "id": 3,
+                "name": "English",
+                "code": "en_US"
+              }
+            }
+          ],
+          "display_subtitle_key": "NewsMainBanner.2.subtitle",
+          "index": 1,
+          "description": "放鬆星描述",
+          "enabled": true
+        },
+        "index": 10,
+        "description": "description",
+        "country_id": 25,
+        "news_country": {},
+        "enabled": true
+      }
+    ],
+    "news_tag": [
+      {
+        "id": "1366996170542419968",
+        "article_id": 1366996167291834368,
+        "tag": "黑嘉嘉"
+      },
+      {
+        "id": "1366996171490332672",
+        "article_id": 1366996167291834368,
+        "tag": "外流"
+      },
+      {
+        "id": "1366996172593434624",
+        "article_id": 1366996167291834368,
+        "tag": "刮鬍刀"
+      },
+      {
+        "id": "1366996173495209984",
+        "article_id": 1366996167291834368,
+        "tag": "娃娃音"
+      },
+      {
+        "id": "1366996174585729024",
+        "article_id": 1366996167291834368,
+        "tag": "男友視角"
+      }
+    ]
+  }
+]

@@ -1,0 +1,40 @@
+{
+  "products": [
+    {
+      "bfID": "D13233195875",
+      "bfRecommendScore": 0.9956501,
+      "bfSrc": "JollyBuy",
+      "srcID": "D13233195875",
+      "productName": "【蜜絲朵】夏日無痕 經典無鋼圈調整型成套內衣B罩B014(黑)",
+      "description": "．零束縛零著感火紅無痕內衣 ．嚴選無痕爆乳款內衣 ．無鋼圈 更加輕鬆自在",
+      "keywords": [
+        "內衣",
+        "成套",
+        "機能",
+        "托高",
+        "集中",
+        "深V",
+        "蕾絲",
+        "法式",
+        "爆乳",
+        "包覆",
+        "歐單",
+        "無鋼圈",
+        "無痕"
+      ],
+      "price": 740,
+      "salePrice": 0,
+      "imageUrl": "https://img.jollybuy.com/S190628213044002/goods/2ad8cc722e08476aa02471d492f5d014_Q50.jpg",
+      "url": "https://j35965.jollybuy.com/Goods/Detail/D13233195875",
+      "selfDefineProperties": {
+        "categoryId": "10140",
+        "categoryName": "內睡衣",
+        "channelName": "asd12843667",
+        "channelType": "10",
+        "isGroupon": false,
+        "isPromotion": false,
+        "isPostFree": false
+      }
+    }
+  ]
+}

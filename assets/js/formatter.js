@@ -1,5 +1,5 @@
 import { Type } from "./constants";
-import { parsingId as parsingYoutubeId } from "./videoParser/youtube";
+import { getSourceIdParser } from "./videoParser/index";
 
 export const formatNews = x => {
   const categories = x.NewsSubCategory ? x.NewsSubCategory : [];
@@ -101,13 +101,3 @@ export const formatVideo = x => {
     marked: x.article_type_id === Type.ManuallyTopUp
   };
 };
-
-function getSourceIdParser(sourceType = "youtube") {
-  switch (sourceType) {
-    case "youtube":
-      return parsingYoutubeId;
-
-    default:
-      break;
-  }
-}

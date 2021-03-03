@@ -14,6 +14,7 @@ module.exports = {
   collectCoverageFrom: [
     "<rootDir>/components/**/*.vue",
     "<rootDir>/pages/**/*.vue",
-    "<rootDir>/news_detail_page/**/formatter.js"
+    "<rootDir>/**/formatter.js",
+    "<rootDir>/**/youtube.js"
   ]
 };
