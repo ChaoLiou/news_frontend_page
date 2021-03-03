@@ -3,7 +3,7 @@
     class="b-news-card"
     :class="{
       'b-news-card_recommendation':
-        recommendationStyleEnabled && data.recommendation,
+        recommendationStyleEnabled && data.recommendation
     }"
     @click="navigate"
   >
@@ -39,7 +39,7 @@ import VueTypes from "vue-types";
 const IMAGE_STATUS_TYPE = {
   LOADING: 1,
   LOADED: 2,
-  NULL: 3,
+  NULL: 3
 };
 /**
  * 新聞卡片
@@ -58,57 +58,57 @@ export default {
         rss: VueTypes.shape({
           id: VueTypes.number, // 新聞來源 - RSS Id
           name: VueTypes.string, // 新聞來源 - RSS 名稱
-          logoImage: VueTypes.string, // 新聞來源 - RSS logo 圖片網址
+          logoImage: VueTypes.string // 新聞來源 - RSS logo 圖片網址
         }),
         site: VueTypes.shape({
           id: VueTypes.number, // 新聞來源 - 站台 Id
-          name: VueTypes.string, // 新聞來源 - 站台名稱
-        }),
+          name: VueTypes.string // 新聞來源 - 站台名稱
+        })
       }),
       representativePlanet: VueTypes.shape({
         name: VueTypes.string, // 新聞所屬星球中第一個星球 - 名稱
-        id: VueTypes.number, // 新聞所屬星球中第一個星球 - 星球 Id
+        id: VueTypes.number // 新聞所屬星球中第一個星球 - 星球 Id
       }),
       representativeCategory: VueTypes.shape({
         name: VueTypes.string, // 新聞所屬星球中第一個分類 - 名稱
-        id: VueTypes.number, // 新聞所屬星球中第一個分類 - 分類 Id
+        id: VueTypes.number // 新聞所屬星球中第一個分類 - 分類 Id
       }),
       categories: VueTypes.arrayOf(
         VueTypes.shape({
-          name: VueTypes.string, // 新聞所屬分類 - 分類名稱
+          name: VueTypes.string // 新聞所屬分類 - 分類名稱
         })
       ),
       description: VueTypes.string, // 新聞內容
       recommendation: VueTypes.bool, // 是否為推薦新聞
-      index: VueTypes.integer, // 新聞 index
+      index: VueTypes.integer // 新聞 index
     }),
     /**
      * 依據圖片比例, 於寬度固定下, 自動調整高度
      */
     autoImgHeight: {
       type: Boolean,
-      default: true,
+      default: true
     },
     /**
      * 固定圖片框高度(css height), 圖片會照比例塞進圖片框. (autoImgHeight ? 用於圖片載入前預設高度 : 圖片固定高度)
      */
     defaultImgHeight: {
       type: String,
-      default: "100px",
+      default: "100px"
     },
     /**
      * 對推薦項目下樣式
      */
     recommendationStyled: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
       imgStatus: IMAGE_STATUS_TYPE.LOADING,
       imgLoadingError: false,
-      recommendationStyleEnabled: this.recommendationStyled,
+      recommendationStyleEnabled: this.recommendationStyled
     };
   },
   computed: {
@@ -121,9 +121,9 @@ export default {
     thumbnailImgStyle() {
       return {
         height: this.defaultImgHeight,
-        backgroundImage: `url(${this.data.img})`,
+        backgroundImage: `url(${this.data.img})`
       };
-    },
+    }
   },
   mounted() {
     this.heightChanged();
@@ -157,65 +157,103 @@ export default {
     },
     imgOnLoad() {
       this.imgStatus = IMAGE_STATUS_TYPE.LOADED;
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .b-news-card {
   display: block;
-}
-.b-news-card:hover {
-  cursor: pointer;
-}
-.b-news-card__body {
-  width: 100%;
-  background-color: #fafafa;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 0.5px solid #dbdbdb;
-}
-.b-news-card__thumbnail {
-  overflow: hidden;
-  position: relative;
-  background-color: #eeeeee;
-}
-.b-news-card__thumbnail-img {
-  width: 100%;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  transition: height 1s ease-in;
-}
-.b-news-card__info {
-  padding: 12px 12.45px;
-  display: grid;
-  row-gap: 4px;
-}
-.b-news-card__source {
-  font-weight: 400;
-  font-size: 13px;
-  line-height: 18.2px;
-  color: #767676;
-  font-weight: 400;
-}
-.b-news-card__title {
-  font-weight: bold;
-  line-height: 21px;
-  font-size: 15px;
-}
-.b-news-card_recommendation .b-news-card__body {
-  border-color: #26d07c;
-  background-color: #26d07b46;
-}
-.b-news-card__thumbnail-img_loading {
-  animation-duration: 1.5s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: infinite;
-  animation-name: placeload;
-  animation-timing-function: linear;
-  background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
-  background-size: 1200px 104px;
+  &:hover {
+    cursor: pointer;
+  }
+  &__body {
+    width: 100%;
+    background: {
+      color: #fafafa;
+    }
+    border: {
+      radius: 16px;
+    }
+    overflow: hidden;
+    border: {
+      width: 0.5px;
+      style: solid;
+      color: #dbdbdb;
+    }
+  }
+  &__thumbnail {
+    overflow: hidden;
+    position: relative;
+    background: {
+      color: #eeeeee;
+    }
+  }
+  &__thumbnail-img {
+    width: 100%;
+    background: {
+      size: contain;
+      position: center;
+      repeat: no-repeat;
+    }
+    transition: {
+      property: height;
+      duration: 1s;
+      timing-function: ease-in;
+    }
+  }
+  &__info {
+    padding: 12px 12.45px;
+    display: grid;
+    row: {
+      gap: 4px;
+    }
+  }
+  &__source {
+    font: {
+      weight: 400;
+      size: 13px;
+      weight: 400;
+    }
+    line: {
+      height: 18.2px;
+    }
+    color: #767676;
+  }
+  &__title {
+    font: {
+      weight: bold;
+      size: 15px;
+    }
+    line: {
+      height: 21px;
+    }
+  }
+  &_recommendation &__body {
+    border: {
+      color: #26d07c;
+    }
+    background: {
+      color: #26d07b46;
+    }
+  }
+  &__thumbnail-img_loading {
+    animation: {
+      duration: 1.5s;
+      fill-mode: forwards;
+      iteration-count: infinite;
+      name: placeload;
+      timing-function: linear;
+    }
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeload;
+    animation-timing-function: linear;
+    background: {
+      size: 1200px 104px;
+      image: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    }
+  }
 }
 </style>

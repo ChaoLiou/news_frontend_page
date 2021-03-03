@@ -34,7 +34,7 @@
         <div
           class="b-audiovisual-player__menu-icon"
           :class="{
-            'b-audiovisual-player__menu-icon_toggled': menuToggle,
+            'b-audiovisual-player__menu-icon_toggled': menuToggle
           }"
           @click="menuToggle = !menuToggle"
         >
@@ -91,40 +91,40 @@ export default {
       planets: VueTypes.arrayOf(
         VueTypes.shape({
           id: VueTypes.number, // 影音所屬星球 - 星球 Id
-          name: VueTypes.string, // 影音所屬星球 - 星球名稱
+          name: VueTypes.string // 影音所屬星球 - 星球名稱
         })
       ),
       representativePlanet: VueTypes.shape({
-        name: VueTypes.string, // 影音所屬星球中的代表星球 - 星球名稱
+        name: VueTypes.string // 影音所屬星球中的代表星球 - 星球名稱
       }),
       representativeCategory: VueTypes.shape({
         name: VueTypes.string, // 影音所屬星球中第一個分類 - 名稱
-        id: VueTypes.number, // 影音所屬星球中第一個分類 - 分類 Id
+        id: VueTypes.number // 影音所屬星球中第一個分類 - 分類 Id
       }),
       categories: VueTypes.arrayOf(
         VueTypes.shape({
-          name: VueTypes.string, // 影音所屬分類 - 分類名稱
+          name: VueTypes.string // 影音所屬分類 - 分類名稱
         })
       ),
       img: VueTypes.shape({
         url: VueTypes.string, // 影音預覽圖 - 網址
         width: VueTypes.number, // 影音預覽圖 - 寬
-        height: VueTypes.number, // 影音預覽圖 - 高
+        height: VueTypes.number // 影音預覽圖 - 高
       }),
       source: VueTypes.shape({
         rss: VueTypes.shape({
           id: VueTypes.number, // 影音來源 - RSS Id
-          name: VueTypes.string, // 影音來源 - RSS 名稱
+          name: VueTypes.string // 影音來源 - RSS 名稱
         }),
         site: VueTypes.shape({
           id: VueTypes.number, // 影音來源 - 站台 Id
           name: VueTypes.string, // 影音來源 - 站台名稱
-          img: VueTypes.string, // 影音來源 - 圖片
-        }),
+          img: VueTypes.string // 影音來源 - 圖片
+        })
       }),
       index: VueTypes.integer, // 影音 index
-      marked: VueTypes.bool, // 影音 已標記
-    }),
+      marked: VueTypes.bool // 影音 已標記
+    })
   },
   data() {
     return {
@@ -134,9 +134,9 @@ export default {
       longTouch: {
         interval: 0,
         duration: 2,
-        counter: 0,
+        counter: 0
       },
-      played: false,
+      played: false
     };
   },
   computed: {
@@ -162,7 +162,7 @@ export default {
       const formattedViews = this.data.views
         ? formatNumber(this.data.views, {
             digit: 4,
-            unit: "萬",
+            unit: "萬"
           })
         : 0;
       return `觀看次數：${formattedViews}次`;
@@ -182,19 +182,19 @@ export default {
         backgroundImage: this.playerEnabled
           ? undefined
           : `url(${this.data.img.url})`,
-        height: `calc(${this.width}px * ${this.imgWHRate})`,
+        height: `calc(${this.width}px * ${this.imgWHRate})`
       };
     },
     playerEnabled() {
       return !!this.player;
-    },
+    }
   },
   mounted() {
     this.width = this.$el.offsetWidth;
     if (typeof YT !== "undefined") {
     } else {
       const scriptDOM = createElement("script", {
-        src: "https://www.youtube.com/iframe_api",
+        src: "https://www.youtube.com/iframe_api"
       });
       document.body.append(scriptDOM);
     }
@@ -205,8 +205,8 @@ export default {
         videoId: this.data.videoId,
         events: {
           onReady: this.onPlayerReady,
-          onStateChange: this.onPlayerStateChange,
-        },
+          onStateChange: this.onPlayerStateChange
+        }
       });
     },
     startDetectingLongTouch() {
@@ -239,106 +239,106 @@ export default {
         this.$emit("start-playing", this.data);
         this.played = true;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .b-audiovisual-player {
   background-color: #262626;
-}
-.b-audiovisual-player__menu {
-  padding: 20px 12px 32px 12px;
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.05);
-  display: grid;
-  grid-template-columns: 1fr 26px;
-  column-gap: 6px;
-}
-.b-audiovisual-player__title {
-  user-select: none;
-  color: #ffffff;
-  font-size: 15px;
-  line-height: 21px;
-  font-weight: bold;
-  cursor: pointer;
-}
-.b-audiovisual-player__info {
-  display: flex;
-  flex-direction: row;
-  margin-top: 4px;
-}
-.b-audiovisual-player__datetime,
-.b-audiovisual-player__views {
-  padding-right: 1em;
-  color: #ececec;
-  font-weight: 400;
-  font-size: 13px;
-  line-height: 18.2px;
-}
-.b-audiovisual-player__menu-icon {
-  cursor: pointer;
-  width: 26px;
-  height: 24px;
-  color: #ffffff;
-}
-.b-audiovisual-player__menu-icon.b-audiovisual-player__menu-icon_toggled {
-  transform: rotateX(180deg);
-}
-.b-audiovisual-player__menu-content {
-  margin-top: 16px;
-}
-.b-audiovisual-player__source {
-  display: grid;
-  column-gap: 12px;
-  grid-template-columns: 30px 1fr;
-  align-items: center;
-}
-.b-audiovisual-player__source-img {
-  width: 30px;
-  height: 30px;
-  background-size: contain;
-  border-radius: 50%;
-}
-.b-audiovisual-player__source-title {
-  font-size: 13px;
-  line-height: 18.2px;
-  color: #ffffff;
-}
-.b-audiovisual-player__description {
-  margin-top: 12px;
-  font-size: 13px;
-  line-height: 24px;
-  color: #ffffff;
-  font-weight: 400;
-  word-break: break-word;
-}
-.b-audiovisual-player__frame {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  cursor: pointer;
-  width: 100%;
-  position: relative;
-}
-.b-audiovisual-player__play-icon {
-  position: absolute;
-  width: fit-content;
-  height: fit-content;
-  z-index: 2;
-}
-.b-audiovisual-player__play-icon > div {
-  width: 50px;
-  height: 50px;
-}
-.b-audiovisual-player__play-icon_center {
-  left: 50%;
-  transform: translate(-50%, -50%);
-  top: 50%;
-}
-.b-audiovisual-player__countdown {
-  color: #ffffff;
-  text-align: center;
+  &__menu {
+    padding: 20px 12px 32px 12px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.05);
+    display: grid;
+    grid-template-columns: 1fr 26px;
+    column-gap: 6px;
+  }
+  &__title {
+    user-select: none;
+    color: #ffffff;
+    font-size: 15px;
+    line-height: 21px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  &__info {
+    display: flex;
+    flex-direction: row;
+    margin-top: 4px;
+  }
+  &__datetime,
+  &__views {
+    padding-right: 1em;
+    color: #ececec;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18.2px;
+  }
+  &__menu-icon {
+    cursor: pointer;
+    width: 26px;
+    height: 24px;
+    color: #ffffff;
+  }
+  &__menu-icon_toggled {
+    transform: rotateX(180deg);
+  }
+  &__menu-content {
+    margin-top: 16px;
+  }
+  &__source {
+    display: grid;
+    column-gap: 12px;
+    grid-template-columns: 30px 1fr;
+    align-items: center;
+  }
+  &__source-img {
+    width: 30px;
+    height: 30px;
+    background-size: contain;
+    border-radius: 50%;
+  }
+  &__source-title {
+    font-size: 13px;
+    line-height: 18.2px;
+    color: #ffffff;
+  }
+  &__description {
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 24px;
+    color: #ffffff;
+    font-weight: 400;
+    word-break: break-word;
+  }
+  &__frame {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    cursor: pointer;
+    width: 100%;
+    position: relative;
+  }
+  &__play-icon {
+    position: absolute;
+    width: fit-content;
+    height: fit-content;
+    z-index: 2;
+  }
+  &__play-icon > div {
+    width: 50px;
+    height: 50px;
+  }
+  &__play-icon_center {
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+  }
+  &__countdown {
+    color: #ffffff;
+    text-align: center;
+  }
 }
 </style>
 <style>

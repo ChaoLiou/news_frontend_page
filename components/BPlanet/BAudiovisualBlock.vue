@@ -8,7 +8,7 @@
       class="b-audiovisual-block__title title"
       :class="{ title_placeholder: !titleText }"
     >
-      <div>{{ titleText }}</div>
+      <div>{{ planetName }} {{ titleText }}</div>
     </div>
     <div>
       <b-masonry-grid
@@ -37,7 +37,7 @@
           height: '230px',
           width: '320px',
           marginRight: '16px',
-          borderRadius: '20px',
+          borderRadius: '20px'
         }"
         @scroll-end="horizontalOnScrollEnd"
       >
@@ -48,7 +48,7 @@
             height="228px"
             width="320px"
             @navigate="navigate"
-            @show-up="(data) => (currentLastItem = data)"
+            @show-up="data => (currentLastItem = data)"
           />
         </template>
       </b-horizontal-scroll>
@@ -59,7 +59,7 @@
 <script>
 import {
   checkAppExistAsync,
-  openFullH5WebviewAsync,
+  openFullH5WebviewAsync
 } from "./../../assets/js/beango/index.async";
 import { showVConsole, getHashModeOrigin } from "./../../assets/js/utils";
 import {
@@ -68,7 +68,7 @@ import {
   impression_landing_page,
   click_video_play,
   BLOCK_TYPE,
-  swipe_banner,
+  swipe_banner
 } from "./../../assets/js/tracking/events";
 import { trackEvent } from "./../../assets/js/tracking";
 import BAudiovisualPlayer from "./BAudiovisualBlock/BAudiovisualPlayer";
@@ -83,7 +83,7 @@ export default {
     BAudiovisualPlayer,
     BAudiovisualCard,
     BHorizontalScroll,
-    BMasonryGrid,
+    BMasonryGrid
   },
   props: {
     /**
@@ -91,42 +91,42 @@ export default {
      */
     titleText: {
       type: String,
-      default: "",
+      default: ""
     },
     /**
      * 垂直 / 水平排版
      */
     vertical: {
       type: Boolean,
-      default: false,
+      default: false
     },
     /**
      * 星球 Id
      */
     planetId: {
       type: [Number, String],
-      default: -1,
+      default: -1
     },
     /**
      * 置頂的影音 Id
      */
     topPriorityId: {
       type: String,
-      default: "",
+      default: ""
     },
     showTitleText: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
   data() {
     return {
       source: [],
       loading: false,
-      currentLastItem: undefined,
+      currentLastItem: undefined
     };
   },
-  computed:{
+  computed: {
     origin() {
       return getHashModeOrigin(this.$router);
     }
@@ -148,10 +148,10 @@ export default {
       if (Array.isArray(list) && list.length > 0) {
         const isFirstPage = pageIndex === 1;
         if (isFirstPage && this.topPriorityId) {
-          const isTopPriority = (id) => id === this.topPriorityId;
-          const topPriorityItem = list.find((x) => isTopPriority(x.id));
+          const isTopPriority = id => id === this.topPriorityId;
+          const topPriorityItem = list.find(x => isTopPriority(x.id));
           const listExcludeTopPriorityItem = list.filter(
-            (x) => !isTopPriority(x.id)
+            x => !isTopPriority(x.id)
           );
           this.source.push(topPriorityItem);
           this.source.push(...listExcludeTopPriorityItem);
@@ -166,7 +166,7 @@ export default {
         const payload = {
           pageIndex,
           pageSize,
-          planetId: this.planetId,
+          planetId: this.planetId
         };
         const list = await this.$store.dispatch("audiovisual/fetch", payload);
         this.loadMoreVideo(list, pageIndex);
@@ -181,7 +181,6 @@ export default {
           categoryName: x.representativeCategory.name,
           videoLink: `${this.origin}/${this.planetId}/audiovisual/${x.id}`,
           videoTitle: x.title,
-          planetName: this.planetName,
           index
         }));
         if (this.vertical) {
@@ -252,26 +251,31 @@ export default {
     },
     async horizontalOnScrollEnd() {
       // [deprecated] track swipe_banner
-    },
+    }
   },
   watch: {
     planetId: {
       immediate: true,
       handler() {
         this.init();
-      },
-    },
-  },
+      }
+    }
+  }
 };
 </script>
 
-<style scoped>
-.b-audiovisual-block__title {
-  font-weight: bold;
-  margin-bottom: 4px;
-  font-size: 1.25em;
-  position: relative;
-  margin-bottom: 10px;
+<style lang="scss" scoped>
+.b-audiovisual-block {
+  &__title {
+    font-weight: bold;
+    margin-bottom: 4px;
+    font-size: 1.25em;
+    position: relative;
+    margin-bottom: 10px;
+  }
+  &_masonry {
+    background-color: #262626;
+  }
 }
 .b-horizontal-scroll > *:not(:last-child) {
   margin-right: 16px;
@@ -281,9 +285,6 @@ export default {
   background-color: #262626;
   color: #ffffff;
   text-align: center;
-}
-.b-audiovisual-block_masonry {
-  background-color: #262626;
 }
 .b-masonry-grid {
   min-height: 100vh;

@@ -29,7 +29,7 @@
           height: '30px',
           width: '50px',
           marginRight: '16px',
-          borderRadius: '10px',
+          borderRadius: '10px'
         }"
       >
         <b-news-tag
@@ -46,10 +46,10 @@
         :key="`${planetId}-${this.selectedTag.id}`"
         :loading="loading"
         :source="source"
-        :triggerable-predicate="(x) => !x.recommendation"
+        :triggerable-predicate="x => !x.recommendation"
         ref="masonryScroll"
         :placeholder-style="{
-          borderRadius: '20px',
+          borderRadius: '20px'
         }"
         :page-size="20"
         @load-more="loadMore"
@@ -72,11 +72,11 @@ import {
   click_news,
   impression_landing_page,
   click_news_category,
-  BLOCK_TYPE,
+  BLOCK_TYPE
 } from "./../../assets/js/tracking/events";
 import {
   checkAppExistAsync,
-  openFullH5WebviewAsync,
+  openFullH5WebviewAsync
 } from "./../../assets/js/beango/index.async";
 import { getSupplierDetailUrl, showVConsole } from "./../../assets/js/utils";
 import BNewsCard from "./BNewsBlock/BNewsCard";
@@ -94,7 +94,7 @@ export default {
     BNewsCard,
     BNewsTag,
     BHorizontalScroll,
-    BMasonryScroll,
+    BMasonryScroll
   },
   props: {
     /**
@@ -102,22 +102,22 @@ export default {
      */
     titleText: {
       type: String,
-      default: "",
+      default: ""
     },
     /**
      * 星球 Id
      */
     planetId: {
       type: [Number, String],
-      default: -1,
+      default: -1
     },
     /**
      * 設定標題需要 sticky 在 top 多少的位置
      */
     stickyTop: {
       type: Number,
-      default: 0,
-    },
+      default: 0
+    }
   },
   data() {
     return {
@@ -129,20 +129,20 @@ export default {
       theTagOfAll: {
         title: RECOMMENDATION_ENABLED.news ? "專屬你的" : "全部",
         id: -1,
-        selected: true,
+        selected: true
       },
       longTouch: {
         interval: 0,
         duration: 2,
-        counter: 0,
+        counter: 0
       },
-      recommendationStyled: RECOMMENDATION_ENABLED.styled,
+      recommendationStyled: RECOMMENDATION_ENABLED.styled
     };
   },
   computed: {
     selectedTag() {
       return this.tags.length > 0
-        ? this.tags.find((t) => t.selected)
+        ? this.tags.find(t => t.selected)
         : this.theTagOfAll;
     },
     categories() {
@@ -153,9 +153,9 @@ export default {
         top: `${this.stickyTop}px`,
         position: "sticky",
         left: "0px",
-        zIndex: 99,
+        zIndex: 99
       };
-    },
+    }
   },
   methods: {
     triggerLongTouch() {
@@ -180,7 +180,7 @@ export default {
       this.longTouch.counter = 0;
     },
     async navigate(data) {
-      const categoryNames = data.categories.map((x) => x.name);
+      const categoryNames = data.categories.map(x => x.name);
       await trackEvent(
         click_news.id,
         click_news.category,
@@ -216,10 +216,10 @@ export default {
       }
     },
     initTags() {
-      this.tags = this.categories.map((c) => ({
+      this.tags = this.categories.map(c => ({
         title: c.name,
         id: c.id,
-        selected: false,
+        selected: false
       }));
       this.tags.unshift(this.theTagOfAll);
       this.tagsLoading = false;
@@ -250,13 +250,17 @@ export default {
         this.source = [];
         this.tags = this.tags.map((t, i) => ({
           ...t,
-          selected: targetIndex === i,
+          selected: targetIndex === i
         }));
         await trackEvent(
           click_news_category.id,
           click_news_category.category,
           click_news_category.action,
-          click_news_category.formatPayload(this.planetName, this.selectedTag.title, targetIndex)
+          click_news_category.formatPayload(
+            this.planetName,
+            this.selectedTag.title,
+            targetIndex
+          )
         );
         await this.init();
       }
@@ -274,7 +278,7 @@ export default {
       if (this.planetId >= 0 && this.selectedTag) {
         const payload = {
           pageIndex,
-          pageSize,
+          pageSize
         };
         if (this.selectedTag.id === -1) {
           payload.planetId = this.planetId;
@@ -305,7 +309,7 @@ export default {
         );
         this.loading = false;
       }
-    },
+    }
   },
   watch: {
     planetId: {
@@ -314,38 +318,38 @@ export default {
         if (value) {
           await this.init(value);
         }
-      },
-    },
-  },
+      }
+    }
+  }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .b-news-block {
   position: relative;
-}
-.b-news-block > div:not(:last-child) {
-  margin-bottom: 6px;
-}
-.b-news-block__title {
-  user-select: none;
-  font-weight: bold;
-  font-size: 17px;
-  line-height: 23.8px;
-  color: #393939;
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1em;
-}
-.b-news-block__tags {
-  margin-right: -12px;
-  background-color: #ffffff;
-}
-.b-news-block__tags .b-horizontal-scroll {
-  align-items: center;
-}
-.b-news-block__tags .b-horizontal-scroll > *:not(:last-child) {
-  margin-right: 16px;
+  & > div:not(:last-child) {
+    margin-bottom: 6px;
+  }
+  &__title {
+    user-select: none;
+    font-weight: bold;
+    font-size: 17px;
+    line-height: 23.8px;
+    color: #393939;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1em;
+  }
+  &__tags {
+    margin-right: -12px;
+    background-color: #ffffff;
+    .b-horizontal-scroll {
+      align-items: center;
+      > *:not(:last-child) {
+        margin-right: 16px;
+      }
+    }
+  }
 }
 .title_placeloader {
   width: 6em;

@@ -10,9 +10,9 @@
       :class="{ 'load-more-triggerable': triggerable(index) }"
       :load-more-triggerable="triggerable(index)"
       :style="{
-        gridRowEnd: getGridRowEnd(index),
+        gridRowEnd: getGridRowEnd(index)
       }"
-      @height-changed="(height) => heightChanged(index, height)"
+      @height-changed="height => heightChanged(index, height)"
       @load-more="loadMore(index)"
     >
       <!--
@@ -30,7 +30,7 @@
           class="placeholder__item"
           :style="{
             gridRowEnd: index % 2 === 0 ? 'span 11' : 'span 10',
-            ...placeholderStyle,
+            ...placeholderStyle
           }"
           v-for="index in placeholderAmount"
           :key="`placeholder-${index}`"
@@ -53,7 +53,7 @@ import BMasonryProxy from "../shared/BMasonryScroll/BMasonryProxy";
  */
 export default {
   components: {
-    BMasonryProxy,
+    BMasonryProxy
   },
   props: {
     /**
@@ -63,28 +63,28 @@ export default {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     /**
      * 是否正在載入
      */
     loading: {
       type: Boolean,
-      default: false,
+      default: false
     },
     /**
      * 列數, 決定要有幾列 Masonry Scroll
      */
     column: {
       type: Number,
-      default: 2,
+      default: 2
     },
     /**
      * 是否自動調整高度
      */
     autoHeight: {
       type: Boolean,
-      default: true,
+      default: true
     },
     /**
      * placeholder 的 css 樣式, 若 loading 為 true, 會採用此 style 顯示 placeholder
@@ -93,7 +93,7 @@ export default {
       type: Object,
       default() {
         return {};
-      },
+      }
     },
     /**
      * placeholder 的數量
@@ -102,36 +102,35 @@ export default {
       type: Number,
       default() {
         return 7;
-      },
-    },
+      }
+    }
   },
   data() {
     return {
       rowSpans: [],
       observer: undefined,
       pageIndex: 1,
-      pageSize: 10,
+      pageSize: 10
     };
   },
   computed: {
     heightWontChanged() {
       return (
-        this.source.length > 0 &&
-        this.source.every((x) => x.height !== undefined)
+        this.source.length > 0 && this.source.every(x => x.height !== undefined)
       );
     },
     style() {
       return {
-        gridTemplateColumns: `repeat(${this.column}, minmax(150px, 1fr))`,
+        gridTemplateColumns: `repeat(${this.column}, minmax(150px, 1fr))`
       };
     },
     defaultPlaceholderStyle() {
       return {
         gridTemplateColumns: `repeat(${this.column}, minmax(150px, 1fr))`,
         gridAutoRows: this.autoHeight || this.loading ? "10px" : undefined,
-        gridGap: this.autoHeight || this.loading ? "10px" : undefined,
+        gridGap: this.autoHeight || this.loading ? "10px" : undefined
       };
-    },
+    }
   },
   mounted() {
     this.rowSpans = Array.from({ length: this.source.length }, (v, i) => 0);
@@ -183,27 +182,36 @@ export default {
        */
       this.$emit("load-more", {
         pageSize: this.pageSize,
-        pageIndex: ++this.pageIndex,
+        pageIndex: ++this.pageIndex
       });
-    },
+    }
   },
   watch: {
     source(value) {
       if (value) {
         this.init(value);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .b-masonry-grid {
   display: grid;
-}
-.b-masonry-grid__placeholder {
-  display: grid;
-  row-gap: 5px;
+  &__placeholder {
+    display: grid;
+    row-gap: 5px;
+  }
+  &_source-none {
+    background: linear-gradient(to right, #262626 8%, #363636 28%, #262626 43%);
+  }
+  &__no-more {
+    grid-column: 1/-1;
+    justify-self: center;
+    align-self: end;
+    color: #00000081;
+  }
 }
 .placeholder__item,
 .b-masonry-grid_source-none {
@@ -217,14 +225,5 @@ export default {
 }
 .placeholder__item {
   background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
-}
-.b-masonry-grid_source-none {
-  background: linear-gradient(to right, #262626 8%, #363636 28%, #262626 43%);
-}
-.b-masonry-grid__no-more {
-  grid-column: 1/-1;
-  justify-self: center;
-  align-self: end;
-  color: #00000081;
 }
 </style>

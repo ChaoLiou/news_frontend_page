@@ -6,7 +6,7 @@
       :class="{
         first: index === 0,
         'load-more-triggerable':
-          triggerablePredicate(item) && triggerable(index),
+          triggerablePredicate(item) && triggerable(index)
       }"
       :bf-index="index"
       :bf-predicate="triggerablePredicate(item)"
@@ -14,9 +14,9 @@
       :style="{
         transform: getTranslateXY(index),
         width: `${itemWidth}px`,
-        height: getHeight(index),
+        height: getHeight(index)
       }"
-      @height-changed="(height) => heightChanged(index, height)"
+      @height-changed="height => heightChanged(index, height)"
       @load-more="loadMore(index)"
     >
       <!--
@@ -30,7 +30,7 @@
         class="b-masonry-scroll__placeholder"
         :style="{
           height: `${placeholderHeight}px`,
-          top: pageIndex === 1 ? '0px' : undefined,
+          top: pageIndex === 1 ? '0px' : undefined
         }"
       >
         <div
@@ -65,7 +65,7 @@ import BMasonryProxy from "../shared/BMasonryScroll/BMasonryProxy";
  */
 export default {
   components: {
-    BMasonryProxy,
+    BMasonryProxy
   },
   props: {
     /**
@@ -75,21 +75,21 @@ export default {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     /**
      * 是否正在載入
      */
     loading: {
       type: Boolean,
-      default: true,
+      default: true
     },
     /**
      * 列數, 決定要有幾列 Masonry Scroll
      */
     column: {
       type: Number,
-      default: 2,
+      default: 2
     },
     /**
      * 篩選出可附加 `載入更多` 的項目, `(event: object): bool`
@@ -98,14 +98,14 @@ export default {
       type: Function,
       default() {
         return () => true;
-      },
+      }
     },
     /**
      * Scroll 高度
      */
     scrollHeight: {
       type: String,
-      default: "100vh",
+      default: "100vh"
     },
     /**
      * placeholder 的 css 樣式, 若 loading 為 true, 會採用此 style 顯示 placeholder
@@ -114,16 +114,16 @@ export default {
       type: Object,
       default() {
         return {};
-      },
+      }
     },
     pageSize: {
       type: Number,
-      default: 10,
+      default: 10
     },
     everyAmountLoading: {
       type: Number,
-      default: 5,
-    },
+      default: 5
+    }
   },
   data() {
     return {
@@ -135,18 +135,17 @@ export default {
       arranged: false,
       placeholderHeight: 860,
       noMoreTextHeight: 30,
-      gap: 10,
+      gap: 10
     };
   },
   computed: {
     heightWontChanged() {
       return (
-        this.source.length > 0 &&
-        this.source.every((x) => x.height !== undefined)
+        this.source.length > 0 && this.source.every(x => x.height !== undefined)
       );
     },
     inactiveTotals() {
-      return this.source.filter((x) => !this.triggerablePredicate(x)).length;
+      return this.source.filter(x => !this.triggerablePredicate(x)).length;
     },
     style() {
       return {
@@ -155,9 +154,9 @@ export default {
           this.itemTops[this.source.length - 1] +
           this.itemHeights[this.source.length - 1] +
           (this.loading ? this.placeholderHeight : this.noMoreTextHeight) +
-          "px",
+          "px"
       };
-    },
+    }
   },
   methods: {
     init(source) {
@@ -207,7 +206,7 @@ export default {
       const groups = Array.from({ length: this.column }, (v, i) => ({
         index: i,
         maxHeight: 0,
-        left: i * (this.itemWidth + this.gap),
+        left: i * (this.itemWidth + this.gap)
       }));
       this.itemHeights.forEach((height, index) => {
         if (index < this.column) {
@@ -216,11 +215,11 @@ export default {
           this.$set(this.itemLefts, index, group.left);
           this.$set(groups, index, {
             ...group,
-            maxHeight: height + this.gap,
+            maxHeight: height + this.gap
           });
         } else {
           let targetGroup = groups[0];
-          groups.forEach((group) => {
+          groups.forEach(group => {
             if (!group.index) return;
             if (group.maxHeight < targetGroup.maxHeight) {
               targetGroup = group;
@@ -228,7 +227,7 @@ export default {
           });
           const updatedGroup = {
             ...targetGroup,
-            maxHeight: targetGroup.maxHeight + height + this.gap,
+            maxHeight: targetGroup.maxHeight + height + this.gap
           };
           this.$set(this.itemTops, index, targetGroup.maxHeight);
           this.$set(this.itemLefts, index, targetGroup.left);
@@ -245,69 +244,69 @@ export default {
          */
         this.$emit("load-more", {
           pageSize: this.pageSize,
-          pageIndex: ++this.pageIndex,
+          pageIndex: ++this.pageIndex
         });
       }
-    },
+    }
   },
   watch: {
     source: {
       immediate: true,
       handler(value) {
         this.init(value);
-      },
+      }
     },
     itemHeights(value) {
       if (value.length === this.source.length) {
         this.arrangeSource();
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .b-masonry-scroll {
   position: relative;
+  &__placeholder {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10px;
+    width: 100%;
+  }
+  &__placeholder,
+  &__no-more {
+    position: absolute;
+    bottom: 0px;
+  }
+  &__placeholder-group {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    row-gap: 10px;
+  }
+  &__placeholder-group:nth-child(even) {
+    height: calc(100% + 80px);
+  }
+  &__placeholder-item {
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeload;
+    animation-timing-function: linear;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 1200px 104px;
+  }
+  &__no-more {
+    display: grid;
+    justify-content: center;
+    width: 100%;
+    color: #00000081;
+  }
 }
 .b-masonry-proxy {
   position: absolute;
 }
 .b-masonry-proxy.first {
   z-index: 2;
-}
-.b-masonry-scroll__placeholder {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  column-gap: 10px;
-  width: 100%;
-}
-.b-masonry-scroll__placeholder,
-.b-masonry-scroll__no-more {
-  position: absolute;
-  bottom: 0px;
-}
-.b-masonry-scroll__placeholder-group {
-  display: grid;
-  grid-template-rows: repeat(4, 1fr);
-  row-gap: 10px;
-}
-.b-masonry-scroll__placeholder-group:nth-child(even) {
-  height: calc(100% + 80px);
-}
-.b-masonry-scroll__placeholder-item {
-  animation-duration: 1.5s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: infinite;
-  animation-name: placeload;
-  animation-timing-function: linear;
-  background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
-  background-size: 1200px 104px;
-}
-.b-masonry-scroll__no-more {
-  display: grid;
-  justify-content: center;
-  width: 100%;
-  color: #00000081;
 }
 </style>

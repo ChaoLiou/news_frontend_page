@@ -2,13 +2,13 @@
   <div class="b-tab-view">
     <div
       ref="tabBar"
-      class="b-tab-view__tab-bar"
+      class="b-tab-view__title"
       :style="{ gridTemplateColumns: `repeat(${source.length}, max-content)` }"
     >
       <div
         :class="[
           'b-tab-view__tab',
-          isSelected(item) ? 'b-tab-view__tab_selected' : '',
+          isSelected(item) ? 'b-tab-view__tab_selected' : ''
         ]"
         v-for="(item, index) in source"
         :key="`tab-${index}`"
@@ -46,19 +46,19 @@ export default {
       type: Array,
       default() {
         return [{ id: "tab_1" }, { id: "tab_2" }, { id: "tab_3" }];
-      },
+      }
     },
     /**
      * 在自訂結構的物件中, 從中選出一個 key 用於識別分頁項目(若使用預設值 `"id"`, 請確認自訂結構中有此屬性且是唯一值)
      */
     identifierKey: {
       type: String,
-      default: "id",
-    },
+      default: "id"
+    }
   },
   data() {
     return {
-      selectedTab: undefined,
+      selectedTab: undefined
     };
   },
   mounted() {
@@ -82,7 +82,7 @@ export default {
         this.selectedTab = item;
         this.$router.history.replace({
           name: this.name,
-          hash: `#${item[this.identifierKey]}`,
+          hash: `#${item[this.identifierKey]}`
         });
       }
     },
@@ -93,7 +93,7 @@ export default {
         item[this.identifierKey] &&
         this.selectedTab[this.identifierKey] === item[this.identifierKey]
       );
-    },
+    }
   },
   watch: {
     source: {
@@ -104,50 +104,50 @@ export default {
         if (this.$route && this.$route.hash) {
           const hash = this.$route.hash;
           const id = parseInt(hash.substr(1));
-          const target = value.find((x) => id === x[this.identifierKey]);
+          const target = value.find(x => id === x[this.identifierKey]);
           if (target) {
             this.selectedTab = target;
             return;
           }
         }
         this.selectedTab = value[0];
-      },
-    },
-  },
+      }
+    }
+  }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .b-tab-view {
   position: relative;
-}
-.b-tab-view__tab-bar {
-  display: grid;
-  width: 100%;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  position: sticky;
-  top: 0px;
-  left: 0px;
-  z-index: 99;
-  background-color: #ffffff;
-}
-.b-tab-view__tab {
-  margin: 6.5px 15px;
-}
-.b-tab-view__tab:hover {
-  cursor: pointer;
-}
-.b-tab-view__tab > *:first-child {
-  font-size: 1.2em;
-  font-weight: bold;
-  padding-top: 7.5px;
-  padding-bottom: 7.5px;
-  margin: 0px 10px;
-  white-space: nowrap;
-}
-.b-tab-view__tab.b-tab-view__tab_selected > div {
-  border-bottom: 2px solid #26d07c;
-  color: #26d07c;
+  &__title {
+    display: grid;
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    position: sticky;
+    top: 0px;
+    left: 0px;
+    z-index: 99;
+    background-color: #ffffff;
+  }
+  &__tab {
+    margin: 6.5px 15px;
+    &:hover {
+      cursor: pointer;
+    }
+    & > *:first-child {
+      font-size: 1.2em;
+      font-weight: bold;
+      padding-top: 7.5px;
+      padding-bottom: 7.5px;
+      margin: 0px 10px;
+      white-space: nowrap;
+    }
+    &_selected > div {
+      border-bottom: 2px solid #26d07c;
+      color: #26d07c;
+    }
+  }
 }
 </style>

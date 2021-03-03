@@ -12,7 +12,7 @@
         height: '325px',
         width: '200px',
         marginRight: '16px',
-        borderRadius: '16px',
+        borderRadius: '16px'
       }"
     >
       <template v-for="(item, index) in source">
@@ -24,7 +24,6 @@
 <script>
 import BAdCard from "../shared/Ad/BAdCard";
 import BHorizontalScroll from "../shared/BHorizontalScroll";
-import { get } from "./../../assets/js/fetchAPI";
 import { formatProduct } from "../../assets/js/recommendation/formatter";
 import { actions } from "../../store/api/news";
 /**
@@ -33,7 +32,7 @@ import { actions } from "../../store/api/news";
 export default {
   components: {
     BAdCard,
-    BHorizontalScroll,
+    BHorizontalScroll
   },
   props: {
     /**
@@ -41,41 +40,41 @@ export default {
      */
     apiPrefix: {
       type: String,
-      default: "",
+      default: ""
     },
     /**
      * 推薦 api 前綴, e.g. `https://your.api.origin/vn`
      */
     recommendationApiPrefix: {
       type: String,
-      default: "",
+      default: ""
     },
     /**
      * 啟用推薦 api
      */
     recommendationEnabled: {
       type: Boolean,
-      default: true,
+      default: true
     },
     /**
      * 以關鍵字取得廣告
      */
     keyword: {
       type: String,
-      default: "",
+      default: ""
     },
     /**
      * 標題文字
      */
     titleText: {
       type: String,
-      default: "",
-    },
+      default: ""
+    }
   },
   data() {
     return {
       loading: true,
-      source: [],
+      source: []
     };
   },
   methods: {
@@ -94,7 +93,7 @@ export default {
           const res = await fetchRecommendation(
             undefined,
             {
-              keyword,
+              keyword
             },
             this.recommendationApiPrefix
           );
@@ -106,7 +105,7 @@ export default {
       } catch (error) {
         console.error(error);
       }
-    },
+    }
   },
   watch: {
     keyword: {
@@ -115,9 +114,9 @@ export default {
         if (value) {
           this.load(value);
         }
-      },
-    },
-  },
+      }
+    }
+  }
 };
 </script>
 <style scoped>

@@ -2,7 +2,7 @@
   <div
     class="b-news-tag"
     :class="{
-      'b-news-tag__selected': selected,
+      'b-news-tag_selected': selected
     }"
     @click="toggle"
   >
@@ -21,15 +21,15 @@ export default {
      */
     titleText: {
       type: String,
-      default: "",
+      default: ""
     },
     /**
      * 被選取
      */
     selected: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   methods: {
     toggle() {
@@ -37,30 +37,42 @@ export default {
        * 切換選取
        */
       this.$emit("toggle");
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .b-news-tag {
-  background-color: #fafafa;
-  border-radius: 10px;
-  line-height: 22px;
-  user-select: none;
-}
-.b-news-tag:hover {
-  cursor: pointer;
-}
-.b-news-tag__selected {
-  background-color: #767676;
-}
-.b-news-tag__selected .b-news-tag__title {
-  color: #ffffff;
-}
-.b-news-tag__title {
-  font-size: 13px;
-  color: #767676;
-  padding: 4px 12px;
+  background: {
+    color: #fafafa;
+  }
+  border: {
+    radius: 10px;
+  }
+  line: {
+    height: 22px;
+  }
+  user: {
+    select: none;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+  &_selected {
+    background: {
+      color: #767676;
+    }
+  }
+  &_selected &__title {
+    color: #ffffff;
+  }
+  &__title {
+    font: {
+      size: 13px;
+    }
+    color: #767676;
+    padding: 4px 12px;
+  }
 }
 </style>

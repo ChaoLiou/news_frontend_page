@@ -30,43 +30,45 @@ export default {
      */
     planetId: {
       type: [Number, String],
-      default: -1,
+      default: -1
     },
     /**
      * 設定新聞區塊工具列需要 sticky 在 top 多少的位置
      */
     newsBlockToolBarStickyTop: {
       type: Number,
-      default: 0,
-    },
+      default: 0
+    }
   },
   computed: {
     blocks() {
-      const target = planetConfigs.find((x) => x.id === this.planetId);
+      const target = planetConfigs.find(x => x.id === this.planetId);
       return target
         ? target.blocks
         : [
             {
-              id: "audiovisual",
+              id: "audiovisual"
             },
             {
-              id: "news",
-            },
+              id: "news"
+            }
           ];
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style scoped>
-.b-planet > * {
-  margin-left: 12px;
-  padding-top: 12px;
-}
-.b-planet > *:not(:last-child) {
-  margin-bottom: 12px;
-}
-.b-planet > .b-news-block {
-  margin-right: 12px;
+<style lang="scss" scoped>
+.b-planet {
+  & > * {
+    margin-left: 12px;
+    padding-top: 12px;
+  }
+  & > *:not(:last-child) {
+    margin-bottom: 12px;
+  }
+  & > .b-news-block {
+    margin-right: 12px;
+  }
 }
 </style>

@@ -3,7 +3,7 @@
     <div
       class="b-ad-card__img"
       :style="{
-        backgroundImage: img,
+        backgroundImage: img
       }"
     ></div>
     <div class="b-ad-card__text">
@@ -41,8 +41,8 @@ export default {
       link: VueTypes.string, // 廣告連結
       salePrice: VueTypes.integer, // 廣告折扣價
       price: VueTypes.integer, // 廣告原價
-      discounted: VueTypes.bool, // 是否折扣
-    }),
+      discounted: VueTypes.bool // 是否折扣
+    })
   },
   computed: {
     img() {
@@ -55,7 +55,7 @@ export default {
         (this.data.salePrice / this.data.price) * 100
       );
       return discount % 10 === 0 ? discount / 10 : discount;
-    },
+    }
   },
   methods: {
     navigate() {
@@ -64,12 +64,12 @@ export default {
        * @property {Object} data 廣告資料, 結構如同 data property
        */
       this.$emit("navigate", this.data);
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .b-ad-card {
   display: grid;
   grid-template-rows: 200px 1fr;
@@ -78,34 +78,34 @@ export default {
   border-radius: 16px;
   border: 0.5px solid #dbdbdb;
   overflow: hidden;
-}
-.b-ad-card:hover {
-  cursor: pointer;
-}
-.b-ad-card__img {
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: #eeeeee;
-}
-.b-ad-card__text {
-  font-size: 15px;
-  padding: 6px;
-}
-.b-ad-card__title {
-  color: #767676;
-  font-weight: 400;
-  line-height: 18px;
-  padding-top: 4px;
+  &:hover {
+    cursor: pointer;
+  }
+  &__img {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #eeeeee;
+  }
+  &__text {
+    font-size: 15px;
+    padding: 6px;
+  }
+  &__title {
+    color: #767676;
+    font-weight: 400;
+    line-height: 18px;
+    padding-top: 4px;
+  }
 }
 .price__original {
   font-size: 13px;
   line-height: 18px;
   font-weight: bold;
   color: #262626;
-}
-.price__original_deleted {
-  text-decoration: line-through;
+  &_deleted {
+    text-decoration: line-through;
+  }
 }
 .price__special {
   display: grid;
