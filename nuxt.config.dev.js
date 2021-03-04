@@ -3,16 +3,16 @@ import config from "./nuxt.config.base";
 export default Object.assign(config, {
   env: {
     BASE_URL: {
-      backendApi: "https://09d68911a667.ngrok.io/v1",
-      trackingApi: "https://d83fe1d42f6e.ngrok.io/v1",
-      recommendationApi: "https://stg-news-api.beanfun.com/v1"
+      backendApi: "/v1",
+      trackingApi: "/v1",
+      recommendationApi: "/v1"
     },
     BGO: {
-      BgoOfficialAccountId: "5e586fb595c54ca9a1fda284785094d6_oa",
-      token: "c46ce549ba424590ab4e2cc7477359da_oat",
-      secret: "b8374d28449e4ff1974c67ecd419e866_oas",
-      clientId: "1A31B3F8-C08C-411C-8CC9-F9B24D638A61",
-      widgetId: "5f9a8945e0dd4c000728183f"
+      BgoOfficialAccountId: "",
+      token: "",
+      secret: "",
+      clientId: "",
+      widgetId: ""
     },
     RECOMMENDATION_ENABLED: {
       news: true,
@@ -20,15 +20,26 @@ export default Object.assign(config, {
       styled: true
     },
     TRACKING_EVENT: {
-      trackingVer: "0.06",
-      gaId: "G-Y5781NKN6D"
+      trackingVer: "",
+      gaId: ""
     },
     BUILD: {
       builtAt: new Date().toLocaleString()
     },
     SUPPLIER: {
       enabled: true,
-      detailUrls: ["articles/tw/1/1358630822793449472/detail.html"],
+      detailUrls: [
+        "articles/tw/1/1367265362118184960/detail.html",
+        "articles/tw/1/1367271967903715328/detail.html",
+        "articles/tw/1/1367271974606213120/detail.html",
+        "articles/tw/1/1367281863013437440/detail.html",
+        "articles/tw/1/1367286009997299712/detail.html",
+        "articles/tw/1/1367295918428131328/detail.html",
+        "articles/tw/1/1367302549698252800/detail.html",
+        "articles/tw/1/1367302560016240640/detail.html",
+        "articles/tw/1/1367302568392265728/detail.html",
+        "articles/tw/1/1367305398184316928/detail.html"
+      ],
       openId: ""
     },
     VIDEO_IMAGE: {
@@ -36,7 +47,7 @@ export default Object.assign(config, {
     },
     NO_ALLOW_COUNTRY_AREA: "HK",
     AD: {
-      AdOfficialAccountId: "690c8cba53934c138e997f7685e98412_oa"
+      AdOfficialAccountId: ""
     },
     APP_DEBUG_MODE: true,
     TRACKER_DEBUG_MODE: true

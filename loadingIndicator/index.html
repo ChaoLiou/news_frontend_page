@@ -368,6 +368,13 @@
   (function() {
     if (/^#\/#?\d?$/.test(location.hash)) {
       /* true if hash is "#/", "#/#1". */
+      const planets = ["放鬆星", "時事星", "電玩星"];
+      [...document.querySelectorAll(".planet-tab-title")].forEach(
+        (titleDOM, index) => {
+          titleDOM.classList.remove("planet-tab-title__placeholder");
+          titleDOM.querySelector("div").innerText = planets[index];
+        }
+      );
     } else {
       document.querySelector("#loadingIndicatorStyle").remove();
     }

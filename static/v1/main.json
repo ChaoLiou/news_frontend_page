@@ -1,0 +1,31 @@
+{
+  "page": 0,
+  "page_size": 20,
+  "data": [
+    {
+      "id": 2,
+      "name": "放鬆星",
+      "index": 1,
+      "lang": "zh_TW",
+      "country": "TW",
+      "activity_flag": "0"
+    },
+    {
+      "id": 3,
+      "name": "時事星",
+      "index": 2,
+      "lang": "zh_TW",
+      "country": "TW",
+      "activity_flag": "0"
+    },
+    {
+      "id": 1,
+      "name": "電玩星",
+      "index": 3,
+      "lang": "zh_TW",
+      "country": "TW",
+      "activity_flag": "1"
+    }
+  ],
+  "total_records": 3
+}

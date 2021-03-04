@@ -30,9 +30,8 @@ export const getSupplierDetailUrl = (
   url,
   urls = process.env.SUPPLIER.detailUrls
 ) => {
-  url = url.replace(/^\//, "");
-  const list = urls.filter(x => x !== url);
-  return list[Date.now() % list.length];
+  const target = urls.find(x => url.endsWith(x));
+  return target;
 };
 
 export const replaceNewLineToBr = text => {

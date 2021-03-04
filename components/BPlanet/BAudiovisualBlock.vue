@@ -8,7 +8,7 @@
       class="b-audiovisual-block__title title"
       :class="{ title_placeholder: !titleText }"
     >
-      <div>{{ planetName }} {{ titleText }}</div>
+      <div>{{ titleText }}</div>
     </div>
     <div>
       <b-masonry-grid

@@ -200,7 +200,7 @@ export default {
       );
       let link = data.link;
       link = SUPPLIER.enabled
-        ? `${location.origin}/${getSupplierDetailUrl(location.pathname)}`
+        ? `${location.origin}/${getSupplierDetailUrl(link)}`
         : link;
       link += `?planetId=${
         data.representativePlanet.id

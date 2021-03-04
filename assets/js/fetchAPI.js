@@ -3,6 +3,10 @@ const debugMode = process.env.APP_DEBUG_MODE;
 
 async function fetchBase(apiRelative, { method, body }, apiPrefix = "") {
   const url = `${apiPrefix ? apiPrefix : baseUrl.backendApi}/${apiRelative}`;
+  const urlObj = new URL(url, location.origin);
+  if (!urlObj.pathname.endsWith(".json")) {
+    urlObj.pathname += ".json";
+  }
   if (debugMode) log(method, url);
   let options = {
     method,
@@ -14,7 +18,7 @@ async function fetchBase(apiRelative, { method, body }, apiPrefix = "") {
   };
   try {
     if (debugMode) console.log(options);
-    const res = await fetch(url, options);
+    const res = await fetch(urlObj.href, options);
     const json = await res.json();
     return json;
   } catch (err) {

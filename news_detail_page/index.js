@@ -199,7 +199,7 @@ function init() {
 function requestNewsDetail() {
   get(`news?id=${_newsId}`, BASE_URL.backendApi).then(json =>
     Array.isArray(json.data) && json.data.length > 0
-      ? initWithNews(formatNews(json.data[0]))
+      ? initWithNews(formatNews(json.data.find(x => x.id === _newsId)))
       : console.error(
           `news(${_newsId}) is not found on [${BASE_URL.backendApi}]!`
         )
