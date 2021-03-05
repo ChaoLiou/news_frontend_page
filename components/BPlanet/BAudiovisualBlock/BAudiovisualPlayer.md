@@ -25,14 +25,40 @@
           },
           title: "YouTube Developers Live: Embedded Web Player Customization",
           datetime: new Date("2013-04-10T00:00:00.000Z"),
+          planets: [
+            {
+              id: 1,
+              name: "星球"
+            }
+          ],
+          representativePlanet: {
+            name: "星球"
+          },
+          categories: [
+            {
+              name: "分類"
+            }
+          ],
+          representativeCategory: {
+            name: "分類"
+          },
           source: {
-            img:
-              "https://www.gstatic.com/devrel-devsite/prod/veaa02889f0c07424beaa31d9bac1e874b6464e7ed7987fde4c94a59ace9487fa/developers/images/touchicon-180.png",
-            title: "Google Developers"
+            rss: {
+              id: 1,
+              name: "Google Developers"
+            },
+            site: {
+              id: 1,
+              img:
+                "https://www.gstatic.com/devrel-devsite/prod/veaa02889f0c07424beaa31d9bac1e874b6464e7ed7987fde4c94a59ace9487fa/developers/images/touchicon-180.png",
+              name: "Google Developers"
+            }
           },
           views: "2132132",
           description:
-            "On this weeks show, Jeff Posnick covers everything you need to know about using player parameters to customize the YouTube iframe-embedded player."
+            "On this weeks show, Jeff Posnick covers everything you need to know about using player parameters to customize the YouTube iframe-embedded player.",
+          index: 1,
+          marked: true
         }
       };
     },

@@ -19,13 +19,24 @@
           externalLink: "https://www.youtube.com/watch?v=M7lc1UVf-VE",
           img: "https://i.ytimg.com/vi/M7lc1UVf-VE/maxresdefault.jpg",
           source: {
-            logoImage:
-              "https://www.gstatic.com/devrel-devsite/prod/veaa02889f0c07424beaa31d9bac1e874b6464e7ed7987fde4c94a59ace9487fa/developers/images/touchicon-180.png",
-            name: "Google Developers"
+            rss: {
+              id: 1,
+              name: "Google Developers",
+              logoImage:
+                "https://www.gstatic.com/devrel-devsite/prod/veaa02889f0c07424beaa31d9bac1e874b6464e7ed7987fde4c94a59ace9487fa/developers/images/touchicon-180.png"
+            },
+            site: {
+              id: 1,
+              name: "Google Developers"
+            }
           },
-          representativePlanet: { id: 1 },
+          representativePlanet: { id: 1, name: "星球" },
+          representativeCategory: { id: 1, name: "分類" },
           categories: [{ name: "Google" }],
-          index: 0
+          description:
+            "On this weeks show, Jeff Posnick covers everything you need to know about using player parameters to customize the YouTube iframe-embedded player.",
+          index: 1,
+          recommendation: true
         }
       };
     },
@@ -63,13 +74,24 @@
           externalLink: "https://www.youtube.com/watch?v=M7lc1UVf-VE",
           img: "https://i.ytimg.com/vi/M7lc1UVf-VE/maxresdefault.jpg",
           source: {
-            logoImage:
-              "https://www.gstatic.com/devrel-devsite/prod/veaa02889f0c07424beaa31d9bac1e874b6464e7ed7987fde4c94a59ace9487fa/developers/images/touchicon-180.png",
-            name: "Google Developers"
+            rss: {
+              id: 1,
+              name: "Google Developers",
+              logoImage:
+                "https://www.gstatic.com/devrel-devsite/prod/veaa02889f0c07424beaa31d9bac1e874b6464e7ed7987fde4c94a59ace9487fa/developers/images/touchicon-180.png"
+            },
+            site: {
+              id: 1,
+              name: "Google Developers"
+            }
           },
-          representativePlanet: { id: 1 },
+          representativePlanet: { id: 1, name: "星球" },
+          representativeCategory: { id: 1, name: "分類" },
           categories: [{ name: "Google" }],
-          index: 0
+          description:
+            "On this weeks show, Jeff Posnick covers everything you need to know about using player parameters to customize the YouTube iframe-embedded player.",
+          index: 1,
+          recommendation: true
         }
       };
     },

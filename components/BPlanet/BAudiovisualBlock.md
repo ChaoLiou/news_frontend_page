@@ -10,6 +10,6 @@
 
 ```html
 <div style="height:500px;overflow:scroll">
-  <b-audiovisual-block vertical />
+  <b-audiovisual-block vertical :show-title-text="false" />
 </div>
 ```

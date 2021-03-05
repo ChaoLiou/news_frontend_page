@@ -46,6 +46,7 @@ module.exports = {
     plugins: [new vueLoader.VueLoaderPlugin()]
   },
   usageMode: "expand",
+  assetsDir: "./static",
   exampleMode: "expand",
   displayOrigins: true,
   styleguideDir: "./static/styleguide"
